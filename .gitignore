@@ -8,6 +8,9 @@ Desktop.ini
 .vscode/
 .idea/
 
+# Build scratch
+.build/
+
 # Secrets (never commit)
 .env
 *.key

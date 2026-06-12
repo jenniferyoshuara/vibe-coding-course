@@ -1159,48 +1159,7 @@
         difficulty: "Beginner",
         time: "45 to 60 min per day",
         topics: ["PowerShell", "Files", "Project Structure"],
-        lesson: `
-          <h5>What the terminal actually is</h5>
-          <p>The terminal (on Windows it is <strong>PowerShell</strong>) is just a text window where you type instructions instead of clicking. Every AI coding tool ultimately runs commands here, so being able to read and run them yourself is the single most useful skill you can have as an operator. You type one line, press Enter, and the computer does exactly that one thing.</p>
-          <p>The blinking line shows your <em>current folder</em>. Commands run <strong>relative to wherever you currently are</strong>, which is why "I ran it but nothing happened" is almost always "I ran it in the wrong folder".</p>
-
-          <h5>Folders, and why structure matters</h5>
-          <p>A project is just a folder with other folders and files inside it. A clean project keeps similar things together so both you and the AI can find them. In your research bot you will typically see:</p>
-          <ul>
-            <li><code>README.md</code> &mdash; the human instructions: what the project is and how to run it. Read this first, always.</li>
-            <li><code>config.yaml</code> &mdash; settings that are safe to share (which model, which tickers).</li>
-            <li><code>.env</code> &mdash; <strong>secrets</strong> like API keys. Never shared, never committed.</li>
-            <li><code>.gitignore</code> &mdash; a list of files Git should pretend it cannot see (this is what protects <code>.env</code>).</li>
-            <li><code>src/</code> &mdash; the actual program code.</li>
-            <li><code>tests/</code> &mdash; code that checks the program still works.</li>
-            <li><code>out/</code> and <code>content/</code> &mdash; the things the bot produces (JSON analysis, Markdown articles).</li>
-          </ul>
-
-          <h5>Absolute vs relative paths</h5>
-          <p>An <strong>absolute path</strong> starts from the drive and is complete: <code>C:\\Users\\You\\Desktop\\research-bot</code>. A <strong>relative path</strong> is "from where I am right now": <code>cd src</code> means "go into the src folder beneath my current spot". Absolute paths always work from anywhere; relative paths only make sense given your current folder.</p>
-
-          <h5>The seven commands you will actually use</h5>
-          <pre class="lesson-code"><span class="c"># move into a folder</span>
-cd "C:\\Users\\You\\Desktop\\research-bot"
-
-<span class="c"># list what is in this folder</span>
-dir
-
-<span class="c"># make a new folder</span>
-mkdir test-project
-
-<span class="c"># print a file to the screen (safe to read)</span>
-type config.yaml
-
-<span class="c"># open a file in Notepad to edit it</span>
-notepad notes.txt
-
-<span class="c"># copy / delete a file</span>
-copy notes.txt backup.txt
-del backup.txt</pre>
-          <p class="l-key">💡 Key idea: you do not need to memorize commands. You need to recognize what each one does so that when an AI tells you "run <code>dir</code>", you understand it is just listing files, not doing anything risky.</p>
-          <p class="l-watch">⚠️ The only commands that change things are <code>mkdir</code>, <code>copy</code>, <code>del</code>, and editing in Notepad. <code>cd</code>, <code>dir</code>, and <code>type</code> only look &mdash; they can never break your project, so explore freely.</p>
-        `,
+        lesson: "\n<h5>Why a non-programmer needs the terminal<\/h5>\n<p>You don't write code. You <em>supervise<\/em> an AI that writes code — your research bot, the Python program that reads stock data and produces JSON and Markdown articles. To supervise anything well, you need to be able to look over its shoulder. The <strong>terminal<\/strong> is how you do that.<\/p>\n<p>A terminal (on Windows, the one we'll use is called <strong>PowerShell<\/strong>) is just a window where you type a command, press Enter, and the computer does exactly that one thing and shows you the result. Think of it as the difference between pointing at a vending machine button (clicking icons) versus speaking a precise order to a clerk (\"show me everything in the <code>out<\/code> folder, sorted by date\"). The clerk does more, but only if you ask clearly.<\/p>\n<p class=\"l-key\">💡 Key idea: Every AI coding tool — Claude Code, Cursor, Copilot — ultimately runs the <em>same<\/em> terminal commands you're about to learn. When the AI says \"I ran the tests\" or \"I created a file,\" it typed a command in a terminal. If you can read that command, you can tell whether the AI did something harmless (looking) or something serious (changing or deleting). That is the whole game of staying in control.<\/p>\n\n<h5>Opening PowerShell on Windows<\/h5>\n<p>There are two reliable ways:<\/p>\n<ul>\n<li>Press the <strong>Start<\/strong> button (the Windows logo), type <code>powershell<\/code>, and click <strong>Windows PowerShell<\/strong> when it appears.<\/li>\n<li>Or, open your project folder in File Explorer, click the address bar at the top, type <code>powershell<\/code>, and press Enter — this opens a terminal <em>already inside that folder<\/em>, which is often exactly what you want.<\/li>\n<\/ul>\n<p>A dark window opens with a blinking cursor. You are now talking directly to your computer.<\/p>\n\n<h5>Reading the prompt line and the \"current folder\"<\/h5>\n<p>Before the cursor, PowerShell prints a line like this. This is the <strong>prompt<\/strong> — it's the computer telling you where you currently are.<\/p>\n<pre class=\"lesson-code\">PS C:\\Users\\You&gt; <span class=\"c\"># PS = PowerShell. The path = your \"current folder\"<\/span><\/pre>\n<p>The single most important concept this week: at every moment, the terminal is \"standing inside\" exactly one folder, called the <strong>current folder<\/strong> (or working directory). Commands act on that folder unless you say otherwise. If you ask to delete a file named <code>config.yaml<\/code>, it looks for that file <em>in the current folder<\/em>. Standing in the wrong folder is the number-one beginner mistake — it's like mailing a letter from the wrong house and wondering why the neighbor got it.<\/p>\n\n<h5>Walkthrough 1 — Open, move in, and look around<\/h5>\n<p>Let's go into the research bot's folder and see what's there. The command <code>cd<\/code> means \"change directory\" (move into a folder). The command <code>dir<\/code> means \"directory listing\" (show me what's in here).<\/p>\n<pre class=\"lesson-code\">PS C:\\Users\\You&gt; cd Desktop\\Personal\\research-bot   <span class=\"c\"># move INTO the project folder<\/span>\nPS C:\\Users\\You\\Desktop\\Personal\\research-bot&gt;       <span class=\"c\"># prompt changed — we're now inside it<\/span>\n\nPS C:\\Users\\You\\Desktop\\Personal\\research-bot&gt; dir   <span class=\"c\"># list what's in the current folder<\/span>\n\n    Directory: C:\\Users\\You\\Desktop\\Personal\\research-bot\n\nMode      LastWriteTime        Length Name\n----      -------------        ------ ----\nd----     2026-06-10  09:14           src        <span class=\"c\"># d = directory (a folder)<\/span>\nd----     2026-06-11  18:02           tests\nd----     2026-06-12  07:30           out        <span class=\"g\"># the bot's JSON results live here<\/span>\nd----     2026-06-12  07:31           content    <span class=\"g\"># the finished Markdown articles<\/span>\n-a---     2026-06-01  11:00      812  README.md  <span class=\"c\"># -a = a normal file, 812 bytes<\/span>\n-a---     2026-06-09  15:22      430  config.yaml\n-a---     2026-06-09  15:22      118  .env        <span class=\"r\"># your secret keys — treat with care<\/span>\n-a---     2026-06-01  11:00       64  .gitignore<\/pre>\n<p>That listing <em>is<\/em> your project's anatomy. Notice <code>cd<\/code> changed the prompt (you moved) but <code>dir<\/code> did not (you only looked). That distinction matters enormously, so let's name it.<\/p>\n\n<h5>\"Looking\" commands vs \"changing\" commands<\/h5>\n<p>Some commands only <em>read<\/em> — they can't break anything, so run them freely. Others <em>write<\/em> — they create, overwrite, or destroy, so read them carefully before pressing Enter (and before approving an AI that wants to run them).<\/p>\n<ul>\n<li><strong>Looking (safe):<\/strong> <code>cd<\/code> (move around), <code>dir<\/code> (list contents), <code>type<\/code> (print a file to the screen).<\/li>\n<li><strong>Changing (think first):<\/strong> <code>mkdir<\/code> (make a folder), <code>copy<\/code> (duplicate a file), <code>del<\/code> (delete a file — <strong>permanent<\/strong>, no Recycle Bin from PowerShell).<\/li>\n<\/ul>\n<p class=\"l-watch\">⚠️ When an AI coding tool asks permission to run a command, the first thing to check is which category it's in. <code>dir out<\/code> is harmless. <code>del out\\*.json<\/code> would erase every result your bot ever produced. Same window, very different stakes.<\/p>\n\n<h5>Walkthrough 2 — Make, copy, delete (with before/after)<\/h5>\n<p>Suppose you want a safety copy of <code>config.yaml<\/code> before letting the AI edit it. We'll make a backups folder, copy the file in, then clean up — watching the folder listing change at each step.<\/p>\n<pre class=\"lesson-code\">PS ...\\research-bot&gt; mkdir backups        <span class=\"c\"># CHANGING: create a new folder<\/span>\n\n    Directory: C:\\Users\\You\\Desktop\\Personal\\research-bot\nMode      LastWriteTime   Length Name\n----      -------------   ------ ----\nd----     2026-06-12 08:01        backups   <span class=\"g\"># confirmation: the folder now exists<\/span>\n\nPS ...\\research-bot&gt; copy config.yaml backups\\config.backup.yaml   <span class=\"c\"># CHANGING: duplicate the file<\/span>\nPS ...\\research-bot&gt;                       <span class=\"c\"># silence = success (copy says nothing when it works)<\/span>\n\nPS ...\\research-bot&gt; dir backups          <span class=\"c\"># LOOKING: confirm the copy landed<\/span>\n-a---     2026-06-12 08:02   430  config.backup.yaml   <span class=\"g\"># there it is, same 430 bytes<\/span>\n\nPS ...\\research-bot&gt; del backups\\config.backup.yaml   <span class=\"r\"># CHANGING: delete — gone for good<\/span>\nPS ...\\research-bot&gt; dir backups\nPS ...\\research-bot&gt;                       <span class=\"c\"># empty listing = the file is no longer there<\/span><\/pre>\n<p>Two things to internalize. First, <code>copy<\/code> and <code>del<\/code> print <em>nothing<\/em> when they succeed — silence means it worked, which feels strange at first. Second, you confirm a change by <em>looking again<\/em> with <code>dir<\/code>. Never assume; verify.<\/p>\n\n<h5>Walkthrough 3 — Peek inside config.yaml<\/h5>\n<p>The <code>type<\/code> command prints a file's contents to the screen without opening any program. It's the fastest way to check what the bot is configured to do. <code>config.yaml<\/code> is the bot's <strong>settings file<\/strong> — a <code>.yaml<\/code> (say \"yamel\") file is just a plain-text list of <code>setting: value<\/code> pairs a human can read.<\/p>\n<pre class=\"lesson-code\">PS ...\\research-bot&gt; type config.yaml\n\nmodel: claude-opus-4-8        <span class=\"c\"># which AI model the bot calls<\/span>\ntickers:                      <span class=\"c\"># the stocks it researches<\/span>\n  - AAPL\n  - NVDA\noutput_dir: out               <span class=\"c\"># where JSON results are written<\/span>\ncontent_dir: content          <span class=\"c\"># where finished articles are written<\/span>\nmax_articles_per_day: 5       <span class=\"y\"># a safety cap — change with care<\/span><\/pre>\n<p>If you'd rather <em>edit<\/em> the file in a friendly window instead of just reading it, type <code>notepad config.yaml<\/code>. That opens Windows Notepad with the file loaded; change a value, press <strong>Ctrl+S<\/strong> to save, and close it. Use <code>type<\/code> to peek, <code>notepad<\/code> to change.<\/p>\n\n<h5>File extensions: the part after the dot<\/h5>\n<p>An <strong>extension<\/strong> is the suffix after the last dot in a filename — <code>.py<\/code>, <code>.yaml<\/code>, <code>.json<\/code>, <code>.md<\/code>. It tells you (and the computer) what kind of file it is, like a label on a jar. You'll meet these constantly in the research bot:<\/p>\n<ul>\n<li><code>.py<\/code> — Python source code (the actual program logic the AI writes and edits).<\/li>\n<li><code>.yaml<\/code> — settings, human-readable (your <code>config.yaml<\/code>).<\/li>\n<li><code>.json<\/code> — structured data; the raw analysis your bot outputs into <code>out<\/code>.<\/li>\n<li><code>.md<\/code> — Markdown, lightly-formatted text; the finished articles in <code>content<\/code>, and <code>README.md<\/code>.<\/li>\n<li><code>.env<\/code> and <code>.gitignore<\/code> — files that are <em>all<\/em> extension and no name; the leading dot just means \"configuration, please don't clutter my view.\"<\/li>\n<\/ul>\n\n<h5>Absolute vs relative paths<\/h5>\n<p>A <strong>path<\/strong> is an address for a file or folder. There are two kinds, and confusing them is a frequent source of \"it can't find the file\" errors.<\/p>\n<ul>\n<li>An <strong>absolute path<\/strong> starts at the drive letter and spells out the whole address: <code>C:\\Users\\You\\Desktop\\Personal\\research-bot\\config.yaml<\/code>. It works no matter where you're standing — like a full postal address.<\/li>\n<li>A <strong>relative path<\/strong> is written <em>from your current folder<\/em>: if you're already inside <code>research-bot<\/code>, then <code>out\\report.json<\/code> means \"the report.json inside the out folder right here.\" Shorter, but only correct if you're standing in the right place — like saying \"the room upstairs\" (true only from your own house).<\/li>\n<\/ul>\n<p>Two shorthand symbols help: <code>.<\/code> means \"the current folder\" and <code>..<\/code> means \"the folder one level up.\" So <code>cd ..<\/code> backs you out of <code>research-bot<\/code> to its parent. This is why standing in the right folder matters so much: most commands and most AI instructions use relative paths.<\/p>\n\n<h5>The research bot's anatomy, file by file<\/h5>\n<p>Now that you can navigate, here's what each part of the project is <em>for<\/em>. When the AI proposes a change, knowing which of these it's touching tells you how worried to be.<\/p>\n<ul>\n<li><code>README.md<\/code> — the project's front-page note: what the bot does and how to run it. Harmless to read; start here on any unfamiliar project.<\/li>\n<li><code>config.yaml<\/code> — your dials: which stocks, which model, the daily cap. Edits here change <em>behavior<\/em>, not logic.<\/li>\n<li><code>.env<\/code> — your secrets, chiefly the API key that lets the bot call the AI (and that costs money). <strong>This is the crown jewel.<\/strong> Anyone with it can spend on your account.<\/li>\n<li><code>.gitignore<\/code> — a list of files that must <em>never<\/em> be shared or uploaded. Critically, it should list <code>.env<\/code> so your secret key is never published by accident.<\/li>\n<li><code>src<\/code> — \"source,\" the folder holding the <code>.py<\/code> code the bot runs. This is where the AI does most of its actual work.<\/li>\n<li><code>tests<\/code> — small programs that check the code still works. Your safety net; you'll run these in a later week.<\/li>\n<li><code>out<\/code> — the bot's raw JSON results, one per analysis.<\/li>\n<li><code>content<\/code> — the polished Markdown articles, the finished product you actually read.<\/li>\n<\/ul>\n<p class=\"l-key\">💡 Key idea: <code>.env<\/code> holds the secret API key and <code>.gitignore<\/code> exists largely to keep <code>.env<\/code> private. If you ever see an AI tool propose adding <code>.env<\/code> into shared/published files, or removing it from <code>.gitignore<\/code>, stop and refuse — that's how secret keys leak.<\/p>\n\n<h5>Why typing <code>python<\/code> works anywhere: the PATH<\/h5>\n<p>You can type <code>python<\/code> from any folder and it runs, even though the Python program isn't sitting in your project. That's thanks to the <strong>PATH<\/strong> — a list of folders Windows automatically searches whenever you type a command name. Python's installer added its folder to that list, so the name resolves no matter where you stand. You rarely touch PATH directly; just know that \"command not found\" sometimes means a tool was installed but not added to PATH, not that you did anything wrong.<\/p>\n\n<h5>Three terminal tricks that save you constantly<\/h5>\n<ul>\n<li><strong>Tab-completion:<\/strong> type the first few letters of a file or folder and press <strong>Tab<\/strong>. PowerShell finishes the name for you (press Tab again to cycle options). Type <code>cd res<\/code>, hit Tab, and it fills in <code>research-bot<\/code>. Fewer typos, faster, and it confirms the thing actually exists.<\/li>\n<li><strong>Up-arrow history:<\/strong> press the <strong>Up arrow<\/strong> to bring back commands you ran before, so you can re-run or tweak them instead of retyping. Down arrow goes the other way.<\/li>\n<li><strong>Copy and paste:<\/strong> select text with the mouse to copy it; <strong>right-click<\/strong> (or Ctrl+V) to paste. Handy for pasting a long path or copying an error message to ask the AI about it.<\/li>\n<\/ul>\n\n<h5>Ctrl+C: the stop button<\/h5>\n<p>If a command gets stuck or runs longer than you want — say the bot is churning and you change your mind — press <strong>Ctrl+C<\/strong>. That interrupts the running command and hands you back the prompt. It does not close the window or harm your files; think of it as tapping the brakes. Memorize it now; you'll be glad you did the first time something hangs.<\/p>\n\n<h5>How this keeps you in control of the AI<\/h5>\n<p>When an AI coding tool works on your bot, it narrates actions in this exact terminal language: \"Running <code>dir out<\/code> to check existing results,\" \"Running <code>python -m pytest<\/code> to run the tests,\" \"Editing <code>src\\analyze.py<\/code>.\" Many tools pause and ask before each command. Your job at that pause is simple and now within reach:<\/p>\n<ul>\n<li>Is this a <em>looking<\/em> command (<code>cd<\/code>, <code>dir<\/code>, <code>type<\/code>) or a <em>changing<\/em> one (<code>mkdir<\/code>, <code>copy<\/code>, <code>del<\/code>, editing a file)? Looking is almost always fine to approve.<\/li>\n<li>If it changes things, <em>which<\/em> files? A change to <code>config.yaml<\/code> or <code>src<\/code> is normal work. A change to <code>.env<\/code> or <code>.gitignore<\/code>, or a <code>del<\/code> aimed at <code>out<\/code> or <code>content<\/code>, deserves a hard look.<\/li>\n<li>After it runs, verify by looking yourself — <code>dir<\/code> the folder, or <code>type<\/code> the file — rather than taking the AI's word for it.<\/li>\n<\/ul>\n<p class=\"l-watch\">⚠️ Never approve a command you can't read. \"Just say yes to make it work\" is how a confused or mistaken AI deletes results or exposes a secret key. If a command is unfamiliar, ask the AI to explain it in plain English first — supervising means understanding before approving.<\/p>\n",
         learn: [
           "What the terminal is and how the current folder controls every command",
           "Absolute paths vs relative paths",
@@ -1225,30 +1184,73 @@ del backup.txt</pre>
           success: "That makes the folder, then steps inside it. (In PowerShell you can also run the two lines separately.)"
         },
         quiz: [
-          {
-            q: "You type a command and it says it cannot find your project files. What is the most likely cause?",
-            options: [
-              "Your computer is broken",
-              "You are running the command in the wrong folder",
-              "You need to reinstall Python",
-              "The AI deleted your project"
-            ],
-            answer: 1,
-            explain: "Commands run relative to your current folder. 'Not found' almost always means you need to cd into the right place first."
-          },
-          {
-            q: "Which file holds your secret API keys and must never be shared or committed?",
-            options: ["README.md", "config.yaml", ".env", "src/"],
-            answer: 2,
-            explain: ".env holds secrets. config.yaml holds safe-to-share settings; README.md is documentation."
-          },
-          {
-            q: "Which of these commands only LOOKS at things and can never change your project?",
-            options: ["del", "mkdir", "type", "copy"],
-            answer: 2,
-            explain: "type just prints a file to the screen. del, mkdir, and copy all change files or folders."
-          }
-        ]
+  {
+    "q": "The prompt line shows C:\\Users\\You\\Desktop\\Personal\\research-bot. What does this tell you?",
+    "options": [
+      "The last command failed",
+      "This is your 'current folder' — commands act here unless you say otherwise",
+      "The terminal is about to delete that folder",
+      "You are logged in as the administrator"
+    ],
+    "answer": 1,
+    "explain": "The path in the prompt is the current (working) folder. Commands like dir, del, and type operate on this folder unless given a different path."
+  },
+  {
+    "q": "Which group contains ONLY 'looking' commands that can't change or delete anything?",
+    "options": [
+      "del, copy, mkdir",
+      "cd, del, notepad",
+      "cd, dir, type",
+      "mkdir, type, copy"
+    ],
+    "answer": 2,
+    "explain": "cd moves you, dir lists contents, and type prints a file — all read-only. mkdir, copy, and del create, duplicate, or destroy, so they need careful review."
+  },
+  {
+    "q": "You run 'copy config.yaml backups\\config.backup.yaml' and PowerShell prints nothing, just a new prompt. What happened?",
+    "options": [
+      "The command failed silently and you should try again",
+      "It worked — copy prints nothing on success; confirm by running dir",
+      "PowerShell is frozen and needs Ctrl+C",
+      "The file was deleted instead of copied"
+    ],
+    "answer": 1,
+    "explain": "Many changing commands say nothing when they succeed. Silence means success; you verify by looking again with dir."
+  },
+  {
+    "q": "Which file is the 'crown jewel' that holds the secret API key and should never be shared or published?",
+    "options": [
+      "README.md",
+      "config.yaml",
+      ".env",
+      "out\\report.json"
+    ],
+    "answer": 2,
+    "explain": ".env stores secrets like the API key that can spend money on your account. .gitignore exists largely to keep .env from ever being uploaded or shared."
+  },
+  {
+    "q": "You're standing in the research-bot folder. Which is a RELATIVE path to a result file?",
+    "options": [
+      "C:\\Users\\You\\Desktop\\Personal\\research-bot\\out\\report.json",
+      "out\\report.json",
+      "PS C:\\Users\\You",
+      "python report.json"
+    ],
+    "answer": 1,
+    "explain": "out\\report.json is written from your current folder, so it's relative. The full C:\\... address is absolute and works from anywhere."
+  },
+  {
+    "q": "An AI coding tool pauses and asks to run 'del out\\*.json'. What is the safest reaction?",
+    "options": [
+      "Approve it — AI tools don't make mistakes",
+      "Recognize it's a CHANGING command targeting your results and refuse or question it before approving",
+      "Press Ctrl+C immediately to crash the tool",
+      "Rename out to config.yaml first"
+    ],
+    "answer": 1,
+    "explain": "del permanently erases files, and this one targets the bot's JSON results in out. Read which command and which files are involved, and don't approve destructive commands you don't fully understand."
+  }
+]
       },
       {
         week: 2,
@@ -1257,45 +1259,7 @@ del backup.txt</pre>
         difficulty: "Beginner",
         time: "45 to 60 min per day",
         topics: ["Git", "Review", "Safety"],
-        lesson: `
-          <h5>Why Git is your safety net</h5>
-          <p>When you let an AI edit your project, the scary question is "what did it actually change?" Git answers that exactly. Git is a tool that records snapshots of your project over time, so you can always see what is different, and undo anything. As an operator, Git is how you go from "I hope the AI did the right thing" to "I can see precisely what it did".</p>
-
-          <h5>The three places your work lives</h5>
-          <ul>
-            <li><strong>Working tree</strong> &mdash; your files right now, as they are on disk (including the AI's latest edits).</li>
-            <li><strong>Staged</strong> &mdash; changes you have marked as "ready to save into the next snapshot".</li>
-            <li><strong>History</strong> &mdash; the permanent, saved snapshots, called <strong>commits</strong>. A commit is a labelled save point: a set of changes plus a message describing them.</li>
-          </ul>
-
-          <h5>The four commands that do 90% of review</h5>
-          <pre class="lesson-code"><span class="c"># 1. What files changed? (your starting point, always)</span>
-git status
-
-<span class="c"># 2. Show me the exact lines that changed</span>
-git diff
-
-<span class="c"># 3. Save reviewed changes as a labelled snapshot</span>
-git add .
-git commit -m "Add scenario table to content stage"
-
-<span class="c"># 4. Show recent snapshots, one per line</span>
-git log --oneline</pre>
-
-          <h5>How to read a diff</h5>
-          <p>In <code>git diff</code>, lines starting with a green <code class="g">+</code> were <strong>added</strong> and lines with a red <code class="r">-</code> were <strong>removed</strong>. So this means the AI replaced one line with another:</p>
-          <pre class="lesson-code"><span class="r">- rating = "buy"</span>
-<span class="g">+ rating = verdict.recommendation</span></pre>
-          <p>Read each <code class="g">+</code> line and ask: do I actually want this change? That habit alone catches most AI mistakes.</p>
-
-          <h5>Keeping secrets out</h5>
-          <p>Your <code>.env</code> must be listed in <code>.gitignore</code> so it never gets committed. Verify it:</p>
-          <pre class="lesson-code">git check-ignore .env
-<span class="c"># If it prints ".env", you are protected.</span>
-<span class="c"># If it prints nothing, .env is NOT ignored -- fix that before committing.</span></pre>
-          <p class="l-watch">⚠️ Once a secret is committed and pushed, treat it as leaked forever &mdash; even if you delete it later, it stays in history. The fix is to rotate (regenerate) the key, which you will learn in Week 4.</p>
-          <p class="l-key">💡 Operator move: before you accept any AI change, run <code>git status</code> then <code>git diff</code>. If the diff touches files you did not ask about, stop and ask why.</p>
-        `,
+        lesson: "\n<p>Last week you learned to read what the AI <em>says<\/em> it did. This week you learn to verify what it <em>actually<\/em> did — down to the exact line. The tool for that is <strong>Git<\/strong> (pronounced \"git\"), the same system professional software teams use to track every change to every file. You are not going to become a Git expert. You are going to learn the five or six things that let you supervise an AI coding tool with confidence: see what changed, read it like a ledger, and keep your secrets out of the record.<\/p>\n\n<h5>The problem Git solves: the \"report_final_v3_REALLY.docx\" mess<\/h5>\n<p>Picture how most people version a document. You start with <code>report.docx<\/code>. You edit it and, nervous about losing the old one, save <code>report_final.docx<\/code>. Then <code>report_final_v2.docx<\/code>, then <code>report_final_v3_REALLY.docx<\/code>, then <code>report_final_USE_THIS_ONE.docx<\/code>. A week later you have no idea which is current, what changed between any two, or how to get back the good paragraph you deleted on Tuesday.<\/p>\n<p><strong>Version control<\/strong> is software that solves exactly this. Instead of a litter of copies, you keep <em>one<\/em> set of files plus a perfect, dated history of every change ever made — who made it, when, and why. You can compare any two points in time, and you can rewind. For your research bot, this means: when the AI rewrites how stock scores are calculated, you can see precisely which lines moved, and undo it in seconds if the numbers look wrong.<\/p>\n\n<h5>The vocabulary, defined once<\/h5>\n<p>A handful of words unlock everything else. Read these slowly.<\/p>\n<ul>\n<li><strong>Repository<\/strong> (or <strong>repo<\/strong>): a folder that Git is watching. Your whole research-bot project folder is the repo. Git stores its history in a hidden sub-folder called <code>.git<\/code> inside it — leave that alone.<\/li>\n<li><strong>Working tree<\/strong>: the actual files as they sit on your disk right now — the ones you and the AI edit. This is your \"desk.\"<\/li>\n<li><strong>Commit<\/strong>: a saved snapshot of the project at one moment, with a short message describing it. Think of it as a labeled photograph of every file. History is a chain of these photos.<\/li>\n<li><strong>Staged area<\/strong> (or <strong>index<\/strong>): a holding tray. Before a snapshot is taken, you place into the tray exactly which changes belong in it. This lets you commit some changes now and others later — like choosing which items go in this box before sealing it.<\/li>\n<li><strong>History<\/strong>: the full chain of commits, oldest to newest.<\/li>\n<li><strong>HEAD<\/strong>: a pointer meaning \"the commit you're currently sitting on\" — almost always the latest one. When you read \"changes since HEAD,\" it means \"changes since your last saved snapshot.\"<\/li>\n<\/ul>\n<p class=\"l-key\">💡 Key idea: A change lives in your working tree (on disk), then moves to the staged area (the tray), then into a commit (a permanent snapshot). Understanding those three locations is 80% of Git.<\/p>\n\n<h5>First, confirm Git is even installed<\/h5>\n<p>Open your terminal (PowerShell on Windows) and type one command. The <code>--version<\/code> flag just asks the program to print its version number — a harmless way to check it exists.<\/p>\n<pre class=\"lesson-code\">PS C:\\Users\\You\\research-bot&gt; git --version\ngit version 2.45.1.windows.1   <span class=\"c\"># Good — Git is installed and ready.<\/span><\/pre>\n<p>If instead you see <span class=\"r\">\"git is not recognized as a command\"<\/span>, Git isn't installed; ask your AI assistant to walk you through installing it from git-scm.com, then reopen the terminal.<\/p>\n\n<h5>Worked walkthrough 1: edit a file, then read its status<\/h5>\n<p>Let's make a tiny, harmless change — adding a comment line to a config file — and watch Git notice. <code>git status<\/code> is the command you'll run most. It answers: \"what's different on my desk versus my last snapshot?\"<\/p>\n<pre class=\"lesson-code\">PS C:\\Users\\You\\research-bot&gt; git status\nOn branch main\nYour branch is up to date with 'origin/main'.\n\nChanges not staged for commit:\n  (use \"git add &lt;file&gt;...\" to update what will be committed)\n  (use \"git restore &lt;file&gt;...\" to discard changes in working directory)\n        <span class=\"r\">modified:   config.py<\/span>\n\nno changes added to commit (yet)<\/pre>\n<p>Reading it line by line: <span class=\"c\">\"On branch main\"<\/span> — you're on the default line of history (more on branches below). <span class=\"c\">\"Changes not staged for commit\"<\/span> — you've edited something but haven't put it in the tray yet. <span class=\"c\">\"modified: config.py\"<\/span> in red — exactly one file changed. Git even reminds you of the two relevant commands: <code>git add<\/code> to stage it, or <code>git restore<\/code> to throw the change away. <strong>Status tells you the big picture but not the actual content of the change.<\/strong> For that, you read a diff.<\/p>\n\n<h5>Worked walkthrough 2: reading a diff (the most important skill)<\/h5>\n<p>A <strong>diff<\/strong> (short for \"difference\") shows the exact lines that changed. This is the heart of supervising AI: never trust a summary like \"I cleaned up the config\" — make the AI's edit show you its receipts.<\/p>\n<pre class=\"lesson-code\">PS C:\\Users\\You\\research-bot&gt; git diff\ndiff --git a/config.py b/config.py\nindex 8a1c2f0..b7e4d19 100644\n--- a/config.py\n+++ b/config.py\n@@ -3,7 +3,7 @@\n MODEL_NAME = \"claude-opus-4\"\n<span class=\"r\">-MAX_STOCKS = 10<\/span>\n<span class=\"g\">+MAX_STOCKS = 25   # raised limit for broader scans<\/span>\n OUTPUT_DIR = \"articles\"<\/pre>\n<p>How to read it: lines starting with <span class=\"r\">-<\/span> (shown red) are <strong>removed<\/strong>; lines starting with <span class=\"g\">+<\/span> (shown green) are <strong>added<\/strong>. Lines with a space in front are unchanged, shown only for context. So this diff says: the limit of stocks per run was changed from 10 to 25. The <code>@@ -3,7 +3,7 @@<\/code> header just locates the change (around line 3) — you can ignore it. Everything else — <code>--- a/<\/code>, <code>index 8a1c…<\/code> — is Git's plumbing; skim past it.<\/p>\n<p class=\"l-watch\">⚠️ A change you didn't expect is the whole point of reading diffs. If you asked the AI to fix a typo and the diff also shows it touched <code>scoring.py<\/code> or deleted a line in your data loader, stop and ask why before committing.<\/p>\n\n<h5>Reading a multi-file diff: skim for surprises<\/h5>\n<p>Real AI edits often touch several files. Running <code>git diff<\/code> then shows each file in turn, separated by a <code>diff --git<\/code> header. You don't need to study every line. Do this instead: scroll through and check (1) <em>which files<\/em> appear — are they the ones you'd expect? (2) the rough <em>balance<\/em> of red and green — a \"small fix\" that removes 80 lines deserves suspicion. (3) anything near sensitive logic — your scoring rules, your file-writing, anything mentioning keys or passwords. You're a supervisor doing a spot-check, not an auditor reading every word.<\/p>\n\n<h5>Worked walkthrough 3: stage, commit, and view history<\/h5>\n<p>Happy with the change? Now save the snapshot. Two steps: <code>git add<\/code> moves the change into the tray; <code>git commit<\/code> seals the box with a label. The <code>-m<\/code> flag (for \"message\") lets you type the label inline.<\/p>\n<pre class=\"lesson-code\">PS C:\\Users\\You\\research-bot&gt; git add config.py\nPS C:\\Users\\You\\research-bot&gt; git commit -m \"Raise MAX_STOCKS from 10 to 25 for broader scans\"\n[main 4f2a9c1] Raise MAX_STOCKS from 10 to 25 for broader scans\n 1 file changed, 1 insertion(+), 1 deletion(-)<\/pre>\n<p>Git confirms: one commit created on <code>main<\/code>, with the short ID <code>4f2a9c1<\/code> (every commit gets a unique fingerprint), and a tally — 1 file, 1 line added, 1 removed. Now look at your history with <code>git log --oneline<\/code>, which prints one tidy line per commit (newest at top).<\/p>\n<pre class=\"lesson-code\">PS C:\\Users\\You\\research-bot&gt; git log --oneline\n<span class=\"g\">4f2a9c1 (HEAD -&gt; main)<\/span> Raise MAX_STOCKS from 10 to 25 for broader scans\n9d3b1e7 Fix crash when ticker has no earnings data\n1a7c004 Add Markdown export for articles\ne5f8a22 Initial research bot<\/pre>\n<p>That <span class=\"g\">(HEAD -&gt; main)<\/span> tag confirms HEAD — your current position — points at the newest commit. You can now read the project's whole story top to bottom. This is why <strong>commit messages matter<\/strong>: six months from now, \"Fix crash when ticker has no earnings data\" tells future-you exactly what happened, while a lazy \"update\" or \"stuff\" tells you nothing. When an AI commits for you, read its message and make it specific.<\/p>\n\n<h5>Undoing uncommitted changes (so mistakes aren't scary)<\/h5>\n<p>Knowing how to rewind removes the fear. If the AI made a mess and you have <em>not<\/em> committed yet, you can wipe the edit and return the file to its last snapshot with <code>git restore<\/code>:<\/p>\n<pre class=\"lesson-code\">PS C:\\Users\\You\\research-bot&gt; git restore config.py   <span class=\"c\"># discard ALL uncommitted edits to this file<\/span>\nPS C:\\Users\\You\\research-bot&gt; git status\nOn branch main\nnothing to commit, working tree clean   <span class=\"c\"># back to a clean slate — the edit is gone.<\/span><\/pre>\n<p class=\"l-watch\">⚠️ <code>git restore<\/code> permanently throws away uncommitted work — that's the point, but there's no recycle bin. Only run it when you're sure you want the AI's changes gone. Committed snapshots are safe; this only affects un-saved edits.<\/p>\n\n<h5>The big one: keep secrets out of the history<\/h5>\n<p>Your research bot uses an <strong>API key<\/strong> — a long secret password that authorizes calls to the AI service and gets billed to you. It typically lives in a file named <code>.env<\/code> (for \"environment\"). <strong>This file must never enter Git's history.<\/strong> A commit is permanent and often gets uploaded (see GitHub below); a leaked key can be used by strangers to run up charges or impersonate your account.<\/p>\n<p>The safeguard is a file called <code>.gitignore<\/code> — a plain list of files Git should pretend not to see. To confirm a file is protected, use <code>git check-ignore<\/code>, which prints the filename only if it's being ignored.<\/p>\n<pre class=\"lesson-code\">PS C:\\Users\\You\\research-bot&gt; git check-ignore .env\n.env                          <span class=\"c\"># Protected. Git is ignoring it — it CANNOT be committed.<\/span>\n\nPS C:\\Users\\You\\research-bot&gt; git check-ignore notes.txt\n<span class=\"c\"># (no output) — NOT ignored. This file WOULD be committed if you add it.<\/span><\/pre>\n<p>If <code>.env<\/code> prints nothing, it is <strong>not<\/strong> protected — open <code>.gitignore<\/code> and make sure a line reading exactly <code>.env<\/code> is present, then check again. Also glance at <code>git status<\/code>: if you ever see <code>.env<\/code> listed under changes, treat it as an alarm.<\/p>\n<p class=\"l-watch\">⚠️ Once a secret is committed, deleting it later does <em>not<\/em> erase it — Git keeps every past snapshot, so the key still sits in history for anyone with the repo to find. The only real fix is to <strong>rotate the key<\/strong> (cancel the old one and issue a new one at the provider's website). We cover rotation in Week 4; for now, the goal is to never let it in.<\/p>\n\n<h5>Local repo vs GitHub: push and pull in plain terms<\/h5>\n<p>Everything so far happens on your own computer — that's your <strong>local repository<\/strong>. <strong>GitHub<\/strong> is a website that hosts a copy of a repo online (a <strong>remote<\/strong>), used for backup and collaboration. Two commands move commits between them: <code>git push<\/code> uploads your local commits to GitHub; <code>git pull<\/code> downloads commits others added. The lesson for a key-holder: <strong>pushing publishes your history to the internet<\/strong>, which is exactly why a committed secret is so dangerous. The <code>origin/main<\/code> you saw in <code>git status<\/code> simply refers to the <code>main<\/code> branch on your remote named <code>origin<\/code>.<\/p>\n\n<h5>Branches, in one paragraph<\/h5>\n<p>A <strong>branch<\/strong> is a parallel line of history, used to try changes without disturbing the main version. The default branch is usually called <code>main<\/code>. An AI tool might create a branch like <code>fix-scoring<\/code> to do its work, then merge it back into <code>main<\/code> when you approve. You don't need to manage branches to supervise — just recognize the word when you see it in <code>git status<\/code> (\"On branch …\") so you always know which version you're looking at.<\/p>\n\n<h5>Your repeatable review habit<\/h5>\n<p>Bundle all of this into one routine you run <em>every time<\/em> the AI touches your bot, before you trust or run anything:<\/p>\n<ul>\n<li><strong>1. <code>git status<\/code><\/strong> — which files changed? Any surprises (especially <code>.env<\/code>)?<\/li>\n<li><strong>2. <code>git diff<\/code><\/strong> — read the actual + and − lines. Do the changes match what you asked for, and nothing more?<\/li>\n<li><strong>3. Decide.<\/strong> Good? Continue. Wrong? <code>git restore<\/code> to wipe it and re-prompt the AI.<\/li>\n<li><strong>4. <code>git add<\/code> + <code>git commit -m \"clear message\"<\/code><\/strong> — save the snapshot with an honest label.<\/li>\n<li><strong>5. <code>git log --oneline<\/code><\/strong> — confirm your commit landed and the history reads cleanly.<\/li>\n<\/ul>\n<p class=\"l-key\">💡 Key idea: You don't need to write code to supervise it. Status, diff, restore, add, commit, log — six commands turn \"I hope the AI did the right thing\" into \"I can see exactly what the AI did, and undo it if it didn't.\"<\/p>\n",
         learn: [
           "What a repository, a commit, and the working tree are",
           "The difference between working tree, staged changes, and history",
@@ -1315,41 +1279,73 @@ git log --oneline</pre>
         deliverable: "You can review what the AI changed, line by line, and confirm the repo is clean and safe to commit.",
         activityType: "quiz",
         quiz: [
-          {
-            q: "In a git diff, a line that begins with a green + means that line was...",
-            options: ["deleted", "added", "renamed", "ignored"],
-            answer: 1,
-            explain: "+ means added, - means removed. Reading the + lines is how you see what the AI introduced."
-          },
-          {
-            q: "You run git check-ignore .env and it prints nothing. What does that tell you?",
-            options: [
-              ".env is safely ignored",
-              ".env is NOT ignored and could be committed by accident",
-              "Git is broken",
-              "You have no secrets"
-            ],
-            answer: 1,
-            explain: "If it prints nothing, .env is not in .gitignore. Fix that before committing or you risk leaking keys."
-          },
-          {
-            q: "What is the right first command when you want to review what the AI just changed?",
-            options: ["git commit", "git status", "git push", "del .env"],
-            answer: 1,
-            explain: "git status shows which files changed. From there you use git diff to see the exact line changes."
-          },
-          {
-            q: "A commit is best described as...",
-            options: [
-              "A way to delete your project",
-              "A labelled snapshot of changes plus a message describing them",
-              "A secret API key",
-              "A type of folder"
-            ],
-            answer: 1,
-            explain: "A commit is a save point: a set of changes with a human-readable message. History is made of commits."
-          }
-        ]
+  {
+    "q": "In a Git diff, a line that begins with a green '+' means:",
+    "options": [
+      "The line was added in this change",
+      "The line was removed in this change",
+      "The line has a syntax error",
+      "The line is a comment Git inserted"
+    ],
+    "answer": 0,
+    "explain": "Lines starting with '+' (shown green) were added; lines starting with '-' (shown red) were removed. Plain context lines have a leading space."
+  },
+  {
+    "q": "You run 'git check-ignore .env' and it prints nothing at all. What does that tell you?",
+    "options": [
+      ".env is safely protected and cannot be committed",
+      ".env is NOT being ignored, so it could be committed — a danger for your secret key",
+      "Git is not installed",
+      "The .env file does not exist"
+    ],
+    "answer": 1,
+    "explain": "check-ignore prints the filename only when it IS ignored. No output means the file is unprotected and would be committed if added — fix .gitignore before continuing."
+  },
+  {
+    "q": "What is the correct order a change moves through before it becomes part of history?",
+    "options": [
+      "Commit, then working tree, then staged area",
+      "Staged area, then commit, then working tree",
+      "Working tree (on disk), then staged area (the tray), then commit (snapshot)",
+      "GitHub, then working tree, then commit"
+    ],
+    "answer": 2,
+    "explain": "You edit files in the working tree, place chosen changes into the staged area with 'git add', then seal them into a commit with 'git commit'."
+  },
+  {
+    "q": "The AI made an edit you don't like, and you have NOT committed it yet. Which command discards the uncommitted change and returns the file to its last snapshot?",
+    "options": [
+      "git push config.py",
+      "git restore config.py",
+      "git log config.py",
+      "git add config.py"
+    ],
+    "answer": 1,
+    "explain": "'git restore <file>' throws away uncommitted edits and restores the last committed version. It has no undo, so use it only when you're sure."
+  },
+  {
+    "q": "A secret API key was accidentally committed last week. You delete the key from the file today and commit again. Is the secret now safe?",
+    "options": [
+      "Yes — deleting it removes it everywhere",
+      "Yes, as long as you also run git status",
+      "No — Git keeps every past snapshot, so the key still lives in history; you must rotate (replace) the key",
+      "No, but only if you have pushed to GitHub"
+    ],
+    "answer": 2,
+    "explain": "History is permanent: old commits still contain the key. The only real fix is to rotate the key at the provider, regardless of whether you pushed."
+  },
+  {
+    "q": "Which command gives a quick, one-line-per-commit view of the project's history with the newest commit on top?",
+    "options": [
+      "git status",
+      "git diff",
+      "git log --oneline",
+      "git check-ignore"
+    ],
+    "answer": 2,
+    "explain": "'git log --oneline' prints one compact line per commit (ID plus message), newest first, so you can skim the project's whole story."
+  }
+]
       },
       {
         week: 3,
@@ -1358,53 +1354,7 @@ git log --oneline</pre>
         difficulty: "Beginner",
         time: "45 to 60 min per day",
         topics: ["Python", "Code Reading", "Logic"],
-        lesson: `
-          <h5>You are reading, not writing</h5>
-          <p>Your goal is not to write Python from scratch. It is to <strong>read</strong> what the AI wrote and translate it into plain English so you can judge whether it makes sense. Python reads almost like English once you know a handful of shapes.</p>
-
-          <h5>Values and variables</h5>
-          <p>A <strong>variable</strong> is a labelled box holding a value. The basic value types:</p>
-          <pre class="lesson-code">ticker = "AAPL"        <span class="c"># string (text), in quotes</span>
-price = 192.5          <span class="c"># number</span>
-is_buy = True          <span class="c"># boolean: True or False</span>
-risks = ["debt", "fx"] <span class="c"># list: an ordered collection</span>
-result = {             <span class="c"># dict: labelled fields (key: value)</span>
-    "ticker": "AAPL",
-    "rating": "buy"
-}</pre>
-          <p>A dictionary (<code>dict</code>) is exactly the shape your bot's JSON output takes &mdash; named fields with values. <code>result["rating"]</code> reads the value <code>"buy"</code>.</p>
-
-          <h5>Decisions and repetition</h5>
-          <pre class="lesson-code"><span class="c"># if: do something only when a condition is true</span>
-if price > 100:
-    print("expensive")
-else:
-    print("cheap")
-
-<span class="c"># for: repeat once per item in a list</span>
-for risk in risks:
-    print(risk)</pre>
-          <p>Notice the <strong>indentation</strong> (the spaces). In Python, the indented lines are the ones "inside" the if or the loop. Indentation is not decoration &mdash; it is the structure.</p>
-
-          <h5>Functions: reusable actions</h5>
-          <pre class="lesson-code">def make_rating(score):
-    if score &gt; 7:
-        return "buy"
-    return "hold"
-
-rating = make_rating(9)   <span class="c"># rating is now "buy"</span></pre>
-          <p>A function (<code>def</code>) packages an action. It takes inputs (here <code>score</code>) and hands back a result with <code>return</code>. When you see a function call like <code>make_rating(9)</code>, read it as "run make_rating with 9 and give me the answer".</p>
-
-          <h5>Reading the lines that matter to you</h5>
-          <p>Two patterns show up constantly in your bot:</p>
-          <pre class="lesson-code"><span class="c"># loading config -- where settings come from</span>
-config = load_config("config.yaml")
-
-<span class="c"># calling the model API -- where the AI work happens</span>
-response = client.messages.create(model=config["model"], ...)</pre>
-          <p>And a subtle one worth understanding: <code>if temperature is not None:</code> means "only do this when temperature has actually been set". <code>None</code> is Python's word for "no value yet" &mdash; different from <code>0</code> or empty text.</p>
-          <p class="l-key">💡 Reading habit: go line by line and say each one aloud in English. If you reach a line you cannot translate, that is exactly the line to ask the AI to explain &mdash; then verify its explanation against the code.</p>
-        `,
+        lesson: "\n<h5>Why you are learning to READ, not WRITE<\/h5>\n<p>You will never have to type Python from a blank screen. The AI does that. Your job is the job of an <em>editor<\/em>, not an <em>author<\/em>: when the AI hands you 40 lines, you need to look at them and say, in plain English, \"this takes the stock score, and if it is above 7 it labels the stock a Buy.\" If you can translate code into English, you can catch the moment the AI's English and the code's English disagree — and that disagreement is where almost every bug lives.<\/p>\n<p>Think of it like reading a contract your lawyer drafted. You are not a lawyer. But you can read each clause and ask \"wait, does this say what I asked for?\" That single skill catches expensive mistakes. Same here.<\/p>\n<p class=\"l-key\">💡 Key idea: You don't need to write Python. You need to read a line and say it out loud in English. If you can't say what a line does, that is exactly the line to ask the AI about.<\/p>\n\n<h5>How Python runs: top to bottom, one line at a time<\/h5>\n<p>A Python file is a <strong>recipe<\/strong>. The computer starts at line 1 and walks downward, doing each instruction in order, then stops at the bottom. It does not skip around or read ahead. This matters: if your bot loads its settings on line 5 and uses them on line 30, line 5 <em>must<\/em> come first. Order is meaning.<\/p>\n<p>A <strong>variable<\/strong> is a labeled box that holds a value. You put something in the box with <code>=<\/code>, and later you use the label to get it back.<\/p>\n<pre class=\"lesson-code\"><span class=\"c\"># the computer reads these three lines in order, top to bottom<\/span>\nticker = \"AAPL\"        <span class=\"c\"># put the text \"AAPL\" in a box labeled ticker<\/span>\nscore = 8              <span class=\"c\"># put the number 8 in a box labeled score<\/span>\nprint(ticker)          <span class=\"c\"># show what is in the ticker box<\/span><\/pre>\n<p>Output: <code>AAPL<\/code>. Line 1 fills the box, line 2 fills another box, line 3 reads the first box and prints it. That is the whole rhythm of every program.<\/p>\n\n<h5>Comments: the notes the computer ignores<\/h5>\n<p>Anything after a <code>#<\/code> on a line is a <strong>comment<\/strong> — a note for humans. Python ignores it completely. Comments are often the AI explaining itself. They are helpful, but be careful: <em>a comment can lie.<\/em> The comment might say \"only Buy if score is above 7\" while the code right below it actually checks \"above 6.\" When the comment and the code disagree, the <strong>code<\/strong> is what runs. Always trust the code, then go fix whichever one is wrong.<\/p>\n\n<h5>The basic types (the kinds of values a box can hold)<\/h5>\n<p>Every value has a <strong>type<\/strong>. You only need five to read your bot:<\/p>\n<ul>\n<li><strong>String<\/strong> — text, always in quotes: <code>\"Apple Inc.\"<\/code> or <code>'AAPL'<\/code>. (The word \"string\" means a string of characters.)<\/li>\n<li><strong>Number<\/strong> — <code>8<\/code> (whole number, called an <em>integer<\/em>) or <code>7.5<\/code> (decimal, called a <em>float<\/em>). No quotes.<\/li>\n<li><strong>Boolean<\/strong> — a yes/no value, written exactly <code>True<\/code> or <code>False<\/code> (capital first letter). Named after George Boole.<\/li>\n<li><strong>List<\/strong> — an ordered row of values in square brackets: <code>[\"debt\", \"lawsuit\", \"competition\"]<\/code>. Order is kept.<\/li>\n<li><strong>Dict<\/strong> (dictionary) — a set of labeled values in curly braces: <code>{\"ticker\": \"AAPL\", \"score\": 8}<\/code>. Each entry is a <em>key<\/em> (the label) and a <em>value<\/em>.<\/li>\n<\/ul>\n<p class=\"l-key\">💡 Key idea: A Python <strong>dict<\/strong> is the same shape as your bot's JSON output. The JSON your bot writes — <code>{\"ticker\": \"AAPL\", \"score\": 8, \"risks\": [...]}<\/code> — becomes a dict the moment Python loads it. If you understand JSON, you already understand dicts.<\/p>\n\n<h5>Reaching inside: indexing and nesting<\/h5>\n<p>To pull one value out of a dict, use square brackets with the key: <code>result[\"score\"]<\/code> gives <code>8<\/code>. To pull one item out of a list, use its position number — and Python <strong>counts from 0<\/strong>, not 1. So <code>risks[0]<\/code> is the <em>first<\/em> risk, <code>risks[1]<\/code> is the second. This off-by-one habit (first thing is at position 0) trips up everyone at first; just remember \"zero is the front of the line.\"<\/p>\n<p>Real bot data is <strong>nested<\/strong> — dicts inside dicts, lists inside dicts. You read these left to right, peeling one layer at a time:<\/p>\n<pre class=\"lesson-code\">result = {\"ticker\": \"AAPL\", \"risks\": [\"high debt\", \"lawsuit\"]}\nfirst_risk = result[\"risks\"][0]\nprint(first_risk)<\/pre>\n<p>Trace it: <code>result[\"risks\"]<\/code> hands back the list <code>[\"high debt\", \"lawsuit\"]<\/code>; then <code>[0]<\/code> takes the first item of that list. Output: <code>high debt<\/code>. Read it aloud as \"from result, take risks, then take the first one.\"<\/p>\n\n<h5>= versus == (the most common confusion)<\/h5>\n<p>This pair looks tiny but means two completely different things:<\/p>\n<ul>\n<li><code>=<\/code> means <strong>assign<\/strong> — \"put this value in the box.\" <code>score = 8<\/code> sets the box.<\/li>\n<li><code>==<\/code> means <strong>compare<\/strong> — \"are these two equal?\" It asks a question and answers <code>True<\/code> or <code>False<\/code>. <code>score == 8<\/code> asks \"is score equal to 8?\"<\/li>\n<\/ul>\n<p class=\"l-watch\">⚠️ If you ever see a single <code>=<\/code> inside an <code>if<\/code> question, something is wrong — questions need <code>==<\/code>. Modern Python usually refuses to run that mistake, but the meaning slip is real: <code>=<\/code> changes a value, <code>==<\/code> checks a value.<\/p>\n\n<h5>if / else: making a decision<\/h5>\n<p>An <code>if<\/code> asks a yes/no question. If the answer is <code>True<\/code>, Python does the indented lines under it. Otherwise it does the <code>else<\/code> block. The comparison signs read just like math: <code>&gt;<\/code> greater than, <code>&lt;<\/code> less than, <code>&gt;=<\/code> greater-than-or-equal, <code>&lt;=<\/code>, and <code>==<\/code> equal.<\/p>\n<pre class=\"lesson-code\">score = 7\nif score &gt;= 7:\n    rating = \"Buy\"\nelse:\n    rating = \"Hold\"\nprint(rating)<\/pre>\n<p>Trace it: score is 7. The question is \"is 7 greater than or equal to 7?\" — yes, <code>True<\/code>. So <code>rating<\/code> becomes \"Buy\" and the <code>else<\/code> is skipped. Output: <code>Buy<\/code>. Notice that <code>&gt;=<\/code> includes 7 itself; a plain <code>&gt;<\/code> (greater than) would have answered False and given \"Hold.\" That one missing <code>=<\/code> flips the result for every stock that scores exactly 7.<\/p>\n\n<h5>Indentation is structure, not decoration<\/h5>\n<p>In most documents, indenting is just for looks. In Python it is <strong>meaning<\/strong>. The spaces at the start of a line say which block a line belongs to. The two indented lines above belong to the <code>if<\/code> and <code>else<\/code>. If a line is indented one level deeper, it is \"inside\" the thing above it; if it is pulled back to the left, it is \"outside\" and runs every time. Reading the indentation is reading the logic. Misaligned indentation is a classic AI slip — a line that was meant to run only inside a loop gets dedented and suddenly runs once at the end instead.<\/p>\n\n<h5>for loops: doing the same thing to each item<\/h5>\n<p>A <code>for<\/code> loop walks through a list and runs its indented body once per item. Your bot uses this constantly — \"for each stock, do the analysis,\" \"for each risk, print a line.\"<\/p>\n<pre class=\"lesson-code\">tickers = [\"AAPL\", \"MSFT\", \"GOOG\"]\nfor t in tickers:\n    print(\"Analyzing\", t)<\/pre>\n<p>Trace it: the loop sets <code>t<\/code> to \"AAPL\" and prints; then <code>t<\/code> becomes \"MSFT\" and prints; then \"GOOG.\" Three trips, then it stops. Output is three lines: <code>Analyzing AAPL<\/code>, <code>Analyzing MSFT<\/code>, <code>Analyzing GOOG<\/code>. Read <code>for t in tickers<\/code> aloud as \"for each t in the list tickers.\"<\/p>\n\n<h5>Functions: a named, reusable chunk of recipe<\/h5>\n<p>A <strong>function<\/strong> is a mini-recipe with a name. You <em>define<\/em> it once with <code>def<\/code>, then <em>call<\/em> it whenever you need it. The values you hand in are <strong>arguments<\/strong>; the value it hands back is the <strong>return value<\/strong>. <code>return<\/code> ends the function and ships one value back to whoever called it.<\/p>\n<pre class=\"lesson-code\">def make_rating(score):\n    if score &gt;= 7:\n        return \"Buy\"\n    return \"Hold\"\n\nresult = make_rating(8)\nprint(result)<\/pre>\n<p>Trace it: we call <code>make_rating(8)<\/code>, so inside the function <code>score<\/code> is 8. \"Is 8 &gt;= 7?\" Yes, so it hits <code>return \"Buy\"<\/code> and stops immediately — the <code>return \"Hold\"<\/code> line never runs. \"Buy\" travels back and lands in <code>result<\/code>. Output: <code>Buy<\/code>. Note how the second <code>return<\/code> acts as the \"everything else\" case because the first <code>return<\/code> already exited for high scores.<\/p>\n\n<h5>Methods vs plain functions, and f-strings<\/h5>\n<p>A <strong>method<\/strong> is a function that belongs to a value and is called with a dot: <code>ticker.upper()<\/code>. Read the dot as \"of.\" <code>\"aapl\".upper()<\/code> is \"the upper-case of aapl\" and gives <code>\"AAPL\"<\/code>. Other common ones: <code>.lower()<\/code>, <code>.strip()<\/code> (trims blank spaces off the ends), <code>.get(...)<\/code> on a dict. A plain function stands alone — <code>print(x)<\/code>; a method hangs off a value — <code>x.upper()<\/code>.<\/p>\n<p>An <strong>f-string<\/strong> builds text with values dropped in. It starts with the letter <code>f<\/code> before the quotes, and anything in <code>{ }<\/code> gets swapped for the value:<\/p>\n<pre class=\"lesson-code\">ticker = \"AAPL\"\nscore = 8\nprint(f\"{ticker} scored {score} out of 10\")<\/pre>\n<p>Output: <code>AAPL scored 8 out of 10<\/code>. The <code>{ticker}<\/code> became \"AAPL\" and <code>{score}<\/code> became 8. This is how your bot stitches its Markdown report together.<\/p>\n\n<h5>None, truthiness, and why \"is not None\" matters<\/h5>\n<p><code>None<\/code> is Python's word for \"nothing here / no value yet.\" It is what a function returns when it has nothing real to give — say the model API call failed and produced no answer. <code>None<\/code> is not zero and not empty text; it is the absence of any value.<\/p>\n<p>Python also has the idea of <strong>truthiness<\/strong>: when used as a yes/no, some values count as \"falsy\" (treated like False) even though they are not literally <code>False<\/code>. The falsy values are: <code>None<\/code>, <code>0<\/code>, an empty string <code>\"\"<\/code>, an empty list <code>[]<\/code>, an empty dict <code>{}<\/code>, and <code>False<\/code>. Everything else is \"truthy.\"<\/p>\n<p class=\"l-watch\">⚠️ This is why <code>if result:<\/code> and <code>if result is not None:<\/code> are different. <code>if result:<\/code> is False when result is None <em>but also<\/em> when result is 0 or an empty list. If a real score of <code>0<\/code> is a valid answer, <code>if score:<\/code> would wrongly skip it as if it were missing. Use <code>is not None<\/code> when you mean \"did we actually get something,\" and save plain <code>if x:<\/code> for \"is this non-empty.\" Mixing these up silently drops valid zeros.<\/p>\n\n<h5>Imports and dict.get() with a default<\/h5>\n<p>An <strong>import<\/strong> at the top of a file pulls in code someone else wrote — a <strong>module<\/strong> (a toolbox). <code>import json<\/code> loads the JSON toolbox; <code>import os<\/code> loads tools for the operating system. When you later see <code>json.loads(...)<\/code>, that is \"the loads tool from the json toolbox.\"<\/p>\n<p><code>dict.get(\"key\", default)<\/code> safely reads a dict: it returns the value for that key, or the <strong>default<\/strong> you supplied if the key is missing — instead of crashing. <code>config.get(\"model\", \"claude-opus-4-8\")<\/code> means \"give me the model setting, but if nobody set one, fall back to claude-opus-4-8.\"<\/p>\n\n<h5>Walkthrough 1 — reading a real config-loader line by line<\/h5>\n<pre class=\"lesson-code\">import os\nimport json\n\ndef load_config(path):\n    with open(path) as f:        <span class=\"c\"># open the settings file<\/span>\n        data = json.load(f)      <span class=\"c\"># turn its JSON text into a dict<\/span>\n    model = data.get(\"model\", \"claude-opus-4-8\")\n    threshold = data.get(\"buy_threshold\", 7)\n    return {\"model\": model, \"threshold\": threshold}<\/pre>\n<p>Say each line in English. Lines 1–2 load two toolboxes. Line 4 defines a function that takes a file <code>path<\/code>. <code>open(path)<\/code> opens that file and <code>json.load(f)<\/code> reads its JSON into a dict called <code>data<\/code>. Then <code>data.get(\"model\", \"claude-opus-4-8\")<\/code> pulls the model name, defaulting to claude-opus-4-8 if it's absent; <code>data.get(\"buy_threshold\", 7)<\/code> pulls the buy cutoff, defaulting to 7. Finally it <code>return<\/code>s a small dict with both. So this function's job, in one sentence: \"read the settings file and hand back which model to use and the buy cutoff, with safe defaults if either is missing.\"<\/p>\n\n<h5>Walkthrough 2 — reading a \"build the rating\" function and spotting the bug<\/h5>\n<pre class=\"lesson-code\">def build_rating(result):\n    score = result.get(\"score\")\n    if score is not None and score &gt; 7:\n        return \"Buy\"\n    elif score is not None and score &gt;= 4:\n        return \"Hold\"\n    else:\n        return \"Sell\"<\/pre>\n<p>Read it: pull <code>score<\/code> from the result dict (<code>None<\/code> if missing). If we actually got a score <em>and<\/em> it is above 7, return \"Buy.\" Otherwise if we got a score and it is 4 or higher, return \"Hold.\" Otherwise \"Sell.\" The <code>is not None<\/code> guards are good — a missing score correctly falls through to \"Sell\" rather than crashing.<\/p>\n<p>Now hunt the bug. Suppose your written spec says \"a score of 7 or higher is a Buy.\" But the code says <code>score &gt; 7<\/code> — strictly greater than 7. So a stock scoring exactly 7 is <em>not<\/em> a Buy; it slides down to the <code>elif<\/code> and becomes a \"Hold.\" The fix is <code>score &gt;= 7<\/code>. This is the single most common logic bug to catch: a <code>&gt;<\/code> that should be <code>&gt;=<\/code> (or vice-versa), quietly mis-rating every value sitting exactly on the boundary.<\/p>\n<p class=\"l-key\">💡 Key idea: To trace by hand, pick one concrete input (here, a result where score is 7), then walk down the code answering each question out loud and seeing where you land. Comparing that landing spot to what you <em>intended<\/em> is how you catch boundary bugs the AI's confident comment will never warn you about.<\/p>\n\n<h5>Your reading habit, in one sentence<\/h5>\n<p>Go line by line and say each one aloud in plain English. When you reach a line you cannot put into words, stop — that is the line to ask the AI to explain, and very often the line where the mistake is hiding.<\/p>\n",
         learn: [
           "Strings, numbers, booleans, lists, and dictionaries",
           "How a dict mirrors your bot's JSON output",
@@ -1424,51 +1374,73 @@ response = client.messages.create(model=config["model"], ...)</pre>
         deliverable: "You can read basic Python and explain, in plain English, what a file is trying to do.",
         activityType: "quiz",
         quiz: [
-          {
-            q: "What does result[\"rating\"] do if result is the dictionary shown in the lesson?",
-            options: [
-              "Creates a new rating",
-              "Reads the value stored under the key 'rating' (which is 'buy')",
-              "Deletes the rating",
-              "Calls the API"
-            ],
-            answer: 1,
-            explain: "Square brackets with a key read that field out of a dict. result['rating'] gives back 'buy'."
-          },
-          {
-            q: "In Python, what makes the lines 'inside' an if statement?",
-            options: [
-              "They are in red",
-              "They are indented under the if",
-              "They start with the word inside",
-              "They are wrapped in quotes"
-            ],
-            answer: 1,
-            explain: "Indentation defines structure in Python. The indented lines belong to the if or loop above them."
-          },
-          {
-            q: "A function's 'return' value is...",
-            options: [
-              "Where the code stops forever",
-              "The answer the function hands back to whoever called it",
-              "A secret key",
-              "A comment"
-            ],
-            answer: 1,
-            explain: "return is how a function gives its result back. rating = make_rating(9) stores that returned value."
-          },
-          {
-            q: "'if temperature is not None' means roughly...",
-            options: [
-              "Only run this when temperature has actually been set",
-              "Run this only when temperature is zero",
-              "Never run this",
-              "Delete temperature"
-            ],
-            answer: 0,
-            explain: "None means 'no value yet'. 'is not None' guards code so it only runs once a real value exists."
-          }
-        ]
+  {
+    "q": "In the line  risk = result[\"risks\"][0]  what does [0] grab?",
+    "options": [
+      "The first item in the risks list, because Python counts from 0",
+      "The second item, because counting starts at 1",
+      "Zero risks (an empty result)",
+      "The total number of risks"
+    ],
+    "answer": 0,
+    "explain": "Python indexes from 0, so [0] is the first item. result[\"risks\"] returns the list, then [0] takes its first element."
+  },
+  {
+    "q": "What is the difference between = and == in Python?",
+    "options": [
+      "They are interchangeable",
+      "= compares two values; == puts a value in a box",
+      "= assigns a value to a variable; == compares two values and answers True or False",
+      "= is for numbers and == is for text"
+    ],
+    "answer": 2,
+    "explain": "A single = stores a value into a variable. A double == asks whether two values are equal and produces True or False, which is what you want inside an if."
+  },
+  {
+    "q": "A function reads  if score is not None and score > 7: return \"Buy\"  but your spec says a 7 should be a Buy. What is the bug?",
+    "options": [
+      "It should use = instead of ==",
+      "It should be score >= 7, since > 7 wrongly excludes a score of exactly 7",
+      "The is not None check is unnecessary",
+      "Buy should be in single quotes"
+    ],
+    "answer": 1,
+    "explain": "> 7 means strictly greater than 7, so a score of exactly 7 fails the test and is not rated Buy. Using >= 7 includes the boundary value 7."
+  },
+  {
+    "q": "Why is  if result is not None:  different from  if result:  ?",
+    "options": [
+      "They behave identically in every case",
+      "if result: is also False for falsy values like 0, \"\", or an empty list, not just None",
+      "is not None only works on text",
+      "if result: crashes when result is None"
+    ],
+    "answer": 1,
+    "explain": "Plain if result: treats all falsy values (None, 0, empty string, empty list) as False. is not None checks specifically whether a value exists, so a valid 0 is not mistakenly skipped."
+  },
+  {
+    "q": "What does  config.get(\"model\", \"claude-opus-4-8\")  return if the key \"model\" is missing from the dict?",
+    "options": [
+      "It crashes with an error",
+      "It returns None",
+      "It returns the default value, claude-opus-4-8",
+      "It returns an empty string"
+    ],
+    "answer": 2,
+    "explain": "dict.get(key, default) returns the stored value if the key exists, otherwise it safely returns the supplied default instead of raising an error."
+  },
+  {
+    "q": "What does the f in  print(f\"{ticker} scored {score}\")  do?",
+    "options": [
+      "It marks the text as a file path",
+      "It makes the text an f-string, so values inside { } are swapped in for the variables",
+      "It forces the output to be a number",
+      "It is a typo and does nothing"
+    ],
+    "answer": 1,
+    "explain": "An f-string lets you embed variables directly: {ticker} and {score} are replaced by their actual values when the line runs."
+  }
+]
       },
       {
         week: 4,
@@ -1477,37 +1449,7 @@ response = client.messages.create(model=config["model"], ...)</pre>
         difficulty: "Intermediate",
         time: "45 to 60 min per day",
         topics: ["Security", "API", "Config"],
-        lesson: `
-          <h5>Two kinds of settings, two different files</h5>
-          <p>Your bot has two kinds of settings, and keeping them separate is what keeps you safe:</p>
-          <ul>
-            <li><code>config.yaml</code> &mdash; <strong>safe to share</strong>: which model to use, your watchlist of tickers, output folders, temperature. If a stranger saw this, nothing bad happens.</li>
-            <li><code>.env</code> &mdash; <strong>secret</strong>: API keys, publishing tokens. If a stranger saw this, they could spend your money or post as you.</li>
-          </ul>
-          <p>The rule: anything that is a password or grants access goes in <code>.env</code>. Everything else goes in <code>config.yaml</code>.</p>
-
-          <h5>What an environment variable is</h5>
-          <p>An <strong>environment variable</strong> is a value the program reads from its surroundings instead of from the code. <code>.env</code> is a small file of these (<code>ANTHROPIC_API_KEY=sk-ant-...</code>). The code loads them at startup. This is why secrets are not written into the code itself &mdash; the code stays shareable, the secrets stay separate.</p>
-
-          <h5>How an API call works</h5>
-          <p>Your bot sends a <strong>request</strong> to a model's server and gets a <strong>response</strong> back. Every response carries a status code &mdash; a three-digit number that tells you what happened. Memorize these five, because they tell you <em>whose problem it is</em>:</p>
-          <pre class="lesson-code"><span class="g">200</span>  OK -- it worked.
-<span class="y">400</span>  Bad request -- YOUR code sent something invalid.
-<span class="y">401</span>  Unauthorized -- your API key is wrong, missing, or expired.
-<span class="y">403</span>  Forbidden -- key is valid but not allowed to do this.
-<span class="r">429</span>  Too many requests -- you hit a RATE LIMIT. Slow down / retry later.
-<span class="r">500</span>  Server error -- THEIR problem. Usually temporary, try again.</pre>
-          <p class="l-key">💡 The 4xx vs 5xx rule: codes starting with <strong>4</strong> mean <em>you</em> sent something wrong (fixable by you). Codes starting with <strong>5</strong> mean <em>the service</em> broke (wait and retry). This one distinction saves hours of chasing the wrong fix.</p>
-
-          <h5>Protecting and rotating keys</h5>
-          <p>Three habits keep your keys safe:</p>
-          <ul>
-            <li>Confirm <code>.env</code> is git-ignored (<code>git check-ignore .env</code>) before every commit.</li>
-            <li>Never run <code>type .env</code> while screen-sharing or pasting logs &mdash; it prints your key in plain text.</li>
-            <li>Set a <strong>monthly spend limit</strong> in your API console so a runaway loop cannot drain your account.</li>
-          </ul>
-          <p class="l-watch">⚠️ If a key is ever exposed (committed, pasted in a chat, shown on stream), <strong>rotate it</strong>: go to the console, delete the old key, generate a new one. A leaked key is only dangerous until you rotate it.</p>
-        `,
+        lesson: "\n<h5>Why this week could save you real money<\/h5>\n<p>Your research bot does not work alone. To get stock prices, financial figures, and news, it reaches out across the internet to other companies' computers and asks for data. To do that, it has to prove who it is — using a secret password called an <strong>API key<\/strong>. That key is tied to your account, and on many services it is tied to your <em>credit card<\/em>. If that key leaks — if it ends up posted publicly, pasted into a chat, or committed to a shared code folder — a stranger can run up charges on your account, sometimes thousands of dollars, before you notice. This week is about never letting that happen, and about reading the bot's error messages calmly instead of in a panic.<\/p>\n<p class=\"l-key\">💡 Key idea: A secret leaks not through dramatic hacking, but through small, ordinary mistakes — printing a key to the screen, pasting it into the wrong file, or sharing a folder that quietly contained it. Your job as the operator is to make those ordinary mistakes impossible.<\/p>\n\n<h5>What an API actually is (the restaurant analogy)<\/h5>\n<p>An <strong>API<\/strong> (Application Programming Interface) is just a way for one program to ask another program for something. Think of a restaurant. You (your bot) sit at a table. You do not walk into the kitchen and cook — you give a <em>waiter<\/em> a clear order from a <em>menu<\/em>. The waiter takes it to the kitchen and brings back exactly what you asked for. The API is the waiter-plus-menu: a fixed list of things you are allowed to ask for, and a polite, predictable way to ask.<\/p>\n<p>The other company's computer is the <strong>server<\/strong> — the kitchen. Your order is a <strong>request<\/strong>. What comes back is a <strong>response<\/strong>. The menu is the API's documentation: it tells you what you can order and in what words.<\/p>\n<p>Two common kinds of order, in plain terms:<\/p>\n<ul>\n<li><strong>GET<\/strong> — \"please bring me something.\" Reading data. (e.g. \"GET the latest price for AAPL\".) Like asking the waiter what today's soup is.<\/li>\n<li><strong>POST<\/strong> — \"please take this and do something with it.\" Sending data. (e.g. POST a block of text to an AI service to summarize.) Like placing a custom order with special instructions.<\/li>\n<\/ul>\n<p>Your research bot mostly does GETs to fetch market data, and POSTs when it asks an AI model to write the analysis.<\/p>\n\n<h5>Where the secret key actually goes — and why not in the web address<\/h5>\n<p>A web address (a <strong>URL<\/strong>) is the public-facing part of the order — like saying the restaurant's name out loud. URLs get logged everywhere: in your browser history, in server logs, in shared links. So the API key does <em>not<\/em> go in the URL. Instead it travels in a hidden part of the request called a <strong>header<\/strong> — like handing the waiter a membership card discreetly rather than shouting your card number across the room.<\/p>\n<p>Here is the rough shape of a request the bot sends. The header carries the key; notice the address itself has no secret in it:<\/p>\n<pre class=\"lesson-code\"><span class=\"c\"># The request your bot sends (simplified)<\/span>\nPOST https://api.example-ai.com/v1/analyze\n<span class=\"y\">Authorization: Bearer sk-REDACTED-your-secret-key<\/span>   <span class=\"c\">&lt;- the key lives HERE, in a header<\/span>\nContent-Type: application/json\n\n<span class=\"c\"># The body: a JSON request describing what we want<\/span>\n{\n  \"ticker\": \"AAPL\",\n  \"task\": \"summarize last quarter earnings\"\n}<\/pre>\n<p><strong>JSON<\/strong> (JavaScript Object Notation) is just a tidy text format of labels and values inside curly braces — <code>\"label\": value<\/code> — that both programs agree to read. The response comes back in the same shape.<\/p>\n\n<h5>config.yaml vs .env — the one rule that decides everything<\/h5>\n<p>Your bot keeps its settings in two different places, and confusing them is the most common way people leak keys.<\/p>\n<ul>\n<li><strong>config.yaml<\/strong> — your <em>settings<\/em>. Which stocks to track, how many years of history, what the output filename is. This is <strong>safe to share<\/strong>. It is meant to be readable and even committed to version control. (<strong>YAML<\/strong> is just a simple text format for settings, one <code>name: value<\/code> per line.)<\/li>\n<li><strong>.env<\/strong> — your <em>secrets<\/em>. API keys and passwords only. This must <strong>NEVER be shared<\/strong> and never committed. The name starts with a dot so it stays a bit hidden, and <code>env<\/code> means \"environment\".<\/li>\n<\/ul>\n<p>The deciding rule, stated plainly: <strong>If a stranger seeing this line could cost you money or impersonate you, it belongs in .env. Otherwise it belongs in config.yaml.<\/strong><\/p>\n\n<p><strong>Worked walkthrough #1 — side by side.<\/strong> Here is what each file looks like for your research bot. The fake key is obvious on purpose:<\/p>\n<pre class=\"lesson-code\"><span class=\"c\"># ===== config.yaml  (SAFE to share / commit) =====<\/span>\ntickers:\n  - AAPL\n  - MSFT\nyears_of_history: 5\noutput_format: markdown\noutput_file: <span class=\"g\">reports\\daily_research.md<\/span>\nai_model: claude-opus-4\n\n<span class=\"c\"># ===== .env  (SECRET - never share, never commit) =====<\/span>\nMARKETDATA_API_KEY=<span class=\"r\">md_live_8f3kQz9_FAKE_DO_NOT_USE<\/span>\nANTHROPIC_API_KEY=<span class=\"r\">sk-ant-FAKE000_DO_NOT_USE<\/span><\/pre>\n<p>Settings on the left describe <em>behavior<\/em> — harmless. The lines on the right are <em>credentials<\/em> — money. The bot's code reads the secrets from the environment at run time and never writes the actual key letters into the program itself.<\/p>\n\n<h5>Environment variables — why secrets live outside the code<\/h5>\n<p>An <strong>environment variable<\/strong> is a named value that lives in the computer's memory <em>around<\/em> a running program, not inside the program's files. The <code>.env<\/code> file is loaded into these variables when the bot starts. Why bother? Because if the secret is never typed into the code, then sharing the code can never share the secret. The code just says \"go get the value named <code>MARKETDATA_API_KEY<\/code> from the environment\" — and on your machine that value is filled in, while on a screenshot or a shared copy it is simply absent.<\/p>\n<p class=\"l-watch\">⚠️ The \"set but empty\" gotcha. An environment variable can <em>exist<\/em> while holding nothing — like a labeled envelope with no card inside. The bot thinks the key is present, sends an empty key, and gets rejected. If a key that \"should be there\" fails, check that it is not just blank. (Your own setup has hit exactly this: a key that is present but empty needs to be re-filled from the .env file.)<\/p>\n\n<h5>The .env.example pattern — share the shape, never the secret<\/h5>\n<p>Other people (or future you) need to know <em>which<\/em> secrets the bot expects, without ever seeing the real values. The answer is a template file named <strong>.env.example<\/strong> that you <em>do<\/em> commit and share. It lists the names with blank or fake values:<\/p>\n<pre class=\"lesson-code\"><span class=\"c\"># .env.example  (committed - a template, no real values)<\/span>\nMARKETDATA_API_KEY=\nANTHROPIC_API_KEY=<\/pre>\n<p>Anyone setting up the bot copies this to <code>.env<\/code> and fills in their own keys. The real <code>.env<\/code> stays out of sharing entirely.<\/p>\n\n<h5>Confirming .env is actually protected (the git check)<\/h5>\n<p><strong>Git<\/strong> is the tool that tracks and shares your code's history. A file called <code>.gitignore<\/code> lists files git should pretend it cannot see, so they are never shared. Your <code>.env<\/code> must be on that list. You don't have to trust that blindly — you can ask git directly.<\/p>\n<p><strong>Worked walkthrough #2 — proving .env is ignored.<\/strong> In your project folder, run:<\/p>\n<pre class=\"lesson-code\"><span class=\"c\">PS C:\\Users\\JenniferYoshurara\\Desktop\\Personal\\research-bot&gt;<\/span> git check-ignore .env\n<span class=\"g\">.env<\/span><\/pre>\n<p>Git printing <code>.env<\/code> back to you means: \"yes, I am ignoring this file.\" That is the answer you want. If instead you get <em>no output at all<\/em>, that is the danger sign — git is <em>not<\/em> ignoring it, and your secret could be shared on the next commit. The fix is to tell your AI tool: \"Add <code>.env<\/code> to .gitignore,\" then run the check again until it prints <code>.env<\/code>.<\/p>\n<p class=\"l-watch\">⚠️ If <code>git check-ignore .env<\/code> shows nothing, do not commit or push anything until it does. Empty output here is the single clearest warning that a leak is one step away.<\/p>\n\n<h5>Reading API responses: status codes<\/h5>\n<p>Every API response comes with a three-digit <strong>status code<\/strong> — a number summarizing how it went, like a one-word reply from the kitchen. You only need a handful:<\/p>\n<ul>\n<li><strong>200<\/strong> — OK. It worked; your data is in the response.<\/li>\n<li><strong>400<\/strong> — Bad Request. You asked for something malformed (e.g. a misspelled field). <em>Your<\/em> fault.<\/li>\n<li><strong>401<\/strong> — Unauthorized. The key is missing, wrong, or empty. <em>Your<\/em> fault — check the key.<\/li>\n<li><strong>403<\/strong> — Forbidden. The key is valid but not allowed to do this particular thing. <em>Your<\/em> fault — wrong permissions.<\/li>\n<li><strong>429<\/strong> — Too Many Requests. You asked too fast; you hit a rate limit. <em>Your<\/em> pace, but expected — slow down and retry.<\/li>\n<li><strong>500<\/strong> — Server Error. <em>Their<\/em> computer broke, not your request. Just wait and try again.<\/li>\n<\/ul>\n<p class=\"l-key\">💡 Key idea: The 4xx-vs-5xx rule. Codes in the <strong>400s mean YOUR fault<\/strong> (fix your request or your key). Codes in the <strong>500s mean THEIR fault<\/strong> (their server; just retry later). This one distinction tells you instantly whether to go fix something or simply wait.<\/p>\n\n<h5>Rate limits, retries, and backoff<\/h5>\n<p>A <strong>rate limit<\/strong> is the API saying \"no more than N requests per minute\" — like a restaurant limiting how many orders one table can fire at once. Hit it and you get a <strong>429<\/strong>. The correct response is not to keep hammering, but to wait and try again — and to wait <em>longer each time<\/em> if it keeps failing. That growing wait is called <strong>exponential backoff<\/strong>: wait 1 second, then 2, then 4, then 8. Each failure doubles the pause, which gives the API room to recover and keeps you from making things worse. A well-built bot does this automatically; your job is to recognize 429 and know the bot should be backing off, not spamming.<\/p>\n\n<p><strong>Worked walkthrough #3 — a 200 then a 429.<\/strong> Here is the bot fetching prices. First call succeeds; a rapid second call gets rate-limited:<\/p>\n<pre class=\"lesson-code\"><span class=\"c\"># First request - success<\/span>\nGET https://api.marketdata.com/v1/quote/AAPL\n<span class=\"g\">200 OK<\/span>\n{\n  \"ticker\": \"AAPL\",\n  \"price\": 214.32,\n  \"currency\": \"USD\"\n}\n<span class=\"c\"># -&gt; Good. Data is here. Bot continues normally.<\/span>\n\n<span class=\"c\"># Many requests fired too fast - rate limited<\/span>\nGET https://api.marketdata.com/v1/quote/MSFT\n<span class=\"r\">429 Too Many Requests<\/span>\n{\n  \"error\": \"rate_limit_exceeded\",\n  \"retry_after\": 4\n}\n<span class=\"c\"># -&gt; NOT a crash. The API says \"wait 4 seconds, then retry.\"<\/span>\n<span class=\"c\"># -&gt; A good bot waits (backoff) and tries again. You do nothing.<\/span><\/pre>\n<p>The takeaway: a <code>429<\/code> is normal traffic management, not a failure of your setup. If the bot retries with backoff and eventually succeeds, the run is fine. If you see <code>401<\/code> instead, stop — that is a key problem, not a timing problem.<\/p>\n\n<h5>Protecting keys: the operator's checklist<\/h5>\n<ul>\n<li><strong>Never print a key.<\/strong> If you ever ask the AI to \"show me the key\" or it prints one to the screen for debugging, that key is now in your terminal scrollback and possibly logs. Treat it as compromised.<\/li>\n<li><strong>Set a spend limit.<\/strong> On the API provider's website, set a hard monthly cap (e.g. $20). Even if a key leaks, the damage stops at the cap. This is your seatbelt.<\/li>\n<li><strong>Use least-privilege / scoped keys.<\/strong> Many providers let you create a key that can only <em>read<\/em> data, or only access one project. Give the bot the narrowest key that still works — a read-only key can't be used to spend or delete.<\/li>\n<li><strong>Read the usage dashboard.<\/strong> Each provider has a page showing requests and cost over time. Glance at it weekly. A sudden spike you didn't cause means a leak.<\/li>\n<\/ul>\n\n<h5>Rotating an exposed key — the concrete steps<\/h5>\n<p>To <strong>rotate<\/strong> a key means to replace a possibly-leaked key with a fresh one and disable the old one — like changing the locks after losing a house key. If a key ever appears in a screenshot, a chat, a commit, or anywhere public, rotate it immediately. The steps:<\/p>\n<ul>\n<li>Log in to the API provider's website (e.g. the market-data or AI dashboard).<\/li>\n<li>Find the API keys section and <strong>create a new key<\/strong>.<\/li>\n<li><strong>Revoke / delete the old key<\/strong> so it stops working everywhere.<\/li>\n<li>Put the new key into your <code>.env<\/code> file, replacing the old value.<\/li>\n<li>Re-run the bot to confirm it works with the new key.<\/li>\n<\/ul>\n<p>Rotating is cheap and fast. Never tell yourself \"it was only exposed for a minute\" — assume the worst and rotate. A leaked-then-rotated key costs you five minutes; a leaked-and-ignored key can cost you your whole spend cap and then some.<\/p>\n<p class=\"l-watch\">⚠️ The moment a real key touches a place other people can see — a screenshot you send, a public repo, a support chat, a pasted log — consider it burned. Rotate it. Do not debate it.<\/p>\n",
         learn: [
           "Why config.yaml (shareable) and .env (secret) are kept separate",
           "What environment variables are and why secrets stay out of the code",
@@ -1527,51 +1469,73 @@ response = client.messages.create(model=config["model"], ...)</pre>
         deliverable: "You can manage API keys safely and tell whether an error is your code, your key, or a temporary service issue.",
         activityType: "quiz",
         quiz: [
-          {
-            q: "Your bot fails with a 401 error. Where do you look first?",
-            options: [
-              "The model's servers are down",
-              "Your API key is wrong, missing, or expired",
-              "You sent too many requests",
-              "Your watchlist is empty"
-            ],
-            answer: 1,
-            explain: "401 = unauthorized, an authentication problem. Check that your key is present and valid."
-          },
-          {
-            q: "You get a 500 error. Whose problem is it most likely, and what do you do?",
-            options: [
-              "Yours -- rewrite your code immediately",
-              "The service's -- it is usually temporary, so wait and retry",
-              "Your key -- rotate it now",
-              "Nobody's -- 500 means success"
-            ],
-            answer: 1,
-            explain: "5xx codes mean the service broke. Usually transient -- retry before changing anything on your side."
-          },
-          {
-            q: "Which setting belongs in .env, not config.yaml?",
-            options: [
-              "The list of tickers to analyze",
-              "Which model to use",
-              "Your ANTHROPIC_API_KEY",
-              "The output folder name"
-            ],
-            answer: 2,
-            explain: "API keys are secrets and belong in .env. The rest are safe-to-share settings for config.yaml."
-          },
-          {
-            q: "A 429 error means...",
-            options: [
-              "Your code is invalid",
-              "You hit a rate limit -- slow down or retry later",
-              "The server crashed",
-              "Your key was rotated"
-            ],
-            answer: 1,
-            explain: "429 = too many requests. Back off and retry; it is about request volume, not correctness."
-          }
-        ]
+  {
+    "q": "Your bot's settings file lists which stocks to track and the output filename. Which file should hold this, and is it safe to share?",
+    "options": [
+      "config.yaml — safe to share, since it contains no secrets",
+      ".env — never share it, since all settings are secret",
+      "config.yaml — but it must never be shared",
+      "The API key header inside the code"
+    ],
+    "answer": 0,
+    "explain": "config.yaml holds non-secret settings (behavior) and is safe to share or commit. Only credentials belong in .env."
+  },
+  {
+    "q": "What is the deciding rule for whether something belongs in .env instead of config.yaml?",
+    "options": [
+      "If it is longer than one line",
+      "If a stranger seeing it could cost you money or impersonate you",
+      "If it changes how the report looks",
+      "If it is written in YAML format"
+    ],
+    "answer": 1,
+    "explain": "Secrets (keys, passwords) that could cost money or impersonate you go in .env; harmless behavior settings go in config.yaml."
+  },
+  {
+    "q": "Your bot fails with a 401 status code. Whose fault is it and what should you do?",
+    "options": [
+      "Their server is down — just wait and retry later",
+      "Too many requests — slow down with backoff",
+      "Your fault — the key is missing, wrong, or empty; check the key",
+      "Nothing is wrong; 401 means success"
+    ],
+    "answer": 2,
+    "explain": "401 Unauthorized is a 4xx code, meaning your fault. It points to a key problem: missing, incorrect, or set-but-empty."
+  },
+  {
+    "q": "The bot returns a 429 while fetching prices. What is the correct interpretation?",
+    "options": [
+      "The bot has crashed and the run is ruined",
+      "The API key has been stolen",
+      "A normal rate limit — the bot should wait and retry with exponential backoff",
+      "The server is permanently broken"
+    ],
+    "answer": 2,
+    "explain": "429 Too Many Requests means you asked too fast. A good bot waits and retries with growing pauses (exponential backoff); it is not a failure of your setup."
+  },
+  {
+    "q": "You run 'git check-ignore .env' and it prints NOTHING. What does that mean?",
+    "options": [
+      "Good — empty output confirms .env is protected",
+      "Danger — git is NOT ignoring .env, so your secret could be shared; fix .gitignore before committing",
+      "It means the .env file does not exist",
+      "It means the key inside .env is empty"
+    ],
+    "answer": 1,
+    "explain": "Git prints the filename back when it IS ignoring it. Empty output means .env is unprotected and one commit away from leaking."
+  },
+  {
+    "q": "A real API key accidentally appeared in a screenshot you shared. What should you do?",
+    "options": [
+      "Nothing, since it was only visible briefly",
+      "Print the key to confirm it still works",
+      "Rotate it: create a new key, revoke the old one, update .env, and re-run",
+      "Move the key from .env into config.yaml for safety"
+    ],
+    "answer": 2,
+    "explain": "Once a key is exposed anywhere others can see, treat it as burned and rotate it immediately. Rotating takes minutes; ignoring it can drain your spend cap."
+  }
+]
       },
       {
         week: 5,
@@ -1580,43 +1544,7 @@ response = client.messages.create(model=config["model"], ...)</pre>
         difficulty: "Intermediate",
         time: "45 to 60 min per day",
         topics: ["Testing", "Debugging", "Pytest"],
-        lesson: `
-          <h5>What tests are for</h5>
-          <p>A <strong>test</strong> is a small piece of code that checks the real code does what it should. Tests are your proof that an AI change actually works &mdash; not just that it looks plausible. A <strong>unit test</strong> checks one small piece in isolation; an <strong>integration test</strong> checks that several pieces work together.</p>
-          <p class="l-key">💡 Operator rule: never accept an AI change without a passing test that proves it. "It looks right" is not evidence; a green test is.</p>
-
-          <h5>Running tests with pytest</h5>
-          <pre class="lesson-code">python -m pytest           <span class="c"># run every test</span>
-python -m pytest -q        <span class="c"># quieter, summary output</span>
-python -m pytest tests/test_config.py   <span class="c"># run just one file</span></pre>
-          <p>Each test reports one of three outcomes:</p>
-          <ul>
-            <li><strong class="g">PASSED</strong> &mdash; the check held. Good.</li>
-            <li><strong class="r">FAILED</strong> &mdash; reality did not match what the test expected. Something is wrong.</li>
-            <li><strong class="y">SKIPPED</strong> &mdash; the test was deliberately not run (often because it needs a real API key). Not a failure, but not coverage either.</li>
-          </ul>
-
-          <h5>Reading a stack trace without fear</h5>
-          <p>When a test fails, Python prints a <strong>stack trace</strong> &mdash; a wall of text that looks alarming but is just a trail of breadcrumbs. Read it <strong>bottom to top</strong>: the <em>last</em> line names the actual error, and the lines above show the path that led there.</p>
-          <pre class="lesson-code">  File "src/config.py", line 12, in load_config
-    return data["model"]
-<span class="r">KeyError: 'model'</span></pre>
-          <p>That bottom line is the whole story: the code asked for a key <code>'model'</code> that was not in the dictionary. The line above tells you exactly where (config.py, line 12). The common errors you will meet:</p>
-          <ul>
-            <li><code>ModuleNotFoundError</code> &mdash; a library is not installed, or you are in the wrong environment.</li>
-            <li><code>FileNotFoundError</code> &mdash; a file/path is missing (often the wrong-folder problem from Week 1).</li>
-            <li><code>KeyError</code> &mdash; asked a dict for a field it does not have.</li>
-            <li><code>ValidationError</code> &mdash; data did not match the required schema (Week 6).</li>
-          </ul>
-
-          <h5>The disciplined debugging loop</h5>
-          <p>When something fails, do not immediately tell the AI "fix it" &mdash; that lets it guess and rewrite blindly. Instead:</p>
-          <ul>
-            <li><strong>1. Diagnose first.</strong> Ask: "Here is the failing test and stack trace. Explain the root cause. Do not edit yet."</li>
-            <li><strong>2. Confirm the plan.</strong> Make it state the smallest fix and which test will prove it.</li>
-            <li><strong>3. Then let it edit</strong>, and re-run <code>python -m pytest</code> yourself to confirm green.</li>
-          </ul>
-        `,
+        lesson: "\n<h5>Why tests are the only proof you have<\/h5>\n<p>When you ask an AI to change your research bot, it will almost always tell you the change is done and that it works. The AI is confident by default. But confidence is not evidence. The AI cannot actually run your bot, look at the JSON it produced, and check that the numbers are right — it is guessing based on the code it can see. A <strong>test<\/strong> is a small, separate piece of code whose only job is to run a part of your bot and check that the result is what it should be. When a test passes, a real computer actually executed your real code and confirmed a real fact. That is the difference between \"the AI says it works\" and \"it works.\"<\/p>\n<p>Think of it like a smoke detector in your kitchen. You can <em>believe<\/em> the stove is off, but the detector is the thing that actually screams when it isn't. Tests are smoke detectors for your code. They cost a little to set up and then quietly protect you forever.<\/p>\n<p class=\"l-key\">💡 Key idea: A passing test is the only honest proof that an AI's change did what it claimed. \"The AI says so\" is not proof — re-running the tests is.<\/p>\n\n<h5>What \"assert\" actually means<\/h5>\n<p>At the heart of every test is one word: <code>assert<\/code>. To <strong>assert<\/strong> something is to declare \"this must be true — if it isn't, stop and complain loudly.\" A test for your bot might assert that when you ask for Apple's data, the result contains a price greater than zero. If the price comes back as zero, or missing, or the word \"error,\" the assertion fails and the test turns red. No drama, no opinion — just a fact that was supposed to hold and didn't.<\/p>\n<p>Well-written tests follow a tidy three-step shape called <strong>Arrange-Act-Assert<\/strong>:<\/p>\n<ul>\n<li><strong>Arrange<\/strong> — set up the situation (e.g. pretend we have a stock ticker \"AAPL\").<\/li>\n<li><strong>Act<\/strong> — run the one thing you're testing (e.g. call the function that builds the report).<\/li>\n<li><strong>Assert<\/strong> — check the outcome (e.g. the report has a \"summary\" field).<\/li>\n<\/ul>\n<p>You don't write these — the AI does. But recognizing the shape helps you read a failing test and understand what it expected.<\/p>\n\n<h5>Unit tests, integration tests, and the testing pyramid<\/h5>\n<p>There are two main flavors of test, and your bot needs both.<\/p>\n<ul>\n<li>A <strong>unit test<\/strong> checks one small piece in isolation — for example, \"does the function that converts a price into a formatted string produce <code>$190.50<\/code>?\" It's fast and pinpoints exactly what broke.<\/li>\n<li>An <strong>integration test<\/strong> checks that several pieces work together — for example, \"does fetching data, then summarizing it, then writing the Markdown file actually produce a file?\" It's slower but catches problems that only appear when parts connect.<\/li>\n<\/ul>\n<p>The <strong>testing pyramid<\/strong> is the rule of thumb that you should have <em>many<\/em> small fast unit tests at the bottom, <em>fewer<\/em> integration tests in the middle, and only a <em>handful<\/em> of slow end-to-end tests at the top. Most of your safety should come from the cheap, fast layer. If the AI proposes a giant slow test for a tiny change, that's a smell worth questioning.<\/p>\n\n<h5>Why tests use fakes — and why some skip<\/h5>\n<p>Your bot calls a paid stock-data service and a paid AI service over the internet. You do <em>not<\/em> want every test run to spend real money or depend on the internet being up. So good tests use a <strong>fake<\/strong> (also called a <strong>mock<\/strong>) — a stand-in that pretends to be the real service and returns a canned answer instantly and for free. The test isn't checking the internet; it's checking <em>your<\/em> logic, so a predictable fake is exactly right.<\/p>\n<p>Some tests genuinely need the real service (to prove the bot can still talk to it). Those tests are written to <strong>skip<\/strong> — quietly do nothing — when no API key is present. That's why you'll see yellow \"skipped\" lines: it's not a failure, it's a test politely stepping aside because you didn't give it a key.<\/p>\n<p class=\"l-watch\">⚠️ A test that hits the real paid API on every run will cost you money and break whenever your internet hiccups. If a test is slow or flaky, ask the AI: \"Should this use a mock instead of the real service?\"<\/p>\n\n<h5>Running pytest — the commands you'll actually type<\/h5>\n<p><strong>pytest<\/strong> is the standard tool that finds your tests, runs them, and reports results. You run it from your bot's folder in the terminal. The safest way to launch it on Windows is:<\/p>\n<pre class=\"lesson-code\">python -m pytest<\/pre>\n<p>The <code>python -m<\/code> part means \"run pytest using this exact Python\" — it avoids a whole class of confusing \"wrong version\" problems. Useful additions:<\/p>\n<ul>\n<li><code>python -m pytest -q<\/code> — <strong>q<\/strong>uiet mode, less clutter.<\/li>\n<li><code>python -m pytest tests\\test_report.py<\/code> — run just one file.<\/li>\n<li><code>python -m pytest -x<\/code> — stop at the first failure (don't bury you in errors).<\/li>\n<li><code>python -m pytest -k summary<\/code> — only run tests whose name contains \"summary.\"<\/li>\n<\/ul>\n\n<h5>Reading the output: dots, F's, and the summary line<\/h5>\n<p>Here is a real run of the research bot's test suite. Type the command, and you get back something like this:<\/p>\n<pre class=\"lesson-code\"><span class=\"c\">$ python -m pytest -q<\/span>\n<span class=\"g\">....<\/span><span class=\"r\">F<\/span><span class=\"y\">s<\/span><span class=\"g\">..<\/span>                                                  <span class=\"c\">[100%]<\/span>\n<span class=\"c\">=================================== FAILURES ===================================<\/span>\n<span class=\"r\">_______________________ test_summary_has_price ________________________<\/span>\n\n    def test_summary_has_price():\n        report = build_report(\"AAPL\")\n<span class=\"r\">&gt;       assert \"price\" in report<\/span>\n<span class=\"r\">E       AssertionError: assert 'price' in {'ticker': 'AAPL', 'summary': '...'}<\/span>\n\ntests\\test_report.py:14: AssertionError\n<span class=\"y\">=========================== short test summary info ============================<\/span>\n<span class=\"r\">FAILED tests\\test_report.py::test_summary_has_price - AssertionError: assert...<\/span>\n<span class=\"r\">1 failed<\/span>, <span class=\"g\">6 passed<\/span>, <span class=\"y\">1 skipped<\/span> in 0.42s<\/pre>\n<p>Decode it like this. The top row <code>....F s ..<\/code> is one character per test, in order: each green dot is a <strong>PASSED<\/strong> test, the red <code>F<\/code> is a <strong>FAILED<\/strong> test, and the yellow <code>s<\/code> is a <strong>SKIPPED<\/strong> test. So at a glance: mostly fine, one real problem, one test sat out. The <strong>last line is the most important line in the whole output<\/strong> — it's the scoreboard: <code>1 failed, 6 passed, 1 skipped<\/code>. Always read that line first.<\/p>\n<ul>\n<li><strong>PASSED<\/strong> (dot) — ran and the assertion held. Good.<\/li>\n<li><strong>FAILED<\/strong> (F) — ran but an assertion was false, OR the code crashed. This is what you investigate.<\/li>\n<li><strong>SKIPPED<\/strong> (s) — deliberately not run (usually a missing API key). Not a problem.<\/li>\n<\/ul>\n\n<h5>Reading a stack trace — bottom to top<\/h5>\n<p>When code crashes rather than just failing an assertion, pytest prints a <strong>traceback<\/strong> (also called a <strong>stack trace<\/strong>): a list of every function call that was in progress when things blew up, newest at the bottom. Beginners read it top-down and get lost. <strong>Read it bottom-to-top.<\/strong> The very last line tells you <em>what<\/em> went wrong; the lines just above tell you <em>where<\/em>.<\/p>\n<pre class=\"lesson-code\"><span class=\"r\">_______________________ test_writes_markdown ________________________<\/span>\n\ntests\\test_writer.py:21: in test_writes_markdown\n    save_report(report)\nsrc\\writer.py:8: in save_report\n    with open(path) as f:\n<span class=\"r\">E   FileNotFoundError: [Errno 2] No such file or directory: 'output\\\\AAPL.md'<\/span><\/pre>\n<p>Read upward from the bottom:<\/p>\n<ul>\n<li><strong>Last line<\/strong>: <code>FileNotFoundError ... 'output\\AAPL.md'<\/code> — the real problem. Python tried to open a file that doesn't exist.<\/li>\n<li><strong>One line up<\/strong>: <code>src\\writer.py:8 ... open(path)<\/code> — the exact file and line number where it crashed: line 8 of writer.py.<\/li>\n<li><strong>Top<\/strong>: <code>tests\\test_writer.py:21<\/code> — the test that started the chain.<\/li>\n<\/ul>\n<p>In ten seconds you know: writer.py, line 8, tried to open <code>output\\AAPL.md<\/code>, and the <code>output<\/code> folder probably doesn't exist yet. You didn't need to understand the code — you read the trace bottom-up and followed the breadcrumbs.<\/p>\n<p class=\"l-key\">💡 Key idea: Read tracebacks from the bottom up. The bottom line is the actual error; the lines above are the path that led there. The first file path that belongs to <em>your<\/em> bot is usually where the bug lives.<\/p>\n\n<h5>The four errors you'll meet most<\/h5>\n<ul>\n<li><strong>ModuleNotFoundError<\/strong> — Python can't find a piece of software it was told to use. Usually a dependency wasn't installed, or you're running from the wrong folder. The fix is rarely \"edit the code.\"<\/li>\n<li><strong>FileNotFoundError<\/strong> — a file or folder the bot expected isn't there (a missing <code>output<\/code> folder, a renamed config file).<\/li>\n<li><strong>KeyError<\/strong> — the code asked a data record for a label that doesn't exist, e.g. asking the stock data for <code>\"price\"<\/code> when the service called it <code>\"latestPrice\"<\/code>. Very common when an external service changes its format.<\/li>\n<li><strong>ValidationError<\/strong> — the data failed a quality check your bot enforces, e.g. a price that came back as text instead of a number, or a required field left blank. This is your bot's safety rails doing their job.<\/li>\n<\/ul>\n\n<h5>The break → fail → fix → pass cycle<\/h5>\n<p>Here is the discipline in miniature. Suppose your bot has a tiny function that formats a price, and someone broke it so it forgets the dollar sign. First you <strong>reproduce the bug<\/strong> — you run the test and watch it fail, so you know you're chasing a real problem and not a ghost:<\/p>\n<pre class=\"lesson-code\"><span class=\"c\">$ python -m pytest -k format_price -q<\/span>\n<span class=\"r\">F<\/span>                                                              <span class=\"c\">[100%]<\/span>\n<span class=\"r\">&gt;       assert format_price(190.5) == \"$190.50\"<\/span>\n<span class=\"r\">E       AssertionError: assert '190.50' == '$190.50'<\/span>\n<span class=\"r\">1 failed<\/span> in 0.05s<\/pre>\n<p>The assertion line shows exactly the gap: you got <code>'190.50'<\/code>, you wanted <code>'$190.50'<\/code> — the dollar sign is missing. The fix adds it back. Then you re-run the <em>same<\/em> command:<\/p>\n<pre class=\"lesson-code\"><span class=\"c\">$ python -m pytest -k format_price -q<\/span>\n<span class=\"g\">.<\/span>                                                              <span class=\"c\">[100%]<\/span>\n<span class=\"g\">1 passed<\/span> in 0.04s<\/pre>\n<p>Green dot, \"1 passed.\" Now you have proof. This is also a <strong>regression test<\/strong>: it will fail again if anyone (including a future AI edit) ever re-breaks the dollar sign. A regression test is a permanent guard against a bug coming back.<\/p>\n\n<h5>The supervisor's loop: make the AI diagnose before it edits<\/h5>\n<p>The single most valuable habit you'll build is refusing to let the AI edit code the instant a test fails. An AI that jumps straight to editing is guessing, and a wrong guess often breaks two more things. Force a diagnosis first. Paste the full failing output and say:<\/p>\n<pre class=\"lesson-code\"><span class=\"c\">Here is the full pytest output. Do NOT edit any code yet.\n1. Tell me which test failed and what it expected vs got.\n2. Explain the root cause in plain English.\n3. Propose the SMALLEST possible fix and which file it touches.\nThen wait for me to approve before changing anything.<\/span><\/pre>\n<p>This works for the same reason <strong>rubber-duck debugging<\/strong> works: the old programmer's trick of explaining your problem out loud (even to a rubber duck) forces you to slow down and actually understand it. You're making the AI be the duck. Once it explains the cause clearly and names the smallest fix, you approve, it edits, and then — non-negotiable — <strong>you re-run the tests yourself.<\/strong> Green scoreboard, or it isn't done.<\/p>\n<p class=\"l-watch\">⚠️ Never accept \"I fixed it\" without re-running pytest. The fix is only real when you personally see the failing test turn green and the summary line show zero failures.<\/p>\n<p class=\"l-watch\">⚠️ Always paste the FULL output, including the assertion line and the bottom of the traceback. Truncating it hides the one fact the AI needs to diagnose correctly.<\/p>\n",
         learn: [
           "What unit tests and integration tests are",
           "How to run pytest and read PASSED / FAILED / SKIPPED",
@@ -1636,51 +1564,73 @@ python -m pytest tests/test_config.py   <span class="c"># run just one file</spa
         deliverable: "You can run tests, interpret failures calmly, and refuse to accept untested AI changes.",
         activityType: "quiz",
         quiz: [
-          {
-            q: "A test fails and prints a long stack trace. Which line names the actual error?",
-            options: [
-              "The very first line",
-              "The last (bottom) line",
-              "The line in the middle",
-              "Stack traces never name the error"
-            ],
-            answer: 1,
-            explain: "Read bottom-to-top. The last line is the error itself; the lines above show how the code got there."
-          },
-          {
-            q: "What does a SKIPPED test mean?",
-            options: [
-              "The test failed",
-              "The test was deliberately not run, so it gave you no coverage",
-              "The test passed perfectly",
-              "The project is broken"
-            ],
-            answer: 1,
-            explain: "Skipped is not a failure, but it is not proof either -- that behavior was not actually checked."
-          },
-          {
-            q: "You see KeyError: 'model'. What went wrong?",
-            options: [
-              "A library is not installed",
-              "The code asked a dictionary for a field 'model' that was not there",
-              "The API server crashed",
-              "A file is missing"
-            ],
-            answer: 1,
-            explain: "KeyError means a dict was asked for a key it does not contain -- here, 'model' was missing from config."
-          },
-          {
-            q: "The best first thing to ask the AI when a test fails is:",
-            options: [
-              "Just fix everything right now",
-              "Delete the failing test",
-              "Explain the root cause from this trace, and do not edit yet",
-              "Rewrite the whole file"
-            ],
-            answer: 2,
-            explain: "Diagnose before editing. Make it explain the cause and plan the smallest fix before touching code."
-          }
-        ]
+  {
+    "q": "Why is a passing test better proof that an AI's change works than the AI simply telling you it works?",
+    "options": [
+      "Because the AI is usually lying on purpose",
+      "Because a passing test means a real computer actually ran your real code and confirmed a real fact, while the AI is only guessing",
+      "Because tests are written in a more advanced language",
+      "Because the AI cannot read its own code"
+    ],
+    "answer": 1,
+    "explain": "The AI can't actually run your bot and check results, so its confidence is a guess. A passing test is real code executing real code and verifying a concrete fact."
+  },
+  {
+    "q": "In the pytest summary row '....F s ..', what does each symbol mean?",
+    "options": [
+      "Dots are failures, F is a pass, s is a syntax error",
+      "Dots are passed tests, F is a failed test, s is a skipped test",
+      "Dots are skipped tests, F is a fast test, s is a slow test",
+      "They are decorative and have no meaning"
+    ],
+    "answer": 1,
+    "explain": "Each dot is a PASSED test, the F is a FAILED test, and the lowercase s is a SKIPPED test (usually skipped because no API key was provided)."
+  },
+  {
+    "q": "When reading a traceback (stack trace), where is the actual error message and how should you read it?",
+    "options": [
+      "At the top; read it top to bottom",
+      "At the bottom; read it bottom to top",
+      "In the middle; read it middle outward",
+      "There is no error message in a traceback"
+    ],
+    "answer": 1,
+    "explain": "The bottom line states what actually went wrong; the lines above show the path of calls that led there. Reading bottom-to-top finds the real error fastest."
+  },
+  {
+    "q": "Why do many of the research bot's tests use a 'fake' or 'mock' instead of calling the real stock and AI services?",
+    "options": [
+      "Because mocks make the tests run more slowly on purpose",
+      "Because the real services are illegal to use in tests",
+      "So tests don't spend real money or depend on the internet, and can check your logic with predictable canned answers",
+      "Because Python cannot connect to the internet"
+    ],
+    "answer": 2,
+    "explain": "Hitting paid services on every test run costs money and breaks when the internet does. A mock returns a predictable answer instantly and for free, letting the test check your logic."
+  },
+  {
+    "q": "A test fails with 'KeyError: price'. What does this most likely mean?",
+    "options": [
+      "A required file is missing from your computer",
+      "The code asked a data record for a label ('price') that doesn't exist in it, perhaps because the service renamed the field",
+      "Python itself was not installed correctly",
+      "The test was skipped because of a missing API key"
+    ],
+    "answer": 1,
+    "explain": "A KeyError means the code looked up a label that isn't present in the data, which often happens when an external service changes the name of a field."
+  },
+  {
+    "q": "A test just failed. What is the disciplined first thing to ask the AI to do?",
+    "options": [
+      "Immediately edit the code to make the failure go away",
+      "Delete the failing test so the suite turns green",
+      "Diagnose the root cause and propose the smallest fix WITHOUT editing yet, then wait for your approval",
+      "Rerun the test many times until it passes by chance"
+    ],
+    "answer": 2,
+    "explain": "Forcing the AI to diagnose and plan the smallest fix before editing prevents guess-driven changes that break other things; you approve, it edits, then you re-run the tests yourself."
+  }
+]
       },
       {
         week: 6,
@@ -1689,40 +1639,7 @@ python -m pytest tests/test_config.py   <span class="c"># run just one file</spa
         difficulty: "Intermediate",
         time: "45 to 60 min per day",
         topics: ["JSON", "Schema", "Pydantic"],
-        lesson: `
-          <h5>Why structure beats prose</h5>
-          <p>If the AI just writes paragraphs, you cannot reliably pull out "what is the rating?" or "what is the price target?". So your bot makes the AI fill in a fixed <strong>structure</strong> instead. That structure is <strong>JSON</strong>, and a <strong>schema</strong> is the contract that says which fields must be present and what type each must be.</p>
-
-          <h5>Reading JSON</h5>
-          <p>JSON is just labelled data. It has six building blocks: objects <code>{ }</code>, arrays <code>[ ]</code>, strings, numbers, booleans, and <code>null</code> (no value). Your bot's output looks like this:</p>
-          <pre class="lesson-code">{
-  "ticker": "AAPL",
-  "thesis": "Durable services growth...",
-  "verdict": "buy",
-  "price_target": 210.0,
-  "catalysts": ["Services margin", "Buybacks"],
-  "risks": ["China demand", "Regulation"],
-  "confidence": 0.72
-}</pre>
-          <p>An <strong>object</strong> is a set of <code>"key": value</code> pairs. An <strong>array</strong> is an ordered list inside <code>[ ]</code>. You already know this shape &mdash; it is a Python dict from Week 3.</p>
-
-          <h5>What a schema enforces with Pydantic</h5>
-          <p><strong>Pydantic</strong> is a Python library that defines the schema as a model. It checks every AI response and <em>rejects</em> anything that does not fit &mdash; missing fields, wrong types, or invalid values:</p>
-          <pre class="lesson-code">from pydantic import BaseModel
-from typing import Literal
-
-class AnalysisResult(BaseModel):
-    ticker: str                              <span class="c"># required text</span>
-    verdict: Literal["buy","hold","sell","avoid"]  <span class="c"># MUST be one of these</span>
-    price_target: float                      <span class="c"># required number</span>
-    confidence: float                        <span class="c"># required number</span></pre>
-          <p>That <code>Literal["buy","hold","sell","avoid"]</code> is powerful: it means the verdict can <em>only</em> be one of those four words. If the model returns "strong buy" or "maybe", validation fails loudly instead of letting garbage through.</p>
-
-          <h5>Validation as a gate</h5>
-          <p>Here is why this matters for you as an operator: validation sits <strong>between</strong> the AI's output and everything downstream (the Markdown article, publishing). If the data is malformed, it stops <em>there</em> &mdash; a clear <code>ValidationError</code> &mdash; instead of silently flowing into a published article with a missing price target.</p>
-          <p class="l-key">💡 The schema is your quality floor. A broken or hallucinated field becomes a loud error you catch, not a quiet mistake your readers catch.</p>
-          <p class="l-watch">⚠️ When you ask the AI to add a new field, it changes the schema &mdash; which can break existing tests and older saved JSON files. Always ask "what does this field do to the tests and to existing outputs?" before accepting it.</p>
-        `,
+        lesson: "\n<h5>Why structure beats free prose<\/h5>\n<p>Imagine you ask an AI: <em>\"Analyze Apple stock.\"<\/em> It writes three polished paragraphs. Beautiful to read — but now your research bot has to <strong>do something<\/strong> with that answer. Is the recommendation \"buy\" or \"hold\"? What price target? How confident is it? A human can skim the paragraphs and guess. A <strong>program<\/strong> cannot. Software needs the answer in tidy, labeled boxes — not a flowing essay where the price target might be hidden in sentence four, or missing entirely.<\/p>\n<p>This is the whole reason this week exists. Your bot turns stocks into <code>out\\aapl.json<\/code> (a data file) and then into a Markdown report. If the AI hands back loose prose, every later step becomes a guessing game. If it hands back <strong>structured, labeled, validated<\/strong> data, the rest of the pipeline becomes reliable plumbing. Structure is what lets a non-programmer trust an AI-built tool: you can <em>check<\/em> structured output at a glance, and the bot can <em>refuse<\/em> to publish when the structure is wrong.<\/p>\n<p class=\"l-key\">💡 Key idea: Free prose is for humans to read. Structured data is for machines to act on. Your bot needs both — but it must <strong>start<\/strong> from structure, then render the prose from it.<\/p>\n\n<h5>JSON: the universal \"labeled boxes\" format<\/h5>\n<p><strong>JSON<\/strong> (say \"JAY-son\", short for JavaScript Object Notation) is just a text format for storing labeled data. It is what lives inside <code>out\\aapl.json<\/code>. It has only a handful of building blocks, and once you know them you can read any JSON file in the world.<\/p>\n<ul>\n<li><strong>Object<\/strong> — a set of labeled boxes, wrapped in curly braces <code>{ }<\/code>. Each entry is a <em>key<\/em> (the label, always in double quotes) and a <em>value<\/em>, separated by a colon. Like a form: \"Ticker: AAPL\".<\/li>\n<li><strong>Array<\/strong> — an ordered list, wrapped in square brackets <code>[ ]<\/code>. Think of a numbered list of bullet points.<\/li>\n<li><strong>String<\/strong> — text, always in double quotes: <code>\"buy\"<\/code>, <code>\"Apple Inc.\"<\/code>.<\/li>\n<li><strong>Number<\/strong> — written bare, no quotes: <code>225.5<\/code> or <code>42<\/code>. Quotes would make it text, not a number you can do math on.<\/li>\n<li><strong>Boolean<\/strong> — a yes/no value: <code>true<\/code> or <code>false<\/code> (all lowercase).<\/li>\n<li><strong>Null<\/strong> — the special value meaning \"nothing here / unknown\", written <code>null<\/code>.<\/li>\n<\/ul>\n\n<h5>Worked walkthrough 1: reading out\\aapl.json line by line<\/h5>\n<p>Here is a realistic file your bot might produce. Read it slowly — the annotations to the right explain each piece.<\/p>\n<pre class=\"lesson-code\">{\n  <span class=\"c\">// objects use { } and keys are in \"double quotes\"<\/span>\n  \"ticker\": \"AAPL\",                 <span class=\"c\">← a string value (text)<\/span>\n  \"company\": \"Apple Inc.\",          <span class=\"c\">← another string<\/span>\n  \"recommendation\": \"buy\",          <span class=\"c\">← one of a fixed set: buy/hold/sell/avoid<\/span>\n  \"confidence\": 0.72,               <span class=\"c\">← a number between 0 and 1 (72% sure)<\/span>\n  \"price_target\": 245.0,            <span class=\"c\">← a number, no quotes = real number<\/span>\n  \"currency\": \"USD\",\n  \"as_of\": \"2026-06-12\",            <span class=\"c\">← a date stored as a string<\/span>\n  \"summary\": \"Strong services growth offsets soft iPhone units.\",\n  \"risks\": [                        <span class=\"c\">← an array (a list), opens with [<\/span>\n    \"China demand softening\",\n    \"Regulatory pressure on App Store\"\n  ],                                <span class=\"c\">← list closes with ]<\/span>\n  \"scenarios\": [                    <span class=\"c\">← an array OF OBJECTS (nested)<\/span>\n    { \"name\": \"bull\", \"price\": 280.0, \"probability\": 0.3 },\n    { \"name\": \"base\", \"price\": 245.0, \"probability\": 0.5 },\n    { \"name\": \"bear\", \"price\": 190.0, \"probability\": 0.2 }\n  ],\n  \"dividend_yield\": null            <span class=\"c\">← null = value unknown / not available<\/span>\n}<\/pre>\n<p>Notice the shapes nesting inside each other: the whole thing is one <strong>object<\/strong>; <code>risks<\/code> is an <strong>array of strings<\/strong>; <code>scenarios<\/code> is an <strong>array of objects<\/strong> (each scenario is its own little labeled box). This nesting is normal and powerful — it lets one file hold a rich, organized picture instead of a flat list.<\/p>\n<p class=\"l-watch\">⚠️ The real comments <code>// like this<\/code> are shown for teaching only. <strong>Real JSON has no comments.<\/strong> If you see <code>//<\/code> inside an actual <code>.json<\/code> file, that file is broken and won't load.<\/p>\n\n<h5>JSON vs a Python dict: cousins, not twins<\/h5>\n<p>Your bot is written in <strong>Python<\/strong>. Python's version of \"labeled boxes\" is called a <strong>dict<\/strong> (short for dictionary). JSON and a Python dict look almost identical, which is why they pair so well — but a few differences cause real bugs, so know them:<\/p>\n<ul>\n<li><strong>true / false vs True / False<\/strong> — JSON uses lowercase <code>true<\/code>; Python uses capitalized <code>True<\/code>.<\/li>\n<li><strong>null vs None<\/strong> — JSON says <code>null<\/code>; Python says <code>None<\/code> for \"nothing\".<\/li>\n<li><strong>Quotes<\/strong> — JSON allows <em>only<\/em> double quotes <code>\"<\/code>. Python lets you use single quotes, but valid JSON must not.<\/li>\n<li><strong>Trailing commas<\/strong> — Python forgives a comma after the last item; JSON does <strong>not<\/strong>. A stray comma before <code>}<\/code> or <code>]<\/code> breaks the file.<\/li>\n<\/ul>\n<p>When the bot reads <code>out\\aapl.json<\/code>, Python automatically translates: JSON <code>true<\/code> becomes Python <code>True<\/code>, JSON <code>null<\/code> becomes <code>None<\/code>, and so on. You usually don't do this by hand — but when you eyeball a file, knowing which world you're in tells you whether what you see is correct.<\/p>\n\n<h5>Why an AI needs to be FORCED into structure<\/h5>\n<p>Left to its own devices, a language model writes prose — that's what it was trained to do. Even when you say \"reply in JSON\", a free-form model will sometimes add a chatty sentence first, forget a quote, or drop a comma. That single slip makes the file unreadable to your bot.<\/p>\n<p>The fix is to run the model in a <strong>structured mode<\/strong> (often called \"JSON mode\" or \"tool/function calling\"): you hand the AI the exact shape you want, and the system guarantees the reply fits that shape — no stray prose, no missing brackets. This is the difference between <em>hoping<\/em> the AI returns clean data and <em>requiring<\/em> it. For a research bot you'll publish from, always require it.<\/p>\n\n<h5>What a schema is — and meet Pydantic<\/h5>\n<p>A <strong>schema<\/strong> is a written description of what valid data must look like: which fields exist, what type each one is, which are required. It's the blueprint; the JSON file is the building. The blueprint lets you check the building.<\/p>\n<p>In Python, the most common tool for schemas is <strong>Pydantic<\/strong>. You write a <strong>model<\/strong> — a class listing each field and its type — and Pydantic becomes a strict inspector at the door: data that matches gets in (and is cleaned up); data that doesn't gets rejected with a clear error. Your bot's model is called <code>AnalysisResult<\/code>. Here is a realistic version:<\/p>\n<pre class=\"lesson-code\"><span class=\"c\"># each line: field_name : type [ = default ]<\/span>\nfrom pydantic import BaseModel, Field\nfrom typing import Literal, Optional\n\nclass Scenario(BaseModel):\n    name: Literal[\"bull\", \"base\", \"bear\"]\n    price: float = Field(gt=0)              <span class=\"c\"># gt=0 means \"greater than 0\"<\/span>\n    probability: float = Field(ge=0, le=1)  <span class=\"c\"># between 0 and 1 inclusive<\/span>\n\nclass AnalysisResult(BaseModel):\n    ticker: str\n    company: str\n    recommendation: Literal[\"buy\", \"hold\", \"sell\", \"avoid\"]\n    confidence: float = Field(ge=0, le=1, description=\"0=no conviction, 1=certain\")\n    price_target: float = Field(gt=0, description=\"12-month target, positive number\")\n    summary: str\n    risks: list[str]\n    scenarios: list[Scenario]\n    dividend_yield: Optional[float] = None   <span class=\"c\"># may be missing → defaults to None<\/span><\/pre>\n<p>Reading this blueprint, term by term:<\/p>\n<ul>\n<li><strong>str<\/strong> = a string (text), <strong>float<\/strong> = a number that can have decimals, <strong>int<\/strong> = a whole number.<\/li>\n<li><strong>Literal[...]<\/strong> = the value must be <em>exactly one of these listed options<\/em>. <code>recommendation<\/code> can only be buy, hold, sell, or avoid — never \"strong buy\" or \"BUY\". This is your guardrail against the AI inventing new labels.<\/li>\n<li><strong>list[str]<\/strong> = a list of strings; <strong>list[Scenario]<\/strong> = a list of Scenario objects (the nested array-of-objects from the JSON).<\/li>\n<li><strong>Field(gt=0)<\/strong> / <strong>Field(ge=0, le=1)<\/strong> = simple <em>constraints<\/em>. <code>gt<\/code> = greater than, <code>ge<\/code> = greater-or-equal, <code>le<\/code> = less-or-equal. So a price target must be positive, and confidence must sit between 0 and 1.<\/li>\n<li><strong>Optional[float] = None<\/strong> = this field may be absent; if so it <em>defaults<\/em> to None. Required fields (no default) <strong>must<\/strong> be present or validation fails.<\/li>\n<li><strong>description=<\/strong> = a human note that is <em>also<\/em> sent to the AI in structured mode, nudging it to fill the field correctly. Good descriptions = cleaner output.<\/li>\n<\/ul>\n\n<h5>Worked walkthrough 2: one input that passes, one that fails<\/h5>\n<p>Validation means: take raw data, run it through the model, and either get a clean object back or get a <strong>ValidationError<\/strong>. First, data that <strong>passes<\/strong>:<\/p>\n<pre class=\"lesson-code\">data = {\n    \"ticker\": \"AAPL\", \"company\": \"Apple Inc.\",\n    \"recommendation\": \"buy\", \"confidence\": 0.72, \"price_target\": 245.0,\n    \"summary\": \"Solid quarter.\", \"risks\": [\"China demand\"],\n    \"scenarios\": [{\"name\": \"base\", \"price\": 245.0, \"probability\": 1.0}]\n}\nresult = AnalysisResult(**data)        <span class=\"c\"># run it through the inspector<\/span>\n<span class=\"g\">✓ Success — dividend_yield is missing, so it defaults to None.<\/span><\/pre>\n<p>Now data that <strong>fails<\/strong> — the AI returned <code>\"strong buy\"<\/code> (not an allowed Literal) and <code>confidence<\/code> of <code>1.4<\/code> (above 1):<\/p>\n<pre class=\"lesson-code\">bad = { ...same..., \"recommendation\": \"strong buy\", \"confidence\": 1.4, ... }\nresult = AnalysisResult(**bad)<\/pre>\n<pre class=\"lesson-code\"><span class=\"r\">pydantic_core._pydantic_core.ValidationError: 2 validation errors for AnalysisResult<\/span>\n<span class=\"r\">recommendation<\/span>\n  Input should be 'buy', 'hold', 'sell' or 'avoid'\n  [type=literal_error, input_value='strong buy', ...]\n<span class=\"r\">confidence<\/span>\n  Input should be less than or equal to 1\n  [type=less_than_equal, input_value=1.4, ...]<\/pre>\n<p>Read an error like this top-down: the <strong>first line<\/strong> says how many problems and which model. Then each problem comes as a <em>pair<\/em>: the <strong>field name<\/strong> on its own line (<code>recommendation<\/code>, <code>confidence<\/code>), then the <strong>reason<\/strong> underneath, plus the exact <code>input_value<\/code> that offended. You don't need to fix the code — you need to read which field the AI got wrong and why. Here: the AI used a label that isn't allowed, and gave an impossible confidence. The error is the bot <em>protecting you<\/em>.<\/p>\n\n<h5>Validation as a gate — the contract between stages<\/h5>\n<p>Picture your pipeline as a relay race: AI → JSON → validation → Markdown report. Validation is the <strong>gate<\/strong> in the middle. Bad data never reaches the report; it's caught and the bot stops (or retries) instead of publishing a number like a negative price target to your readers.<\/p>\n<p>Think of the schema as a <strong>contract<\/strong> between two stages. The \"writer\" stage promises: <em>I will always hand over data shaped exactly like AnalysisResult.<\/em> The \"reporter\" stage trusts that promise and never has to second-guess. As long as the contract holds, each stage can be built and changed independently. That is how a non-programmer keeps a multi-step AI tool trustworthy: the gate enforces the contract automatically, every single run.<\/p>\n<p class=\"l-key\">💡 Key idea: Validation isn't bureaucracy — it's the safety rail that turns \"the AI usually gets it right\" into \"nothing wrong ever gets published.\"<\/p>\n\n<h5>Worked walkthrough 3: adding a field — the ripple effect<\/h5>\n<p>Say you want to add <code>sector<\/code> (e.g. \"Technology\") to every analysis. It seems like a one-line change. But because the schema is a contract, changing it ripples outward. Reason through it before you let the AI make the edit:<\/p>\n<pre class=\"lesson-code\">class AnalysisResult(BaseModel):\n    ...\n    sector: str          <span class=\"r\">← REQUIRED: every input must now include sector<\/span><\/pre>\n<ul>\n<li><strong>The AI/writer stage<\/strong> must now produce <code>sector<\/code>, or every run fails validation.<\/li>\n<li><strong>Old saved files<\/strong> in <code>out\\<\/code> — your existing <code>aapl.json<\/code>, <code>msft.json<\/code> — have <em>no<\/em> sector field. Re-validating them now throws \"Field required\". This is a <strong>schema versioning<\/strong> problem: old data was written under the old contract.<\/li>\n<li><strong>Tests<\/strong> that build an <code>AnalysisResult<\/code> from sample data will break until they too include <code>sector<\/code>.<\/li>\n<\/ul>\n<p>The gentle fix is to make it optional so old files and tests still pass:<\/p>\n<pre class=\"lesson-code\">    sector: Optional[str] = None   <span class=\"g\">← old files validate; new runs can fill it in<\/span><\/pre>\n<p>This is the core supervision instinct for this week: when the AI offers to \"just add a field,\" ask it three questions — <em>Does the writer stage now produce it? Will old <code>out\\*.json<\/code> files still validate? Which tests need updating?<\/em> A required new field is a breaking change; an optional one with a default usually isn't.<\/p>\n<p class=\"l-watch\">⚠️ Adding a <strong>required<\/strong> field is a breaking change to your contract. Prefer <code>Optional[...] = default<\/code> when old data or tests must keep working — and decide on purpose whether to re-run old tickers under the new schema.<\/p>\n\n<h5>Putting it together<\/h5>\n<p>Structured output is the spine of a trustworthy research bot. JSON gives you labeled boxes; a Python dict is its in-program twin; a Pydantic model is the blueprint that says exactly what's allowed; <code>Literal<\/code> and <code>Field<\/code> constraints stop the AI from inventing labels or impossible numbers; and validation is the gate that refuses to publish anything off-contract. You don't need to write this code — but reading it, and reading a <code>ValidationError<\/code>, is exactly how you supervise the AI that does.<\/p>\n",
         learn: [
           "JSON building blocks: objects, arrays, strings, numbers, booleans, null",
           "How JSON mirrors the Python dict you already know",
@@ -1742,51 +1659,73 @@ class AnalysisResult(BaseModel):
         deliverable: "You can inspect structured AI output and explain how the schema protects the whole pipeline.",
         activityType: "quiz",
         quiz: [
-          {
-            q: "What does Literal[\"buy\",\"hold\",\"sell\",\"avoid\"] enforce on the verdict field?",
-            options: [
-              "The verdict can be any text",
-              "The verdict must be exactly one of those four words, or validation fails",
-              "The verdict must be a number",
-              "The verdict is optional"
-            ],
-            answer: 1,
-            explain: "Literal restricts a field to a fixed set of allowed values. 'strong buy' would be rejected."
-          },
-          {
-            q: "Why is schema validation valuable to you as an operator?",
-            options: [
-              "It makes the AI faster",
-              "It catches malformed output early, before it flows into published articles",
-              "It hides errors",
-              "It writes the article for you"
-            ],
-            answer: 1,
-            explain: "Validation is a gate: bad data becomes a loud ValidationError instead of a quiet mistake downstream."
-          },
-          {
-            q: "In JSON, what does [ ] denote?",
-            options: [
-              "An object with named fields",
-              "An ordered array (list) of values",
-              "A secret key",
-              "A comment"
-            ],
-            answer: 1,
-            explain: "Square brackets are an array -- an ordered list. Curly braces { } are an object with key:value pairs."
-          },
-          {
-            q: "Before accepting an AI-added schema field, the key question is:",
-            options: [
-              "What color should it be?",
-              "How does this field affect the tests and existing saved outputs?",
-              "Can we publish immediately?",
-              "Does it look nice?"
-            ],
-            answer: 1,
-            explain: "New fields change the contract -- they can break tests and older JSON. Always check the ripple effects."
-          }
-        ]
+  {
+    "q": "Why does the research bot need structured JSON instead of free-flowing AI prose?",
+    "options": [
+      "Prose uses more disk space than JSON",
+      "A program can reliably read labeled fields, but cannot dependably extract facts from an essay",
+      "JSON is the only format Python can open",
+      "Prose is always less accurate than JSON"
+    ],
+    "answer": 1,
+    "explain": "Software needs data in tidy, labeled boxes to act on it; loose prose may hide or omit the price target or recommendation, leaving the bot to guess."
+  },
+  {
+    "q": "Which of these is valid JSON?",
+    "options": [
+      "{ 'ticker': 'AAPL', 'active': True }",
+      "{ \"ticker\": \"AAPL\", \"active\": true, }",
+      "{ \"ticker\": \"AAPL\", \"active\": true }",
+      "{ ticker: \"AAPL\", active: true }"
+    ],
+    "answer": 2,
+    "explain": "JSON requires double quotes on keys and strings, lowercase true/false, and no trailing comma. Only the third option follows all of those rules."
+  },
+  {
+    "q": "In the JSON file, what does the value null mean for dividend_yield?",
+    "options": [
+      "The dividend yield is exactly zero",
+      "The value is unknown or not available",
+      "The field is an error and the file is broken",
+      "The yield is being calculated right now"
+    ],
+    "answer": 1,
+    "explain": "null is JSON's way of saying 'nothing here / unknown'. It is different from 0, which would be a real measured value of zero. In Python this becomes None."
+  },
+  {
+    "q": "In the AnalysisResult model, what does recommendation: Literal[\"buy\", \"hold\", \"sell\", \"avoid\"] enforce?",
+    "options": [
+      "The value must be text of any kind",
+      "The value must be exactly one of those four options",
+      "The value must include all four words",
+      "The value can be any word starting with b, h, s, or a"
+    ],
+    "answer": 1,
+    "explain": "A Literal restricts the field to exactly the listed choices, so the AI cannot invent labels like 'strong buy' or 'BUY' — a key guardrail for trustworthy output."
+  },
+  {
+    "q": "An input gives confidence = 1.4 and the model declares confidence: float = Field(ge=0, le=1). What happens?",
+    "options": [
+      "It is accepted because 1.4 is a valid number",
+      "It is silently rounded down to 1.0",
+      "A ValidationError is raised because the value exceeds the le=1 limit",
+      "The whole file is deleted"
+    ],
+    "answer": 2,
+    "explain": "le=1 means 'less than or equal to 1', so 1.4 violates the constraint and Pydantic raises a ValidationError naming the field and reason instead of letting bad data through."
+  },
+  {
+    "q": "You add a new REQUIRED field sector: str to AnalysisResult. What is the main risk?",
+    "options": [
+      "Nothing changes; existing files and tests keep working",
+      "Old out\\*.json files and existing tests will now fail validation because they lack sector",
+      "The bot will run twice as fast",
+      "JSON no longer supports objects"
+    ],
+    "answer": 1,
+    "explain": "A required new field is a breaking change: old saved files and sample-data tests have no sector and fail with 'Field required'. Making it Optional with a default avoids breaking them."
+  }
+]
       },
       {
         week: 7,
@@ -1795,50 +1734,7 @@ class AnalysisResult(BaseModel):
         difficulty: "Operator",
         time: "45 to 60 min per day",
         topics: ["Markdown", "Content", "Publishing"],
-        lesson: `
-          <h5>Markdown in five minutes</h5>
-          <p><strong>Markdown</strong> is plain text with a few symbols that become formatting. It is how the bot writes articles. The whole language you need:</p>
-          <pre class="lesson-code"># Big heading
-## Smaller heading
-
-**bold text**   and   *italic text*
-
-- a bullet
-- another bullet
-
-| Scenario | Price | Prob |
-| -------- | ----- | ---- |
-| Bull     | 240   | 30%  |
-| Base     | 210   | 50%  |</pre>
-          <p>That table syntax (pipes <code>|</code> and a divider row of dashes) is how you build scenario and valuation tables, which is most of an analyst note.</p>
-
-          <h5>Front matter: metadata at the top</h5>
-          <p>Many articles start with a <strong>YAML front matter</strong> block fenced by <code>---</code>. It carries machine-readable metadata that the publishing step uses:</p>
-          <pre class="lesson-code">---
-title: "Apple: Services-Led Re-Rating"
-ticker: AAPL
-date: 2026-06-12
-rating: buy
-tags: [tech, large-cap]
----</pre>
-
-          <h5>Deterministic template vs AI rewrite</h5>
-          <p>There are two ways to turn JSON into an article, and the difference is the whole game:</p>
-          <ul>
-            <li><strong>Deterministic template</strong> &mdash; code drops the validated JSON values into fixed slots. Boring, but it <em>cannot</em> invent facts.</li>
-            <li><strong>AI rewrite</strong> &mdash; the model rephrases for flow. Reads better, but <em>can</em> drift from the source.</li>
-          </ul>
-          <p class="l-key">💡 The safe pattern: the factual core (numbers, rating, price target) follows the validated JSON closely &mdash; ideally templated. Let the AI improve <em>wording</em>, never the <em>facts</em>. After generation, compare the article's numbers against the source JSON.</p>
-
-          <h5>Grounding and the dry-run gate</h5>
-          <p><strong>Grounded</strong> means every claim in the article traces back to the source JSON or real data &mdash; nothing invented. Your job reviewing Stage 2 is to spot any number or claim that is <em>not</em> in the JSON; that is a hallucination and it must go.</p>
-          <p>Two safety rails:</p>
-          <ul>
-            <li>A <strong>disclaimer</strong> is appended automatically (compliance), so it can never be forgotten.</li>
-            <li><code>--dry-run</code> writes the article locally and shows it, but <strong>does not publish</strong>. Nothing reaches the public until you explicitly say so.</li>
-          </ul>
-          <p class="l-watch">⚠️ Always run content generation with <code>--dry-run</code> first and read the output. Treat publishing as a separate, deliberate decision &mdash; never the default.</p>
-        `,
+        lesson: "\n<h5>From validated numbers to a publishable article<\/h5>\n<p>By now your research bot has done the hard, factual work: it pulled stock data, ran checks, and produced a <strong>JSON<\/strong> file. <em>JSON<\/em> (JavaScript Object Notation) is just a structured text format computers use to store data as labelled values — think of it as a tidy filing cabinet where every drawer has a name (<code>\"ticker\"<\/code>) and a value (<code>\"AAPL\"<\/code>). It is precise but ugly. No human wants to read a filing cabinet.<\/p>\n<p>This week is about the last mile: turning that cabinet of validated facts into a clean, analyst-style article a person actually wants to read — <strong>without the AI inventing anything along the way<\/strong>. The output format is <strong>Markdown<\/strong>, and the bot writes it into the <code>content\\<\/code> folder of your project.<\/p>\n<p class=\"l-key\">💡 Key idea: The JSON is the source of truth. The article is a <em>view<\/em> of that truth. Your whole job as supervisor is to make sure the view never says more than the truth.<\/p>\n\n<h5>What Markdown is (and why publishers love it)<\/h5>\n<p><strong>Markdown<\/strong> is a way to write formatted text using plain symbols instead of buttons. You type <code>#<\/code> for a heading or <code>*<\/code> for emphasis, and a publishing tool later turns those symbols into real headings and bold text. It is just a text file (ending in <code>.md<\/code>) that you can open in Notepad — no special software needed, nothing locked in a proprietary format. That portability is exactly why blogs, GitHub, and newsletters all read it.<\/p>\n<p>Here is the core syntax, shown <em>literally<\/em> (this is what the bot writes into the file):<\/p>\n<pre class=\"lesson-code\"><span class=\"c\"># Big heading (an H1)<\/span>\n<span class=\"c\">## Smaller heading (an H2)<\/span>\n<span class=\"c\">### Smaller still (an H3)<\/span>\n\nNormal paragraph text just sits on its own line.\n\n**This is bold** and *this is italic*.\n\n<span class=\"c\">A bulleted list:<\/span>\n- First point\n- Second point\n  - A nested sub-point (indent two spaces)\n\n<span class=\"c\">A numbered list:<\/span>\n1. Do this\n2. Then this<\/pre>\n\n<p>Two more pieces you will see often. <strong>Links<\/strong> wrap the visible words in square brackets and the address in parentheses. <strong>Blockquotes<\/strong> start with a <code>&gt;<\/code> and are used for pulled-out remarks. <strong>Inline code<\/strong> wraps a value in backticks so it renders in a monospace font — handy for tickers or numbers you want to stand out.<\/p>\n<pre class=\"lesson-code\"><span class=\"c\">A link:<\/span> [Apple investor relations](https://investor.apple.com)\n\n<span class=\"c\">A blockquote:<\/span>\n&gt; Margins expanded for the third straight quarter.\n\n<span class=\"c\">Inline code:<\/span> The ticker `AAPL` closed at `198.40`.<\/pre>\n\n<h5>Tables — and how to escape special characters<\/h5>\n<p>Tables are the workhorse of a research note. The header row is separated from the data by a line of dashes and pipes. The <code>|<\/code> (pipe) character draws the columns:<\/p>\n<pre class=\"lesson-code\">| Metric        | Value   |\n| ------------- | ------- |\n| P/E ratio     | 28.5    |\n| Dividend yld  | 0.5%    |<\/pre>\n<p>Because <code>|<\/code> and <code>#<\/code> have special meaning, what if a real value <em>contains<\/em> one — say a column literally needs to show a pipe, or a sentence starts with a <code>#<\/code>? You <strong>escape<\/strong> it by putting a backslash in front: <code>\\|<\/code> or <code>\\#<\/code>. The backslash tells the renderer \"treat the next symbol as plain text, not as formatting.\" This is a tiny detail, but a stray unescaped pipe is the most common way a generated table comes out mangled — worth knowing so you can recognise it when reviewing.<\/p>\n\n<h5>YAML front matter — the label on the envelope<\/h5>\n<p>At the very top of a publishable Markdown file sits a small block fenced by three dashes (<code>---<\/code>) above and below. This is the <strong>YAML front matter<\/strong>. <em>YAML<\/em> is another simple \"name: value\" text format; <em>front matter<\/em> just means \"metadata that comes before the article body.\" It is not displayed to readers — it is <strong>machine-readable labelling<\/strong> that publishing platforms parse to file, sort, and display your article.<\/p>\n<pre class=\"lesson-code\"><span class=\"r\">---<\/span>\n<span class=\"y\">title:<\/span> Apple Inc. — Quarterly Margin Review\n<span class=\"y\">ticker:<\/span> AAPL\n<span class=\"y\">date:<\/span> 2026-06-12\n<span class=\"y\">rating:<\/span> Hold\n<span class=\"y\">tags:<\/span> [technology, large-cap, dividend]\n<span class=\"r\">---<\/span><\/pre>\n<p>Field by field: <code>title<\/code> is the headline a blog shows in its index and browser tab. <code>ticker<\/code> lets a site auto-link to a quote page or group all your Apple notes together. <code>date<\/code> drives sort order and \"published on\" stamps. <code>rating<\/code> (your verdict — Buy / Hold / Sell) can power a filter or a coloured badge. <code>tags<\/code> feed category pages and search. A publisher reads this block <em>before<\/em> the prose, which is why getting it right matters: a wrong <code>rating<\/code> here can mislabel the whole piece even if the body is perfect.<\/p>\n<p class=\"l-watch\">⚠️ The front-matter <code>rating<\/code> must equal the verdict in your JSON. If JSON says <code>\"verdict\": \"Hold\"<\/code> but the front matter says <code>Buy<\/code>, a downstream site might show a green \"Buy\" badge over a cautious article. Always cross-check these two.<\/p>\n\n<h5>Deterministic template vs AI rewrite — the spectrum<\/h5>\n<p>There are two ways to turn JSON into prose, and a range in between. Understanding the trade-off is the heart of supervising this stage.<\/p>\n<p>A <strong>deterministic template<\/strong> is a fixed fill-in-the-blanks form. <em>Deterministic<\/em> means \"same input always gives exactly the same output, no surprises.\" The template has slots like <code>The {ticker} P/E ratio is {pe}.<\/code> and the bot drops JSON values straight into the slots. It cannot invent anything because there is nowhere for invention to happen — every word is either fixed text you wrote or a value copied verbatim from the JSON.<\/p>\n<p>A <strong>full AI rewrite<\/strong> hands the JSON to a language model and says \"write me an engaging analyst note.\" This reads beautifully and varies sentence structure like a human — but the model is a fluent guesser, so it may smooth over a gap by inventing a plausible-sounding number or source. That invention is called a <strong>hallucination<\/strong>.<\/p>\n<p>Between the extremes sits <strong>template-with-AI-polish<\/strong>: the factual scaffold is built by the deterministic template, then the AI is allowed only to <em>rephrase the wording<\/em> — never to add facts. This is usually the sweet spot for a research bot.<\/p>\n<ul>\n<li><strong>Pure template<\/strong> — zero hallucination risk, but stiff, repetitive prose.<\/li>\n<li><strong>Template + AI polish<\/strong> — readable, low risk <em>if<\/em> the AI is fenced to wording only.<\/li>\n<li><strong>Full AI rewrite<\/strong> — best prose, highest hallucination risk; needs the strictest review.<\/li>\n<\/ul>\n<p class=\"l-key\">💡 Key idea: Separate the factual <strong>CORE<\/strong> (numbers, ratings, sources — these must follow the JSON exactly) from the <strong>PROSE<\/strong> (tone, transitions, word choice — here the AI may help). Let AI touch prose, never core.<\/p>\n\n<h5>What \"grounded\" means — and a hallucination checklist<\/h5>\n<p>A claim is <strong>grounded<\/strong> when it can be traced back to a specific value in the source JSON. \"The P/E ratio is 28.5\" is grounded if the JSON contains <code>\"pe\": 28.5<\/code>. \"The P/E is the lowest in the sector\" is <strong>ungrounded<\/strong> if the JSON never mentions the sector — the AI conjured it. Ungrounded claims are hallucinations even when they sound authoritative, and <em>especially<\/em> dangerous in finance because readers may act on them.<\/p>\n<p>Here is a concrete review checklist to run on every generated article:<\/p>\n<ul>\n<li><strong>Every number traces to the JSON.<\/strong> Pick each figure in the article and find it in the JSON. No match = hallucination.<\/li>\n<li><strong>No invented sources or quotes.<\/strong> If the article cites \"according to Reuters\" but the JSON has no such source, delete it.<\/li>\n<li><strong>Rating matches the verdict.<\/strong> Front matter, body text, and JSON verdict must all agree.<\/li>\n<li><strong>No new comparisons or superlatives<\/strong> (\"best in class\", \"lowest in years\") unless the JSON supports them.<\/li>\n<li><strong>No invented dates or time ranges<\/strong> beyond the JSON's <code>date<\/code>.<\/li>\n<\/ul>\n\n<h5>Worked walkthrough 1 — JSON next to the article it should produce<\/h5>\n<p>Here is a trimmed source JSON:<\/p>\n<pre class=\"lesson-code\">{\n  <span class=\"y\">\"ticker\"<\/span>: <span class=\"g\">\"AAPL\"<\/span>,\n  <span class=\"y\">\"company\"<\/span>: <span class=\"g\">\"Apple Inc.\"<\/span>,\n  <span class=\"y\">\"price\"<\/span>: <span class=\"g\">198.40<\/span>,\n  <span class=\"y\">\"pe\"<\/span>: <span class=\"g\">28.5<\/span>,\n  <span class=\"y\">\"verdict\"<\/span>: <span class=\"g\">\"Hold\"<\/span>,\n  <span class=\"y\">\"date\"<\/span>: <span class=\"g\">\"2026-06-12\"<\/span>\n}<\/pre>\n<p>The deterministic template produces this Markdown:<\/p>\n<pre class=\"lesson-code\"><span class=\"r\">---<\/span>\n<span class=\"y\">title:<\/span> Apple Inc. — Snapshot\n<span class=\"y\">ticker:<\/span> AAPL\n<span class=\"y\">date:<\/span> 2026-06-12\n<span class=\"y\">rating:<\/span> Hold\n<span class=\"r\">---<\/span>\n\n<span class=\"c\"># Apple Inc. (AAPL)<\/span>\n\nAs of 2026-06-12, **AAPL** trades at `198.40`\nwith a P/E ratio of `28.5`.\n\n**Verdict: Hold.**<\/pre>\n<p>Annotation — trace each value: <code>Apple Inc.<\/code> ← <code>\"company\"<\/code>; <code>AAPL<\/code> ← <code>\"ticker\"<\/code>; <code>2026-06-12<\/code> ← <code>\"date\"<\/code>; <code>198.40<\/code> ← <code>\"price\"<\/code>; <code>28.5<\/code> ← <code>\"pe\"<\/code>; <code>Hold<\/code> ← <code>\"verdict\"<\/code> (and it appears identically in both the front matter and the body). Every single fact in the article has a home in the JSON. That is what a grounded article looks like.<\/p>\n\n<h5>Worked walkthrough 2 — catching a hallucination<\/h5>\n<p>Same JSON as above. Now an AI rewrite hands you this paragraph:<\/p>\n<pre class=\"lesson-code\"><span class=\"c\"># Apple Inc. (AAPL)<\/span>\n\nAAPL trades at `198.40` with a P/E of `28.5`,\n<span class=\"r\">a 12% discount to its five-year average.<\/span>\n<span class=\"r\">Analysts at Morgan Stanley reiterated a Buy.<\/span>\n\n**Verdict: Hold.**<\/pre>\n<p>Run the checklist. <code>198.40<\/code> and <code>28.5<\/code> trace fine. But \"a 12% discount to its five-year average\" — search the JSON: there is no <code>12%<\/code> and no five-year average anywhere. <strong>Hallucinated number.<\/strong> \"Analysts at Morgan Stanley reiterated a Buy\" — no such source in the JSON, and worse, it says <em>Buy<\/em> while the verdict is <em>Hold<\/em>. <strong>Hallucinated source plus a contradiction.<\/strong> You reject this draft and either fix the prompt or fall back to the template. This is the everyday work of supervising an AI writer.<\/p>\n\n<h5>Disclaimers, the publisher interface, and dry runs<\/h5>\n<p><strong>Why disclaimers are auto-appended.<\/strong> Every published note should carry a standard line such as \"This is not financial advice; do your own research.\" The bot appends it automatically — not as decoration but as legal and ethical hygiene. Automating it means it can never be forgotten on a busy day, and because it is fixed text it is itself a tiny deterministic template (zero hallucination risk).<\/p>\n<p><strong>A publisher interface.<\/strong> Today the article lands as a file in <code>content\\<\/code>. Later you might post to a blog or email list. A well-built bot hides the destination behind a <strong>publisher interface<\/strong> — a single agreed \"front door\" (e.g., a <code>publish(article)<\/code> step) so the writing logic never needs to know <em>where<\/em> the article goes. Swapping \"save to file\" for \"post to blog\" changes only the publisher, not the article generator. As supervisor, this is the boundary you want to insist on: it keeps the risky writing code isolated from the plumbing.<\/p>\n<p><strong>Idempotent, dry-run publishing.<\/strong> <em>Idempotent<\/em> means running the same publish twice produces the same result as running it once — no duplicate posts. The bot achieves this by checking whether an article with that ticker and date already exists before writing. And <code>--dry-run<\/code> is a flag you add to the command that tells the bot: \"do everything <em>except<\/em> the final publish — show me what you <em>would<\/em> write, but touch nothing.\" You run it like this:<\/p>\n<pre class=\"lesson-code\">python bot.py --dry-run<\/pre>\n<p>Always dry-run first. Read the proposed article, run your hallucination checklist, confirm the front matter and disclaimer, and only then run the real publish. A dry run costs you thirty seconds; a hallucinated \"Buy\" that goes live can cost a reader real money and cost you your credibility.<\/p>\n<p class=\"l-watch\">⚠️ Treat <code>--dry-run<\/code> as mandatory, not optional. Never let an AI tool publish in one step \"to save time.\" The whole point of supervision is the pause between generate and publish — that pause is where you live.<\/p>\n<p class=\"l-watch\">⚠️ If the same article appears twice in <code>content\\<\/code>, idempotency has failed — stop and investigate before the duplicate reaches readers.<\/p>\n",
         learn: [
           "Markdown headings, bold, lists, and tables",
           "YAML front matter for title, ticker, date, rating, and tags",
@@ -1858,51 +1754,73 @@ tags: [tech, large-cap]
         deliverable: "You can supervise Stage 2 and judge whether an article is publishable, grounded, and analyst-grade.",
         activityType: "quiz",
         quiz: [
-          {
-            q: "You review a generated article and the price target is 230, but the source JSON says 210. What is this?",
-            options: [
-              "A rounding choice, ignore it",
-              "A hallucination -- a claim not grounded in the source -- and it must be fixed",
-              "A formatting bug",
-              "Correct, the AI knows better"
-            ],
-            answer: 1,
-            explain: "Every number must trace back to the JSON. A figure that is not in the source is hallucinated and unsafe to publish."
-          },
-          {
-            q: "What does --dry-run do during content generation?",
-            options: [
-              "Publishes immediately",
-              "Writes and shows the article locally but does NOT publish",
-              "Deletes the article",
-              "Sends an email"
-            ],
-            answer: 1,
-            explain: "Dry-run lets you preview the output safely. Publishing stays a separate, deliberate action."
-          },
-          {
-            q: "For the factual core of an article (numbers, rating), the safer approach is:",
-            options: [
-              "Let the AI freely rewrite everything",
-              "Follow the validated JSON closely, ideally via a deterministic template",
-              "Skip the JSON entirely",
-              "Publish without review"
-            ],
-            answer: 1,
-            explain: "Templates can't invent facts. Let the AI polish wording, but keep facts pinned to the validated JSON."
-          },
-          {
-            q: "In Markdown, how do you make a table row?",
-            options: [
-              "With curly braces { }",
-              "With pipes | separating cells and a dashed divider row",
-              "With the word TABLE",
-              "You cannot make tables in Markdown"
-            ],
-            answer: 1,
-            explain: "Pipes separate columns and a row of dashes marks the header divider -- that is the whole table syntax."
-          }
-        ]
+  {
+    "q": "What does it mean for a claim in the article to be \"grounded\"?",
+    "options": [
+      "It is written in formal, professional-sounding language",
+      "It can be traced back to a specific value in the source JSON",
+      "It appears in both the front matter and the body",
+      "It was written by an AI rather than a template"
+    ],
+    "answer": 1,
+    "explain": "A grounded claim maps directly to a value in the JSON source of truth. If a number or source has no home in the JSON, it is a hallucination."
+  },
+  {
+    "q": "The YAML front matter is the block at the top of a Markdown file fenced by three dashes. What is its main purpose?",
+    "options": [
+      "It is the headline paragraph readers see first",
+      "It is machine-readable metadata (title, ticker, date, rating, tags) that publishers parse",
+      "It is the auto-appended legal disclaimer",
+      "It is a comment that the bot ignores"
+    ],
+    "answer": 1,
+    "explain": "Front matter is metadata before the article body. Publishing platforms read it to file, sort, and label the piece; it is not shown as prose to readers."
+  },
+  {
+    "q": "Why is a pure deterministic template the lowest-risk way to generate the factual core?",
+    "options": [
+      "It produces the most engaging, varied prose",
+      "It calls a language model that checks its own facts",
+      "Every word is either fixed text or a value copied verbatim from the JSON, so there is nowhere to invent facts",
+      "It automatically adds new sector comparisons"
+    ],
+    "answer": 2,
+    "explain": "A deterministic template fills fixed slots with JSON values, so it cannot hallucinate. The trade-off is stiffer, more repetitive prose."
+  },
+  {
+    "q": "An AI rewrite of an article says \"Analysts at Morgan Stanley reiterated a Buy,\" but the JSON contains no such source and lists the verdict as \"Hold.\" What should you do?",
+    "options": [
+      "Publish it; the AI likely knows recent analyst views",
+      "Reject the draft: it has an invented source and contradicts the JSON verdict",
+      "Change the JSON verdict to Buy to match the article",
+      "Keep the sentence but remove the bank's name"
+    ],
+    "answer": 1,
+    "explain": "The claim is an ungrounded hallucination and contradicts the verdict. You reject the draft and fix the prompt or fall back to the template; you never edit the source of truth to match invented prose."
+  },
+  {
+    "q": "What does the --dry-run flag do, and why does it matter?",
+    "options": [
+      "It publishes immediately but skips the disclaimer to save time",
+      "It runs everything except the final publish, showing what would be written without touching anything",
+      "It deletes old articles from the content folder",
+      "It forces a full AI rewrite instead of the template"
+    ],
+    "answer": 1,
+    "explain": "A dry run lets you preview and review the article (run your hallucination checklist) before anything is published. The pause between generate and publish is where supervision happens."
+  },
+  {
+    "q": "A publish step is described as \"idempotent.\" What does that guarantee?",
+    "options": [
+      "The article will always be rewritten by AI for freshness",
+      "Running the same publish twice produces the same result as once, so you never double-post",
+      "The article is encrypted before it is saved",
+      "The front matter is regenerated every run"
+    ],
+    "answer": 1,
+    "explain": "Idempotent publishing checks whether an article for that ticker and date already exists, so re-running does not create a duplicate post."
+  }
+]
       },
       {
         week: 8,
@@ -1911,43 +1829,7 @@ tags: [tech, large-cap]
         difficulty: "Operator",
         time: "45 to 60 min per day",
         topics: ["Automation", "Reliability", "Workflow"],
-        lesson: `
-          <h5>From lucky to repeatable</h5>
-          <p>Vibe coding gets you a result once. <strong>Operating</strong> means getting the right result every time, safely, even when you are not watching. This week is about the habits and guardrails that make that true.</p>
-
-          <h5>Dry-run as a safety switch</h5>
-          <p>You met <code>--dry-run</code> in Week 7. Make it your default. A dry-run does all the work and shows you the result <em>without</em> side effects &mdash; no publishing, no irreversible writes. The discipline: <strong>dry-run, read, then run for real.</strong> Real publishing is always an explicit, separate step.</p>
-
-          <h5>Logs and date-stamped output</h5>
-          <p>When a run happens unattended, logs are how you find out what it did. Two practices:</p>
-          <ul>
-            <li><strong>Log files</strong> record each run: what ran, what succeeded, what failed and why. Your first stop when something looks off.</li>
-            <li><strong>Date-stamped outputs</strong> (e.g. <code>content/2026-06-12-AAPL.md</code>) keep history and prevent one run from silently overwriting another &mdash; and help prevent duplicate publishing.</li>
-          </ul>
-
-          <h5>Watchlists and per-ticker error isolation</h5>
-          <p>A <strong>watchlist</strong> lets the bot process many tickers from config in one run:</p>
-          <pre class="lesson-code">watchlist:
-  - AAPL
-  - MSFT
-  - NVDA
-  - LITE</pre>
-          <p class="l-key">💡 The reliability rule that matters most: <strong>one ticker failing must not stop the others.</strong> If NVDA errors, AAPL, MSFT, and LITE should still complete. This is called per-ticker error isolation &mdash; the run catches each ticker's error, logs it, and moves on. When you ask the AI for batch features, demand this explicitly.</p>
-
-          <h5>Scheduling (later, carefully)</h5>
-          <p>Once dry-run, logging, and isolation are solid, you can have <strong>Windows Task Scheduler</strong> run the bot on a schedule (e.g. weekly). Do not schedule anything that publishes automatically until you trust it completely &mdash; schedule the analysis, keep publishing manual.</p>
-
-          <h5>Your pre-commit checklist</h5>
-          <p>Before you accept and commit any AI work, run this every single time. This checklist is the entire point of the course &mdash; it is how you replace blind trust with verification:</p>
-          <pre class="lesson-code">[ ] git status   -- only the files I expected changed?
-[ ] git diff     -- I read every changed line and I want it?
-[ ] pytest       -- all tests pass (and new behavior has a test)?
-[ ] secrets      -- nothing printed or committed a key? .env still ignored?
-[ ] scope        -- nothing changed outside what I asked for?
-[ ] dry-run      -- preview looks grounded before anything publishes?
-[ ] README       -- still accurate after the change?</pre>
-          <p class="l-watch">⚠️ If any box is unchecked, do not commit. An unreviewed AI change is a liability, not a feature &mdash; the whole skill you have built is the willingness to stop here.</p>
-        `,
+        lesson: "\n<h5>From \"It Worked Once\" to \"It Works Every Morning\"<\/h5>\n<p>Up to now you have probably run your research bot by hand: open the terminal, type a command, watch the JSON and Markdown appear, eyeball the result. That is <em>vibe coding<\/em> — improvising one run at a time. It is fine for experiments, but it is fragile. You forget a step. You overwrite yesterday's file. You run it at 6am from a scheduler that fails silently and you never notice until a Monday meeting. This week is about turning a clever one-off into a <strong>boring, repeatable, safe operation<\/strong> — the way a real desk runs a process. The goal is not more features. It is <em>reliability<\/em>: the same input gives the same result, failures are loud, and you can always tell what happened and when.<\/p>\n\n<p class=\"l-key\">💡 Key idea: A reliable process is one you can run half-asleep, twice by accident, on a flaky internet connection, and still trust the output — because the process protects you, not your memory.<\/p>\n\n<h5>Dry-Run: The Default Safety Switch<\/h5>\n<p>A <strong>dry-run<\/strong> is a mode where the bot does <em>all the thinking but none of the permanent actions<\/em>. It fetches data, builds the analysis, and prints what it <em>would<\/em> write — but it does not save files, does not overwrite anything, and does not publish. Think of it like a pilot's pre-flight walk-around: you check everything before the engines start.<\/p>\n<p>The discipline is simple: <strong>dry-run should be the default<\/strong>, and doing real work should require an explicit flag (a <code>--commit<\/code> or <code>--write<\/code> switch — a flag is just an extra word you add to the command to turn an option on). That way, a forgotten flag means \"did nothing,\" not \"destroyed the wrong file.\" The safe failure mode is the lazy one.<\/p>\n<pre class=\"lesson-code\"><span class=\"c\"># Default: safe. Shows intent, writes nothing.<\/span>\npython research_bot.py --ticker AAPL\n<span class=\"c\"># You must opt IN to real writes:<\/span>\npython research_bot.py --ticker AAPL --commit<\/pre>\n<p>When you ask your AI assistant to build a feature, make this your standing request: <em>\"Add a dry-run mode that is the default; only write files when I pass <code>--commit<\/code>.\"<\/em><\/p>\n\n<h5>Idempotent: Why Running Twice Should Be Harmless<\/h5>\n<p><strong>Idempotent<\/strong> (say: eye-DEM-po-tent) is a fancy word for a simple, calming property: <em>running the operation a second time changes nothing extra<\/em>. Saving a file named <code>AAPL_2026-06-12.md<\/code> is idempotent — run it five times, you still have one correct file. But <em>appending<\/em> \"Today's pick: AAPL\" to a published newsletter is <strong>not<\/strong> idempotent — run it twice and your readers see the pick twice.<\/p>\n<p>This matters most for <strong>publishing<\/strong>. If your 6am job retries after a hiccup, an idempotent design means the retry is safe. A non-idempotent design means a retry double-posts. Rule of thumb: <em>writing dated, named output files is naturally idempotent; sending, posting, or appending is not<\/em> — so keep those manual.<\/p>\n\n<h5>Logging and Date-Stamped Output Folders<\/h5>\n<p>A <strong>log<\/strong> is a written diary of what the program did, line by line, with timestamps. Without it, a failed run is a mystery. With it, you scroll back and see exactly where things went wrong. <strong>Structured logging<\/strong> just means each line follows the same shape so you (and your eyes at 7am) can scan it fast.<\/p>\n<p>Logs use <strong>levels<\/strong> to signal severity, like a traffic light:<\/p>\n<ul>\n<li><code>INFO<\/code> — normal progress. \"Starting AAPL,\" \"Saved 1 file.\" The green hum of a healthy run.<\/li>\n<li><code>WARNING<\/code> — odd but survivable. \"Price feed slow, retrying.\" Worth a glance, not a panic.<\/li>\n<li><code>ERROR<\/code> — something failed. \"NVDA: no data returned.\" This is what you grep for first.<\/li>\n<\/ul>\n<p>A <em>good log line<\/em> contains four things: <strong>when<\/strong> (timestamp), <strong>how serious<\/strong> (level), <strong>what part<\/strong> (which ticker / step), and <strong>what happened<\/strong> (plain message). Compare:<\/p>\n<pre class=\"lesson-code\"><span class=\"r\">Bad:  Error!<\/span>\n<span class=\"g\">Good: 2026-06-12 06:00:14 ERROR [NVDA] price fetch failed: timeout after 3 tries<\/span><\/pre>\n<p>Pair logs with <strong>date-stamped output folders<\/strong>. Instead of dumping everything into one folder that you overwrite daily, write to <code>output\\2026-06-12\\<\/code>. Each day gets its own drawer. You never clobber history, you can compare yesterday to today, and a re-run lands in the right day automatically.<\/p>\n\n<h5>Watchlists: Scaling From One Ticker to Many — Safely<\/h5>\n<p>A <strong>watchlist<\/strong> is just a plain list of the tickers you care about, kept in one file (a <code>.txt<\/code> with one symbol per line, or a small CSV). Instead of typing each symbol, the bot reads the list and loops through it. The win is consistency: the same tickers, in the same order, every run — no \"oops, forgot LITE today.\"<\/p>\n<pre class=\"lesson-code\"><span class=\"c\"># watchlist.txt<\/span>\nAAPL\nMSFT\nNVDA\nLITE<\/pre>\n<p>But scaling introduces a danger: if the bot processes them in one big batch and item #3 explodes, do items #4 and beyond die too? That is the next, crucial idea.<\/p>\n\n<h5>Per-Ticker Error Isolation: One Failure Must Not Sink the Fleet<\/h5>\n<p>Imagine a factory line where one jammed widget stops the whole belt. Bad design. You want each ticker handled in its own little sealed compartment, so a leak in one doesn't flood the ship. In programming this is the <strong>try/except-per-item pattern<\/strong>. In plain English:<\/p>\n<ul>\n<li><strong>try<\/strong> — \"attempt to analyze this one ticker.\"<\/li>\n<li><strong>except<\/strong> — \"if that attempt throws an error, catch it right here, write it to the log as an ERROR, and move on to the next ticker.\"<\/li>\n<\/ul>\n<p>The \"try/except\" wraps <em>each loop iteration<\/em>, not the whole loop. That single placement choice is the difference between \"lost the whole morning\" and \"lost one ticker, kept three.\" Ask your AI: <em>\"Wrap each ticker in its own try/except so one failure is logged and skipped, and the rest still run.\"<\/em><\/p>\n\n<h5>Retries With Backoff: Surviving a Flaky Internet<\/h5>\n<p>Network calls — fetching prices, calling an API — fail randomly sometimes. The fix is a <strong>retry<\/strong>: if a call fails, wait a moment and try again. <strong>Backoff<\/strong> means each wait gets longer (1 second, then 2, then 4) so you don't hammer a struggling server. After a small number of tries (say 3), give up and log an ERROR. This turns \"internet blinked for 2 seconds\" — a non-event — into a non-event, instead of a failed run.<\/p>\n<p class=\"l-watch\">⚠️ Retries are for <em>transient<\/em> (temporary) problems like timeouts. Do not retry a \"ticker not found\" or \"bad API key\" error — those will fail identically every time, and retrying just wastes minutes and hides the real cause.<\/p>\n\n<h5>Exit Codes: How a Scheduler Knows It Failed<\/h5>\n<p>When a program finishes, it hands back a single number called an <strong>exit code<\/strong>. By universal convention, <code>0<\/code> means success and <em>any non-zero number<\/em> means failure. You usually never see it, but it is the only language a scheduler understands. The Windows Task Scheduler doesn't read your logs — it just checks: did this return 0 or not? If your bot hits a fatal error but still exits 0, the scheduler thinks everything is fine. So a reliable bot must <strong>exit non-zero when something truly fails<\/strong>, so the failure is visible to the machine watching it.<\/p>\n\n<h5>Secrets in an Unattended Run: The \"Empty But Present\" Trap<\/h5>\n<p>An <strong>API key<\/strong> is a secret password that lets your bot use a paid service. When <em>you<\/em> run the bot, the key is loaded from your environment. But a scheduled 6am run happens with nobody watching — a different, stripped-down environment — and here lies a nasty gotcha you have already met on this machine: <strong>the key can be present but empty<\/strong>. The variable exists, so a naive check \"is the key set?\" passes — yet the value is a blank string, so every API call fails.<\/p>\n<p class=\"l-watch\">⚠️ Check for a <em>non-empty<\/em> key, not just a present one, and <strong>fail loudly<\/strong> (log ERROR, exit non-zero) at the very start if it is blank. A run that silently produces empty analysis is far more dangerous than one that stops with \"API key missing or empty.\"<\/p>\n<pre class=\"lesson-code\"><span class=\"c\"># The bot's first action should be a guard like:<\/span>\n<span class=\"g\">06:00:01 INFO  startup: API key present and non-empty — OK<\/span>\n<span class=\"c\"># ...or, when blank:<\/span>\n<span class=\"r\">06:00:01 ERROR startup: API key is empty. Aborting. (exit 1)<\/span><\/pre>\n\n<h5>Worked Walkthrough 1 — An Annotated Watchlist Run (One Ticker Fails)<\/h5>\n<p>Here is a real-looking log from a watchlist run. Read it like a flight recorder. NVDA fails; everything else survives. That is error isolation working.<\/p>\n<pre class=\"lesson-code\"><span class=\"c\">$ python research_bot.py --watchlist watchlist.txt --commit<\/span>\n<span class=\"g\">06:00:01 INFO  startup: API key present and non-empty — OK<\/span>\n<span class=\"c\">06:00:01 INFO  loaded 4 tickers from watchlist.txt<\/span>\n<span class=\"c\">06:00:01 INFO  output folder: output\\2026-06-12\\<\/span>\n<span class=\"g\">06:00:05 INFO  [AAPL] analysis complete — saved output\\2026-06-12\\AAPL.md<\/span>\n<span class=\"g\">06:00:09 INFO  [MSFT] analysis complete — saved output\\2026-06-12\\MSFT.md<\/span>\n<span class=\"y\">06:00:12 WARNING [NVDA] price fetch slow, retry 1/3 in 1s<\/span>\n<span class=\"y\">06:00:14 WARNING [NVDA] price fetch slow, retry 2/3 in 2s<\/span>\n<span class=\"r\">06:00:18 ERROR [NVDA] price fetch failed after 3 tries: timeout — SKIPPING<\/span>\n<span class=\"g\">06:00:22 INFO  [LITE] analysis complete — saved output\\2026-06-12\\LITE.md<\/span>\n<span class=\"y\">06:00:22 WARNING run finished with 1 error (3 ok, 1 failed)<\/span>\n<span class=\"r\">06:00:22 exit code: 1<\/span><\/pre>\n<p>How to read it, line by line:<\/p>\n<ul>\n<li><strong>The startup guard<\/strong> confirmed the API key was real before doing any work — no silent-empty disaster.<\/li>\n<li><strong>AAPL and MSFT<\/strong> sailed through (green INFO), each saved into today's dated folder.<\/li>\n<li><strong>NVDA<\/strong> showed backoff in action: two WARNINGs (retry 1, then 2 with a longer wait), then a final ERROR. The word <strong>SKIPPING<\/strong> is the isolation: the bot caught the error and moved on.<\/li>\n<li><strong>LITE still ran<\/strong> after NVDA died — proof one failure did not sink the rest.<\/li>\n<li><strong>The summary line and exit code 1<\/strong> mean: \"I finished, but not cleanly.\" A non-zero exit is exactly what tells your scheduler to flag the morning. You got 3 good reports <em>and<\/em> an honest signal that NVDA needs a look.<\/li>\n<\/ul>\n\n<h5>Light-Touch Monitoring: How Would You Know a 6am Run Failed?<\/h5>\n<p>Automation's hidden risk is <em>silence<\/em>. A job that fails quietly is worse than no job, because you <em>trust<\/em> it. You don't need a fancy alerting system — start with the cheapest reliable signal that survives \"I forgot to check\":<\/p>\n<ul>\n<li><strong>A daily summary you actually see<\/strong> — e.g. the run writes a one-line <code>STATUS.txt<\/code> (\"2026-06-12: 3 ok, 1 failed — NVDA\") and you glance at it with your coffee.<\/li>\n<li><strong>Absence is a signal too<\/strong> — if today's dated folder doesn't exist by 7am, the job never ran at all. Train yourself to treat \"missing\" as \"failed.\"<\/li>\n<li><strong>Let the exit code drive it<\/strong> — Task Scheduler can be set to show \"last run result\" non-zero; a quick weekly glance catches a stuck job.<\/li>\n<\/ul>\n<p class=\"l-key\">💡 Key idea: The question is never \"is my automation perfect?\" — it is \"if it breaks at 6am while I sleep, what guarantees I find out before it matters?\"<\/p>\n\n<h5>Worked Walkthrough 2 — Scheduling the Analysis With Windows Task Scheduler<\/h5>\n<p><strong>Task Scheduler<\/strong> is the built-in Windows tool that runs a program automatically at set times — like an alarm clock for commands. We schedule the <em>analysis<\/em> only and keep <em>publishing manual<\/em>, because analysis is idempotent and safe to automate, while publishing is not.<\/p>\n<ul>\n<li><strong>Step 1.<\/strong> Press the Start button, type <code>Task Scheduler<\/code>, open it. On the right, click <strong>Create Basic Task<\/strong>.<\/li>\n<li><strong>Step 2.<\/strong> Name it <code>Research Bot - Daily Analysis<\/code>. Description: \"Runs watchlist analysis, dry-run-safe, no publishing.\" Click Next.<\/li>\n<li><strong>Step 3.<\/strong> Trigger: choose <strong>Daily<\/strong>, set the time to <code>06:00<\/code>. (Pick a time your PC is on and awake.)<\/li>\n<li><strong>Step 4.<\/strong> Action: <strong>Start a program<\/strong>. In \"Program/script\" put the full path to Python, e.g. <code>C:\\Users\\JenniferYoshurara\\AppData\\Local\\Programs\\Python\\Python312\\python.exe<\/code>. In \"Add arguments\" put <code>research_bot.py --watchlist watchlist.txt --commit<\/code>. In \"Start in\" put your project folder, e.g. <code>C:\\Users\\JenniferYoshurara\\Desktop\\Personal\\Claude Code<\/code>.<\/li>\n<li><strong>Step 5.<\/strong> Finish. Then <strong>right-click the task → Run<\/strong> once, by hand, to prove it works before trusting 6am. Check that today's dated folder and the STATUS line appeared.<\/li>\n<\/ul>\n<p class=\"l-watch\">⚠️ Two classic gotchas. First, the \"Start in\" folder must be set, or the bot won't find <code>watchlist.txt<\/code> and will fail. Second, the scheduled run uses a different environment than your terminal — this is exactly where the empty-API-key trap bites. Test the actual scheduled task, not just the command in your own window.<\/p>\n\n<h5>The Pre-Commit Checklist: Turning Review Into a Ritual<\/h5>\n<p>\"Commit\" means saving a snapshot of your code into <strong>Git<\/strong>, your project's history book — an accept button for changes. The danger of vibe coding is accepting AI work you didn't really inspect. The cure is a fixed <strong>ritual<\/strong> you run <em>every single time<\/em> before committing, in the same order, no exceptions. Rituals beat willpower: you stop deciding whether to check, and just check.<\/p>\n\n<h5>Worked Walkthrough 3 — The Checklist Applied to a Real Change<\/h5>\n<p>Say your AI just added the retry-with-backoff feature. Here is the ritual, step by step:<\/p>\n<pre class=\"lesson-code\"><span class=\"c\"># 1. What files changed? (the overview)<\/span>\n$ git status\n<span class=\"g\">  modified:   research_bot.py<\/span>\n<span class=\"r\">  modified:   .env          &lt;-- WAIT. Why is my secrets file changed?<\/span>\n\n<span class=\"c\"># 2. Read EVERY change, line by line (the detail)<\/span>\n$ git diff\n<span class=\"g\">  + for attempt in range(3):        # new retry loop — looks right<\/span>\n<span class=\"r\">  + API_KEY = \"sk-live-abc123...\"   # a real key hard-coded! NEVER commit this<\/span>\n\n<span class=\"c\"># 3. Run the tests — does anything break?<\/span>\n$ pytest\n<span class=\"g\">  ===== 12 passed in 3.1s =====<\/span>\n\n<span class=\"c\"># 4. Secrets & scope check (done by reading the diff above)<\/span>\n<span class=\"c\">#    - Did a secret leak in?  YES -> must fix before commit<\/span>\n<span class=\"c\">#    - Did it change more than I asked?  YES -> .env should not be touched<\/span><\/pre>\n<p>What the checklist just caught: the AI hard-coded a live API key into the code and modified your <code>.env<\/code> secrets file — neither of which you asked for. Without the ritual you'd have committed a secret to history (very hard to fully undo) and published your key. <strong>The checklist did its job: it refused the work.<\/strong> You'd revert those parts, keep only the clean retry loop, then commit:<\/p>\n<pre class=\"lesson-code\">$ git diff               <span class=\"c\"># confirm only research_bot.py's retry loop remains<\/span>\n$ git add research_bot.py\n$ git commit -m \"Add retry-with-backoff for price fetches\"\n<span class=\"g\">  [main 9f2a1c7] Add retry-with-backoff for price fetches<\/span><\/pre>\n<p>Memorize the order: <strong>status → diff → tests → secrets/scope → commit<\/strong>. Same five steps, every time, until it feels strange <em>not<\/em> to do them. That is the difference between operating a system and gambling with one.<\/p>\n\n<p class=\"l-key\">💡 Key idea: Discipline is not extra work — it is the work. The dry-run default, the dated folders, the per-ticker isolation, the loud-fail on empty secrets, the five-step ritual: each one removes a way to be quietly wrong. Together they let a non-programmer run a real automated process and sleep at night.<\/p>\n",
         learn: [
           "Dry-run as your default safety switch",
           "Logging and date-stamped outputs for unattended runs",
@@ -1973,51 +1855,73 @@ tags: [tech, large-cap]
           success: "See changes, read changes, prove with tests, then commit. Pushing comes only after this passes."
         },
         quiz: [
-          {
-            q: "In a watchlist run, NVDA throws an error. What SHOULD happen?",
-            options: [
-              "The whole run stops and nothing else is analyzed",
-              "The error is logged and the other tickers still complete",
-              "All output is deleted",
-              "The bot publishes anyway"
-            ],
-            answer: 1,
-            explain: "Per-ticker error isolation: catch and log one ticker's failure, then keep going for the rest."
-          },
-          {
-            q: "Why use date-stamped output files like 2026-06-12-AAPL.md?",
-            options: [
-              "They look professional",
-              "They keep history and stop one run from overwriting or duplicating another",
-              "They are required by Python",
-              "They make files smaller"
-            ],
-            answer: 1,
-            explain: "Date stamps preserve history and help prevent silent overwrites and duplicate publishing."
-          },
-          {
-            q: "What is the correct order of your pre-commit checklist?",
-            options: [
-              "Commit, then check status",
-              "git status and diff to review, run tests to prove it, then commit",
-              "Push first, review later",
-              "Just trust the AI and commit"
-            ],
-            answer: 1,
-            explain: "Review what changed (status/diff), prove it works (tests), then commit. Never commit unreviewed work."
-          },
-          {
-            q: "Which task is safe to put on an automatic schedule first?",
-            options: [
-              "Automatic publishing to the public",
-              "Analysis runs (with publishing kept manual)",
-              "Deleting the repo",
-              "Rotating keys randomly"
-            ],
-            answer: 1,
-            explain: "Schedule analysis once it's reliable, but keep publishing a deliberate manual step until you fully trust it."
-          }
-        ]
+  {
+    "q": "Why should a 'dry-run' (analyze but write nothing) be the DEFAULT mode, with real writes requiring a --commit flag?",
+    "options": [
+      "Because dry-runs are faster than real runs",
+      "So that forgetting a flag means 'did nothing' instead of 'destroyed the wrong file' — the safe failure is the lazy one",
+      "Because schedulers cannot run commands with flags",
+      "Because writing files is not allowed on Windows"
+    ],
+    "answer": 1,
+    "explain": "Making the harmless mode the default means a slip of memory results in no damage; you must consciously opt in to permanent actions with --commit."
+  },
+  {
+    "q": "An operation is 'idempotent' when...",
+    "options": [
+      "It runs faster the second time",
+      "Running it a second time causes no extra harm or change",
+      "It can only ever be run once",
+      "It requires an internet connection"
+    ],
+    "answer": 1,
+    "explain": "Idempotent means a repeat run changes nothing extra — which is why writing dated files is safe to retry, but appending to a published newsletter is not."
+  },
+  {
+    "q": "In a watchlist run, what does the 'try/except-per-item' pattern achieve, and where must it be placed?",
+    "options": [
+      "Around the whole loop, so any error stops all tickers at once",
+      "Around each individual ticker, so one failure is logged and skipped while the rest still run",
+      "Only around the API-key check at startup",
+      "Around the file-saving step only"
+    ],
+    "answer": 1,
+    "explain": "Wrapping each ticker individually isolates failures: NVDA can error and be skipped while AAPL, MSFT, and LITE still complete."
+  },
+  {
+    "q": "A scheduled bot hits a fatal error but still returns exit code 0. What is the consequence?",
+    "options": [
+      "The Task Scheduler will automatically retry it",
+      "Windows will delete the output folder",
+      "The scheduler thinks the run succeeded, so the failure goes unnoticed",
+      "Nothing — exit codes are only for the programmer"
+    ],
+    "answer": 2,
+    "explain": "A scheduler judges success only by the exit code (0 = success, non-zero = failure); a fatal error that still exits 0 hides the failure from the machine watching it."
+  },
+  {
+    "q": "Why is an API key that is 'present but empty' especially dangerous in an unattended 6am run?",
+    "options": [
+      "An empty key uses more memory",
+      "A naive 'is the key set?' check passes, so the bot runs and silently produces empty/failed analysis with nobody watching",
+      "Empty keys are automatically refilled by Windows",
+      "It makes the run idempotent"
+    ],
+    "answer": 1,
+    "explain": "Because the variable exists, a present-check passes even though the value is blank; the bot must check for a NON-empty key and fail loudly (exit non-zero) at startup."
+  },
+  {
+    "q": "During the pre-commit ritual, 'git status' shows your .env secrets file was modified and 'git diff' reveals a hard-coded live API key. What is the right move?",
+    "options": [
+      "Commit anyway since the tests passed",
+      "Commit, then delete the key in a later change",
+      "Refuse the work: revert the .env change and the hard-coded key, keep only what you asked for, then commit",
+      "Skip the diff step to save time"
+    ],
+    "answer": 2,
+    "explain": "The checklist exists to catch exactly this; you reject the out-of-scope and secret-leaking changes, keep only the intended edit, and only then commit."
+  }
+]
       }
     ];
 

@@ -1,0 +1,2875 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vibe Coding Operator Course</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel-2: #1f2937;
+      --card: #ffffff;
+      --text: #0f172a;
+      --muted: #64748b;
+      --line: #e5e7eb;
+      --soft: #f8fafc;
+      --brand: #2563eb;
+      --brand-2: #1d4ed8;
+      --good: #16a34a;
+      --warn: #f59e0b;
+      --danger: #dc2626;
+      --radius: 18px;
+      --shadow: 0 20px 60px rgba(15, 23, 42, 0.14);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 42%, #eef2ff 100%);
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    select,
+    textarea {
+      font: inherit;
+    }
+
+    .app {
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 310px 1fr;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: auto;
+      padding: 24px;
+      background: radial-gradient(circle at top left, #1e40af 0%, #0f172a 45%, #020617 100%);
+      color: #fff;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .logo {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: rgba(255, 255, 255, 0.13);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      box-shadow: 0 16px 35px rgba(0, 0, 0, 0.25);
+      font-weight: 900;
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      line-height: 1.1;
+      margin: 0;
+    }
+
+    .brand p {
+      margin: 4px 0 0;
+      color: #cbd5e1;
+      font-size: 12px;
+    }
+
+    .side-section {
+      margin: 22px 0;
+    }
+
+    .side-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: #93c5fd;
+      margin-bottom: 10px;
+      font-weight: 800;
+    }
+
+    .progress-wrap {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      border-radius: 18px;
+      padding: 14px;
+    }
+
+    .progress-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+      color: #e2e8f0;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .progress-bar {
+      height: 10px;
+      background: rgba(255, 255, 255, 0.16);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      width: 0%;
+      height: 100%;
+      background: linear-gradient(90deg, #38bdf8, #22c55e);
+      border-radius: inherit;
+      transition: width 0.25s ease;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 8px;
+    }
+
+    .nav-btn,
+    .topic-chip,
+    .view-btn,
+    .small-btn {
+      border: 0;
+      cursor: pointer;
+      transition: transform 0.15s ease, background 0.15s ease, border 0.15s ease, color 0.15s ease;
+    }
+
+    .nav-btn {
+      width: 100%;
+      text-align: left;
+      color: #dbeafe;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 10px 12px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-btn:hover,
+    .nav-btn.active {
+      background: rgba(59, 130, 246, 0.32);
+      border-color: rgba(147, 197, 253, 0.5);
+      transform: translateY(-1px);
+    }
+
+    .nav-btn span:first-child {
+      font-weight: 750;
+      font-size: 13px;
+    }
+
+    .nav-btn span:last-child {
+      color: #bfdbfe;
+      font-size: 11px;
+      white-space: nowrap;
+    }
+
+    .topic-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .topic-chip {
+      padding: 8px 10px;
+      border-radius: 999px;
+      color: #dbeafe;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 12px;
+      font-weight: 700;
+    }
+
+    .topic-chip.active,
+    .topic-chip:hover {
+      background: #dbeafe;
+      color: #1e3a8a;
+    }
+
+    .main {
+      padding: 28px;
+      max-width: 1280px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      overflow: hidden;
+      background: linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 30px;
+      margin-bottom: 20px;
+    }
+
+    .hero::after {
+      content: "";
+      position: absolute;
+      right: -90px;
+      top: -90px;
+      width: 260px;
+      height: 260px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(37, 99, 235, 0.20), rgba(37, 99, 235, 0));
+    }
+
+    .kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: #dbeafe;
+      color: #1d4ed8;
+      font-size: 12px;
+      font-weight: 850;
+      margin-bottom: 14px;
+    }
+
+    .hero h2 {
+      font-size: clamp(30px, 5vw, 58px);
+      letter-spacing: -0.055em;
+      line-height: 0.95;
+      margin: 0 0 14px;
+      max-width: 840px;
+    }
+
+    .hero p {
+      max-width: 820px;
+      color: var(--muted);
+      font-size: 16px;
+      line-height: 1.65;
+      margin: 0;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .primary-btn,
+    .secondary-btn {
+      border: 0;
+      border-radius: 14px;
+      padding: 11px 14px;
+      font-weight: 850;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    .primary-btn {
+      background: var(--brand);
+      color: #fff;
+      box-shadow: 0 12px 28px rgba(37, 99, 235, 0.32);
+    }
+
+    .secondary-btn {
+      background: #fff;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .primary-btn:hover,
+    .secondary-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .control-panel {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .search-box,
+    .view-tabs {
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 20px;
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08);
+      padding: 14px;
+      backdrop-filter: blur(16px);
+    }
+
+    .search-box {
+      display: grid;
+      grid-template-columns: 1fr 180px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .search-box input,
+    .search-box select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: #fff;
+      padding: 12px 13px;
+      outline: none;
+    }
+
+    .search-box input:focus,
+    .search-box select:focus {
+      border-color: #93c5fd;
+      box-shadow: 0 0 0 4px rgba(147, 197, 253, 0.28);
+    }
+
+    .view-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+      align-items: center;
+    }
+
+    .view-btn {
+      background: #f1f5f9;
+      color: #334155;
+      padding: 10px 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 850;
+    }
+
+    .view-btn.active,
+    .view-btn:hover {
+      background: var(--brand);
+      color: #fff;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
+    }
+
+    .stat-card strong {
+      display: block;
+      font-size: 24px;
+      letter-spacing: -0.04em;
+      margin-bottom: 4px;
+    }
+
+    .stat-card span {
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .content-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+
+    .week-card,
+    .project-card,
+    .reference-card {
+      background: rgba(255, 255, 255, 0.92);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 24px;
+      box-shadow: 0 14px 36px rgba(15, 23, 42, 0.10);
+      overflow: hidden;
+    }
+
+    .card-head {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: start;
+      padding: 20px;
+      border-bottom: 1px solid var(--line);
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+    }
+
+    .card-head h3 {
+      margin: 0 0 6px;
+      font-size: 22px;
+      letter-spacing: -0.035em;
+    }
+
+    .card-head p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      border-radius: 999px;
+      padding: 6px 9px;
+      font-size: 11px;
+      font-weight: 850;
+      background: #eff6ff;
+      color: #1d4ed8;
+      border: 1px solid #bfdbfe;
+    }
+
+    .difficulty {
+      background: #fef3c7;
+      color: #92400e;
+      border-color: #fde68a;
+    }
+
+    .time {
+      background: #dcfce7;
+      color: #166534;
+      border-color: #bbf7d0;
+    }
+
+    .quiz-badge {
+      background: #f3e8ff;
+      color: #6b21a8;
+      border-color: #e9d5ff;
+    }
+
+    .expand-btn {
+      border: 1px solid var(--line);
+      background: #fff;
+      border-radius: 14px;
+      padding: 9px 11px;
+      cursor: pointer;
+      font-weight: 850;
+      color: #334155;
+    }
+
+    .card-body {
+      display: none;
+      padding: 20px;
+    }
+
+    .week-card.open .card-body,
+    .project-card.open .card-body,
+    .reference-card.open .card-body {
+      display: block;
+    }
+
+    /* ---------- Lesson (the actual course content) ---------- */
+    .lesson {
+      background: linear-gradient(135deg, #ffffff 0%, #fbfdff 100%);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 20px 22px;
+      margin-bottom: 16px;
+    }
+
+    .lesson-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.09em;
+      color: #1d4ed8;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 999px;
+      padding: 5px 10px;
+      margin-bottom: 12px;
+    }
+
+    .lesson h5 {
+      margin: 18px 0 8px;
+      font-size: 16px;
+      letter-spacing: -0.01em;
+      color: #0f172a;
+    }
+
+    .lesson h5:first-of-type {
+      margin-top: 4px;
+    }
+
+    .lesson p {
+      margin: 0 0 10px;
+      color: #334155;
+      line-height: 1.7;
+      font-size: 15px;
+    }
+
+    .lesson ul {
+      margin: 0 0 10px;
+      line-height: 1.7;
+    }
+
+    .lesson code {
+      background: #eef2ff;
+      color: #3730a3;
+      border-radius: 6px;
+      padding: 1px 6px;
+      font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      font-size: 13px;
+    }
+
+    .lesson-code {
+      background: #020617;
+      color: #dbeafe;
+      border-radius: 14px;
+      padding: 14px 16px;
+      overflow: auto;
+      line-height: 1.6;
+      font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      font-size: 13px;
+      margin: 4px 0 14px;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+      white-space: pre;
+    }
+
+    .lesson-code .c { color: #64748b; }
+    .lesson-code .g { color: #4ade80; }
+    .lesson-code .r { color: #f87171; }
+    .lesson-code .y { color: #fbbf24; }
+
+    .l-key {
+      border-left: 4px solid var(--brand);
+      background: #eff6ff;
+      border-radius: 12px;
+      padding: 11px 14px;
+      color: #1e3a8a !important;
+      line-height: 1.6;
+      margin: 6px 0 12px !important;
+      font-size: 14px !important;
+    }
+
+    .l-watch {
+      border-left: 4px solid var(--danger);
+      background: #fef2f2;
+      border-radius: 12px;
+      padding: 11px 14px;
+      color: #7f1d1d !important;
+      line-height: 1.6;
+      margin: 6px 0 12px !important;
+      font-size: 14px !important;
+    }
+
+    .section-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .mini-section {
+      background: var(--soft);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 15px;
+    }
+
+    .mini-section h4 {
+      margin: 0 0 10px;
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 0.075em;
+      color: #334155;
+    }
+
+    ul {
+      margin: 0;
+      padding-left: 19px;
+      color: #334155;
+      line-height: 1.7;
+    }
+
+    li + li {
+      margin-top: 4px;
+    }
+
+    .task-list {
+      display: grid;
+      gap: 9px;
+    }
+
+    .task-item {
+      display: grid;
+      grid-template-columns: 24px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 10px;
+    }
+
+    .task-item input {
+      width: 18px;
+      height: 18px;
+      accent-color: var(--good);
+    }
+
+    .task-item.done span {
+      color: var(--muted);
+      text-decoration: line-through;
+    }
+
+    .task-tag {
+      font-size: 10px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: #475569;
+      background: #f1f5f9;
+      border-radius: 999px;
+      padding: 5px 7px;
+      white-space: nowrap;
+    }
+
+    .code-block {
+      position: relative;
+      background: #020617;
+      color: #dbeafe;
+      border-radius: 18px;
+      padding: 16px;
+      overflow: auto;
+      line-height: 1.55;
+      font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      font-size: 13px;
+      margin: 12px 0 0;
+      border: 1px solid rgba(148, 163, 184, 0.22);
+    }
+
+    .copy-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+      color: #dbeafe;
+      border-radius: 10px;
+      padding: 6px 8px;
+      cursor: pointer;
+      font-size: 11px;
+      font-weight: 900;
+    }
+
+    .note {
+      border-left: 4px solid var(--brand);
+      background: #eff6ff;
+      border-radius: 14px;
+      padding: 12px 14px;
+      color: #1e3a8a;
+      line-height: 1.55;
+      margin-top: 14px;
+    }
+
+    .warning {
+      border-left-color: var(--danger);
+      background: #fef2f2;
+      color: #7f1d1d;
+    }
+
+    .success {
+      border-left-color: var(--good);
+      background: #f0fdf4;
+      color: #14532d;
+    }
+
+    /* ---------- Quiz / activity ---------- */
+    .activity {
+      margin-top: 16px;
+      border: 1px solid #e9d5ff;
+      background: linear-gradient(135deg, #faf5ff 0%, #ffffff 100%);
+      border-radius: 18px;
+      padding: 18px 20px;
+    }
+
+    .activity-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 6px;
+    }
+
+    .activity-head h4 {
+      margin: 0;
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: #6b21a8;
+    }
+
+    .activity-score {
+      font-size: 12px;
+      font-weight: 900;
+      color: #6b21a8;
+      background: #f3e8ff;
+      border: 1px solid #e9d5ff;
+      border-radius: 999px;
+      padding: 5px 10px;
+    }
+
+    .activity-intro {
+      color: #475569;
+      font-size: 14px;
+      line-height: 1.6;
+      margin: 0 0 8px;
+    }
+
+    .quiz-q {
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-top: 12px;
+    }
+
+    .quiz-question {
+      margin: 0 0 12px;
+      font-weight: 750;
+      color: #0f172a;
+      line-height: 1.5;
+    }
+
+    .quiz-opts {
+      display: grid;
+      gap: 8px;
+    }
+
+    .quiz-opt {
+      text-align: left;
+      width: 100%;
+      background: #f8fafc;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 11px 13px;
+      cursor: pointer;
+      color: #334155;
+      font-weight: 600;
+      line-height: 1.45;
+      transition: background 0.12s ease, border 0.12s ease, transform 0.12s ease;
+    }
+
+    .quiz-opt:hover:not(:disabled) {
+      background: #eef2ff;
+      border-color: #c7d2fe;
+      transform: translateY(-1px);
+    }
+
+    .quiz-opt:disabled {
+      cursor: default;
+    }
+
+    .quiz-opt.correct {
+      background: #f0fdf4;
+      border-color: #86efac;
+      color: #14532d;
+    }
+
+    .quiz-opt.wrong {
+      background: #fef2f2;
+      border-color: #fca5a5;
+      color: #7f1d1d;
+    }
+
+    .quiz-feedback {
+      display: none;
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.55;
+      border-radius: 12px;
+      padding: 10px 13px;
+    }
+
+    .quiz-feedback.show {
+      display: block;
+    }
+
+    .quiz-feedback.success {
+      background: #f0fdf4;
+      color: #14532d;
+      border: 1px solid #bbf7d0;
+    }
+
+    .quiz-feedback.error {
+      background: #fef2f2;
+      color: #7f1d1d;
+      border: 1px solid #fecaca;
+    }
+
+    /* Build-the-command activity */
+    .builder {
+      margin-top: 12px;
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 16px;
+    }
+
+    .builder p { margin: 0 0 10px; color: #334155; line-height: 1.5; }
+
+    .builder-bank {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .chip-btn {
+      border: 1px solid #c7d2fe;
+      background: #eef2ff;
+      color: #3730a3;
+      border-radius: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      font-size: 13px;
+      font-weight: 700;
+      transition: transform 0.12s ease, background 0.12s ease;
+    }
+
+    .chip-btn:hover { transform: translateY(-1px); background: #e0e7ff; }
+    .chip-btn:disabled { opacity: 0.35; cursor: default; transform: none; }
+
+    .builder-line {
+      min-height: 46px;
+      background: #020617;
+      color: #4ade80;
+      border-radius: 12px;
+      padding: 12px 14px;
+      font-family: "Cascadia Code", "SFMono-Regular", Consolas, monospace;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .builder-line .prompt { color: #64748b; }
+
+    .builder-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+      flex-wrap: wrap;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .project-card .card-head h3 {
+      font-size: 19px;
+    }
+
+    .reference-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .ref-table {
+      width: 100%;
+      border-collapse: collapse;
+      overflow: hidden;
+      border-radius: 16px;
+      font-size: 14px;
+    }
+
+    .ref-table th,
+    .ref-table td {
+      padding: 11px 12px;
+      border-bottom: 1px solid var(--line);
+      text-align: left;
+      vertical-align: top;
+    }
+
+    .ref-table th {
+      background: #f8fafc;
+      color: #334155;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .ref-table tr:last-child td {
+      border-bottom: 0;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 50px 20px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      border-radius: 24px;
+      box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+    }
+
+    .empty-state h3 {
+      margin: 0 0 8px;
+      font-size: 24px;
+    }
+
+    .empty-state p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .footer-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 22px 0 4px;
+    }
+
+    .small-btn {
+      border-radius: 12px;
+      padding: 9px 11px;
+      background: #fff;
+      border: 1px solid var(--line);
+      color: #334155;
+      font-weight: 850;
+    }
+
+    .small-btn:hover {
+      background: #f8fafc;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    @media (max-width: 1040px) {
+      .app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: relative;
+        height: auto;
+      }
+
+      .main {
+        padding: 18px;
+      }
+
+      .control-panel,
+      .search-box,
+      .section-grid,
+      .project-grid,
+      .reference-grid,
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .view-tabs {
+        justify-content: flex-start;
+      }
+    }
+
+    @media print {
+      body {
+        background: #fff;
+      }
+
+      .sidebar,
+      .control-panel,
+      .hero-actions,
+      .expand-btn,
+      .footer-actions,
+      .copy-btn {
+        display: none !important;
+      }
+
+      .app {
+        display: block;
+      }
+
+      .main {
+        max-width: none;
+        padding: 0;
+      }
+
+      .hero,
+      .week-card,
+      .project-card,
+      .reference-card,
+      .stat-card {
+        box-shadow: none;
+        border: 1px solid #ddd;
+        break-inside: avoid;
+      }
+
+      .card-body {
+        display: block !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="logo">VC</div>
+        <div>
+          <h1>Vibe Coding Operator</h1>
+          <p>8 week hands-on course</p>
+        </div>
+      </div>
+
+      <div class="progress-wrap">
+        <div class="progress-row">
+          <span>Overall progress</span>
+          <span id="progressText">0%</span>
+        </div>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+      </div>
+
+      <div class="side-section">
+        <div class="side-label">Weeks</div>
+        <div class="nav-list" id="weekNav"></div>
+      </div>
+
+      <div class="side-section">
+        <div class="side-label">Topics</div>
+        <div class="topic-grid" id="topicNav"></div>
+      </div>
+
+      <div class="side-section">
+        <div class="side-label">Quick controls</div>
+        <div class="nav-list">
+          <button class="nav-btn" onclick="expandAll()"><span>Expand all</span><span>Open</span></button>
+          <button class="nav-btn" onclick="collapseAll()"><span>Collapse all</span><span>Close</span></button>
+          <button class="nav-btn" onclick="window.print()"><span>Print course</span><span>PDF</span></button>
+          <button class="nav-btn" onclick="resetProgress()"><span>Reset progress</span><span>Clear</span></button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <section class="hero">
+        <div class="kicker">Built for supervising AI coders, not becoming a full CS major</div>
+        <h2>Learn enough coding to operate AI-built projects safely.</h2>
+        <p>
+          A real course, not just a checklist. Each week has a full readable lesson, hands-on practice,
+          commands to run, and an interactive quiz or build-it activity so you can prove you understood it.
+          Everything is anchored to your real use case: running a stock research bot, reviewing AI changes,
+          running tests, protecting API keys, and shipping analyst-grade output without blindly trusting the AI.
+        </p>
+        <div class="hero-actions">
+          <button class="primary-btn" onclick="setView('weeks'); selectWeek(1);">Start with Week 1</button>
+          <button class="secondary-btn" onclick="setView('projects'); scrollToContent();">Open project track</button>
+          <button class="secondary-btn" onclick="setView('references'); scrollToContent();">Open cheat sheets</button>
+        </div>
+      </section>
+
+      <section class="stats">
+        <div class="stat-card">
+          <strong>8</strong>
+          <span>Weeks</span>
+        </div>
+        <div class="stat-card">
+          <strong id="statQuizzes">0</strong>
+          <span>Quiz questions</span>
+        </div>
+        <div class="stat-card">
+          <strong>5</strong>
+          <span>Applied projects</span>
+        </div>
+        <div class="stat-card">
+          <strong id="completedTasks">0</strong>
+          <span>Steps completed</span>
+        </div>
+      </section>
+
+      <section class="control-panel" id="contentTop">
+        <div class="search-box">
+          <input id="searchInput" type="search" placeholder="Search topics, tasks, commands, or concepts..." oninput="render()" />
+          <select id="difficultyFilter" onchange="render()">
+            <option value="all">All difficulty</option>
+            <option value="Beginner">Beginner</option>
+            <option value="Intermediate">Intermediate</option>
+            <option value="Operator">Operator</option>
+          </select>
+        </div>
+        <div class="view-tabs">
+          <button class="view-btn active" data-view="weeks" onclick="setView('weeks')">Weeks</button>
+          <button class="view-btn" data-view="topics" onclick="setView('topics')">Topics</button>
+          <button class="view-btn" data-view="checklist" onclick="setView('checklist')">Checklist</button>
+          <button class="view-btn" data-view="projects" onclick="setView('projects')">Projects</button>
+          <button class="view-btn" data-view="references" onclick="setView('references')">Cheat sheets</button>
+        </div>
+      </section>
+
+      <section class="content-grid" id="content"></section>
+
+      <div class="footer-actions">
+        <button class="small-btn" onclick="exportProgress()">Export progress</button>
+        <button class="small-btn" onclick="copyPromptTemplate()">Copy AI prompt template</button>
+        <button class="small-btn" onclick="setView('weeks'); window.scrollTo({ top: 0, behavior: 'smooth' });">Back to top</button>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const syllabus = [
+      {
+        week: 1,
+        title: "Terminal, Files, and Project Anatomy",
+        focus: "Learn how to move around a project folder, run commands, and understand the basic shape of a codebase.",
+        difficulty: "Beginner",
+        time: "45 to 60 min per day",
+        topics: ["PowerShell", "Files", "Project Structure"],
+        lesson: `
+          <h5>What the terminal actually is</h5>
+          <p>The terminal (on Windows it is <strong>PowerShell</strong>) is just a text window where you type instructions instead of clicking. Every AI coding tool ultimately runs commands here, so being able to read and run them yourself is the single most useful skill you can have as an operator. You type one line, press Enter, and the computer does exactly that one thing.</p>
+          <p>The blinking line shows your <em>current folder</em>. Commands run <strong>relative to wherever you currently are</strong>, which is why "I ran it but nothing happened" is almost always "I ran it in the wrong folder".</p>
+
+          <h5>Folders, and why structure matters</h5>
+          <p>A project is just a folder with other folders and files inside it. A clean project keeps similar things together so both you and the AI can find them. In your research bot you will typically see:</p>
+          <ul>
+            <li><code>README.md</code> &mdash; the human instructions: what the project is and how to run it. Read this first, always.</li>
+            <li><code>config.yaml</code> &mdash; settings that are safe to share (which model, which tickers).</li>
+            <li><code>.env</code> &mdash; <strong>secrets</strong> like API keys. Never shared, never committed.</li>
+            <li><code>.gitignore</code> &mdash; a list of files Git should pretend it cannot see (this is what protects <code>.env</code>).</li>
+            <li><code>src/</code> &mdash; the actual program code.</li>
+            <li><code>tests/</code> &mdash; code that checks the program still works.</li>
+            <li><code>out/</code> and <code>content/</code> &mdash; the things the bot produces (JSON analysis, Markdown articles).</li>
+          </ul>
+
+          <h5>Absolute vs relative paths</h5>
+          <p>An <strong>absolute path</strong> starts from the drive and is complete: <code>C:\\Users\\You\\Desktop\\research-bot</code>. A <strong>relative path</strong> is "from where I am right now": <code>cd src</code> means "go into the src folder beneath my current spot". Absolute paths always work from anywhere; relative paths only make sense given your current folder.</p>
+
+          <h5>The seven commands you will actually use</h5>
+          <pre class="lesson-code"><span class="c"># move into a folder</span>
+cd "C:\\Users\\You\\Desktop\\research-bot"
+
+<span class="c"># list what is in this folder</span>
+dir
+
+<span class="c"># make a new folder</span>
+mkdir test-project
+
+<span class="c"># print a file to the screen (safe to read)</span>
+type config.yaml
+
+<span class="c"># open a file in Notepad to edit it</span>
+notepad notes.txt
+
+<span class="c"># copy / delete a file</span>
+copy notes.txt backup.txt
+del backup.txt</pre>
+          <p class="l-key">💡 Key idea: you do not need to memorize commands. You need to recognize what each one does so that when an AI tells you "run <code>dir</code>", you understand it is just listing files, not doing anything risky.</p>
+          <p class="l-watch">⚠️ The only commands that change things are <code>mkdir</code>, <code>copy</code>, <code>del</code>, and editing in Notepad. <code>cd</code>, <code>dir</code>, and <code>type</code> only look &mdash; they can never break your project, so explore freely.</p>
+        `,
+        learn: [
+          "What the terminal is and how the current folder controls every command",
+          "Absolute paths vs relative paths",
+          "What README.md, config.yaml, .env, .gitignore, src, tests, out, and content are for",
+          "Core PowerShell commands: cd, dir, mkdir, copy, del, type, notepad",
+          "How to run commands inside the correct project folder"
+        ],
+        tasks: [
+          { text: "Create a test project folder from PowerShell", tag: "PowerShell" },
+          { text: "Create, copy, open, and delete a text file", tag: "Files" },
+          { text: "Open your research-bot folder and identify each major file or folder", tag: "Project" },
+          { text: "Run python --version and git --version", tag: "Setup" },
+          { text: "Explain the project structure out loud in plain English", tag: "Review" }
+        ],
+        commands: "cd \"C:\\Users\\YourName\\Desktop\"\nmkdir test-project\ncd test-project\ndir\nnotepad notes.txt\npython --version\ngit --version",
+        deliverable: "You can open a project folder, run basic commands, and explain what the key files are for.",
+        activityType: "builder",
+        builder: {
+          intro: "Build the command that creates a folder called notes and then moves into it. Click the pieces in the right order.",
+          bank: ["cd notes", "mkdir notes", "&&", "dir", "del notes"],
+          answer: ["mkdir notes", "&&", "cd notes"],
+          success: "That makes the folder, then steps inside it. (In PowerShell you can also run the two lines separately.)"
+        },
+        quiz: [
+          {
+            q: "You type a command and it says it cannot find your project files. What is the most likely cause?",
+            options: [
+              "Your computer is broken",
+              "You are running the command in the wrong folder",
+              "You need to reinstall Python",
+              "The AI deleted your project"
+            ],
+            answer: 1,
+            explain: "Commands run relative to your current folder. 'Not found' almost always means you need to cd into the right place first."
+          },
+          {
+            q: "Which file holds your secret API keys and must never be shared or committed?",
+            options: ["README.md", "config.yaml", ".env", "src/"],
+            answer: 2,
+            explain: ".env holds secrets. config.yaml holds safe-to-share settings; README.md is documentation."
+          },
+          {
+            q: "Which of these commands only LOOKS at things and can never change your project?",
+            options: ["del", "mkdir", "type", "copy"],
+            answer: 2,
+            explain: "type just prints a file to the screen. del, mkdir, and copy all change files or folders."
+          }
+        ]
+      },
+      {
+        week: 2,
+        title: "Git: How to Review What the AI Changed",
+        focus: "See exactly what changed, read diffs, understand commits, and keep secrets out of version control.",
+        difficulty: "Beginner",
+        time: "45 to 60 min per day",
+        topics: ["Git", "Review", "Safety"],
+        lesson: `
+          <h5>Why Git is your safety net</h5>
+          <p>When you let an AI edit your project, the scary question is "what did it actually change?" Git answers that exactly. Git is a tool that records snapshots of your project over time, so you can always see what is different, and undo anything. As an operator, Git is how you go from "I hope the AI did the right thing" to "I can see precisely what it did".</p>
+
+          <h5>The three places your work lives</h5>
+          <ul>
+            <li><strong>Working tree</strong> &mdash; your files right now, as they are on disk (including the AI's latest edits).</li>
+            <li><strong>Staged</strong> &mdash; changes you have marked as "ready to save into the next snapshot".</li>
+            <li><strong>History</strong> &mdash; the permanent, saved snapshots, called <strong>commits</strong>. A commit is a labelled save point: a set of changes plus a message describing them.</li>
+          </ul>
+
+          <h5>The four commands that do 90% of review</h5>
+          <pre class="lesson-code"><span class="c"># 1. What files changed? (your starting point, always)</span>
+git status
+
+<span class="c"># 2. Show me the exact lines that changed</span>
+git diff
+
+<span class="c"># 3. Save reviewed changes as a labelled snapshot</span>
+git add .
+git commit -m "Add scenario table to content stage"
+
+<span class="c"># 4. Show recent snapshots, one per line</span>
+git log --oneline</pre>
+
+          <h5>How to read a diff</h5>
+          <p>In <code>git diff</code>, lines starting with a green <code class="g">+</code> were <strong>added</strong> and lines with a red <code class="r">-</code> were <strong>removed</strong>. So this means the AI replaced one line with another:</p>
+          <pre class="lesson-code"><span class="r">- rating = "buy"</span>
+<span class="g">+ rating = verdict.recommendation</span></pre>
+          <p>Read each <code class="g">+</code> line and ask: do I actually want this change? That habit alone catches most AI mistakes.</p>
+
+          <h5>Keeping secrets out</h5>
+          <p>Your <code>.env</code> must be listed in <code>.gitignore</code> so it never gets committed. Verify it:</p>
+          <pre class="lesson-code">git check-ignore .env
+<span class="c"># If it prints ".env", you are protected.</span>
+<span class="c"># If it prints nothing, .env is NOT ignored -- fix that before committing.</span></pre>
+          <p class="l-watch">⚠️ Once a secret is committed and pushed, treat it as leaked forever &mdash; even if you delete it later, it stays in history. The fix is to rotate (regenerate) the key, which you will learn in Week 4.</p>
+          <p class="l-key">💡 Operator move: before you accept any AI change, run <code>git status</code> then <code>git diff</code>. If the diff touches files you did not ask about, stop and ask why.</p>
+        `,
+        learn: [
+          "What a repository, a commit, and the working tree are",
+          "The difference between working tree, staged changes, and history",
+          "How git status, git diff, and git log --oneline work",
+          "How to read + (added) and - (removed) lines in a diff",
+          "Why .env must be ignored, and how to confirm it is",
+          "A repeatable habit for reviewing AI changes before trusting them"
+        ],
+        tasks: [
+          { text: "Run git status in your project", tag: "Git" },
+          { text: "Edit a harmless file and inspect git diff", tag: "Review" },
+          { text: "Make a small commit with a clean message", tag: "Git" },
+          { text: "Confirm .env is ignored with git check-ignore", tag: "Safety" },
+          { text: "Ask the AI to summarize changed files, then verify against git diff yourself", tag: "Review" }
+        ],
+        commands: "git status\ngit diff\ngit add .\ngit commit -m \"Practice commit\"\ngit log --oneline\ngit check-ignore .env",
+        deliverable: "You can review what the AI changed, line by line, and confirm the repo is clean and safe to commit.",
+        activityType: "quiz",
+        quiz: [
+          {
+            q: "In a git diff, a line that begins with a green + means that line was...",
+            options: ["deleted", "added", "renamed", "ignored"],
+            answer: 1,
+            explain: "+ means added, - means removed. Reading the + lines is how you see what the AI introduced."
+          },
+          {
+            q: "You run git check-ignore .env and it prints nothing. What does that tell you?",
+            options: [
+              ".env is safely ignored",
+              ".env is NOT ignored and could be committed by accident",
+              "Git is broken",
+              "You have no secrets"
+            ],
+            answer: 1,
+            explain: "If it prints nothing, .env is not in .gitignore. Fix that before committing or you risk leaking keys."
+          },
+          {
+            q: "What is the right first command when you want to review what the AI just changed?",
+            options: ["git commit", "git status", "git push", "del .env"],
+            answer: 1,
+            explain: "git status shows which files changed. From there you use git diff to see the exact line changes."
+          },
+          {
+            q: "A commit is best described as...",
+            options: [
+              "A way to delete your project",
+              "A labelled snapshot of changes plus a message describing them",
+              "A secret API key",
+              "A type of folder"
+            ],
+            answer: 1,
+            explain: "A commit is a save point: a set of changes with a human-readable message. History is made of commits."
+          }
+        ]
+      },
+      {
+        week: 3,
+        title: "Reading Python (Enough to Catch Mistakes)",
+        focus: "Learn just enough Python syntax to read AI output and spot obvious logic problems.",
+        difficulty: "Beginner",
+        time: "45 to 60 min per day",
+        topics: ["Python", "Code Reading", "Logic"],
+        lesson: `
+          <h5>You are reading, not writing</h5>
+          <p>Your goal is not to write Python from scratch. It is to <strong>read</strong> what the AI wrote and translate it into plain English so you can judge whether it makes sense. Python reads almost like English once you know a handful of shapes.</p>
+
+          <h5>Values and variables</h5>
+          <p>A <strong>variable</strong> is a labelled box holding a value. The basic value types:</p>
+          <pre class="lesson-code">ticker = "AAPL"        <span class="c"># string (text), in quotes</span>
+price = 192.5          <span class="c"># number</span>
+is_buy = True          <span class="c"># boolean: True or False</span>
+risks = ["debt", "fx"] <span class="c"># list: an ordered collection</span>
+result = {             <span class="c"># dict: labelled fields (key: value)</span>
+    "ticker": "AAPL",
+    "rating": "buy"
+}</pre>
+          <p>A dictionary (<code>dict</code>) is exactly the shape your bot's JSON output takes &mdash; named fields with values. <code>result["rating"]</code> reads the value <code>"buy"</code>.</p>
+
+          <h5>Decisions and repetition</h5>
+          <pre class="lesson-code"><span class="c"># if: do something only when a condition is true</span>
+if price > 100:
+    print("expensive")
+else:
+    print("cheap")
+
+<span class="c"># for: repeat once per item in a list</span>
+for risk in risks:
+    print(risk)</pre>
+          <p>Notice the <strong>indentation</strong> (the spaces). In Python, the indented lines are the ones "inside" the if or the loop. Indentation is not decoration &mdash; it is the structure.</p>
+
+          <h5>Functions: reusable actions</h5>
+          <pre class="lesson-code">def make_rating(score):
+    if score &gt; 7:
+        return "buy"
+    return "hold"
+
+rating = make_rating(9)   <span class="c"># rating is now "buy"</span></pre>
+          <p>A function (<code>def</code>) packages an action. It takes inputs (here <code>score</code>) and hands back a result with <code>return</code>. When you see a function call like <code>make_rating(9)</code>, read it as "run make_rating with 9 and give me the answer".</p>
+
+          <h5>Reading the lines that matter to you</h5>
+          <p>Two patterns show up constantly in your bot:</p>
+          <pre class="lesson-code"><span class="c"># loading config -- where settings come from</span>
+config = load_config("config.yaml")
+
+<span class="c"># calling the model API -- where the AI work happens</span>
+response = client.messages.create(model=config["model"], ...)</pre>
+          <p>And a subtle one worth understanding: <code>if temperature is not None:</code> means "only do this when temperature has actually been set". <code>None</code> is Python's word for "no value yet" &mdash; different from <code>0</code> or empty text.</p>
+          <p class="l-key">💡 Reading habit: go line by line and say each one aloud in English. If you reach a line you cannot translate, that is exactly the line to ask the AI to explain &mdash; then verify its explanation against the code.</p>
+        `,
+        learn: [
+          "Strings, numbers, booleans, lists, and dictionaries",
+          "How a dict mirrors your bot's JSON output",
+          "if/else and for loops, and why indentation defines structure",
+          "Functions, arguments, and return values",
+          "Reading config-loading and API-call lines",
+          "What None means and why 'is not None' matters"
+        ],
+        tasks: [
+          { text: "Read a Python file and point out the variables, functions, and if statements", tag: "Python" },
+          { text: "Translate 'if temperature is not None' into plain English", tag: "Logic" },
+          { text: "Find where your bot loads config.yaml", tag: "Project" },
+          { text: "Find where your bot calls the model API", tag: "API" },
+          { text: "Ask the AI to explain one file line by line, then verify manually", tag: "Review" }
+        ],
+        commands: "python\n# Try this in the Python prompt:\nticker = \"aapl\"\nprint(ticker.upper())\nexit()",
+        deliverable: "You can read basic Python and explain, in plain English, what a file is trying to do.",
+        activityType: "quiz",
+        quiz: [
+          {
+            q: "What does result[\"rating\"] do if result is the dictionary shown in the lesson?",
+            options: [
+              "Creates a new rating",
+              "Reads the value stored under the key 'rating' (which is 'buy')",
+              "Deletes the rating",
+              "Calls the API"
+            ],
+            answer: 1,
+            explain: "Square brackets with a key read that field out of a dict. result['rating'] gives back 'buy'."
+          },
+          {
+            q: "In Python, what makes the lines 'inside' an if statement?",
+            options: [
+              "They are in red",
+              "They are indented under the if",
+              "They start with the word inside",
+              "They are wrapped in quotes"
+            ],
+            answer: 1,
+            explain: "Indentation defines structure in Python. The indented lines belong to the if or loop above them."
+          },
+          {
+            q: "A function's 'return' value is...",
+            options: [
+              "Where the code stops forever",
+              "The answer the function hands back to whoever called it",
+              "A secret key",
+              "A comment"
+            ],
+            answer: 1,
+            explain: "return is how a function gives its result back. rating = make_rating(9) stores that returned value."
+          },
+          {
+            q: "'if temperature is not None' means roughly...",
+            options: [
+              "Only run this when temperature has actually been set",
+              "Run this only when temperature is zero",
+              "Never run this",
+              "Delete temperature"
+            ],
+            answer: 0,
+            explain: "None means 'no value yet'. 'is not None' guards code so it only runs once a real value exists."
+          }
+        ]
+      },
+      {
+        week: 4,
+        title: "Config, Secrets, and API Keys",
+        focus: "Understand config files, .env, API keys, and common API errors so you never leak secrets or misread a failure.",
+        difficulty: "Intermediate",
+        time: "45 to 60 min per day",
+        topics: ["Security", "API", "Config"],
+        lesson: `
+          <h5>Two kinds of settings, two different files</h5>
+          <p>Your bot has two kinds of settings, and keeping them separate is what keeps you safe:</p>
+          <ul>
+            <li><code>config.yaml</code> &mdash; <strong>safe to share</strong>: which model to use, your watchlist of tickers, output folders, temperature. If a stranger saw this, nothing bad happens.</li>
+            <li><code>.env</code> &mdash; <strong>secret</strong>: API keys, publishing tokens. If a stranger saw this, they could spend your money or post as you.</li>
+          </ul>
+          <p>The rule: anything that is a password or grants access goes in <code>.env</code>. Everything else goes in <code>config.yaml</code>.</p>
+
+          <h5>What an environment variable is</h5>
+          <p>An <strong>environment variable</strong> is a value the program reads from its surroundings instead of from the code. <code>.env</code> is a small file of these (<code>ANTHROPIC_API_KEY=sk-ant-...</code>). The code loads them at startup. This is why secrets are not written into the code itself &mdash; the code stays shareable, the secrets stay separate.</p>
+
+          <h5>How an API call works</h5>
+          <p>Your bot sends a <strong>request</strong> to a model's server and gets a <strong>response</strong> back. Every response carries a status code &mdash; a three-digit number that tells you what happened. Memorize these five, because they tell you <em>whose problem it is</em>:</p>
+          <pre class="lesson-code"><span class="g">200</span>  OK -- it worked.
+<span class="y">400</span>  Bad request -- YOUR code sent something invalid.
+<span class="y">401</span>  Unauthorized -- your API key is wrong, missing, or expired.
+<span class="y">403</span>  Forbidden -- key is valid but not allowed to do this.
+<span class="r">429</span>  Too many requests -- you hit a RATE LIMIT. Slow down / retry later.
+<span class="r">500</span>  Server error -- THEIR problem. Usually temporary, try again.</pre>
+          <p class="l-key">💡 The 4xx vs 5xx rule: codes starting with <strong>4</strong> mean <em>you</em> sent something wrong (fixable by you). Codes starting with <strong>5</strong> mean <em>the service</em> broke (wait and retry). This one distinction saves hours of chasing the wrong fix.</p>
+
+          <h5>Protecting and rotating keys</h5>
+          <p>Three habits keep your keys safe:</p>
+          <ul>
+            <li>Confirm <code>.env</code> is git-ignored (<code>git check-ignore .env</code>) before every commit.</li>
+            <li>Never run <code>type .env</code> while screen-sharing or pasting logs &mdash; it prints your key in plain text.</li>
+            <li>Set a <strong>monthly spend limit</strong> in your API console so a runaway loop cannot drain your account.</li>
+          </ul>
+          <p class="l-watch">⚠️ If a key is ever exposed (committed, pasted in a chat, shown on stream), <strong>rotate it</strong>: go to the console, delete the old key, generate a new one. A leaked key is only dangerous until you rotate it.</p>
+        `,
+        learn: [
+          "Why config.yaml (shareable) and .env (secret) are kept separate",
+          "What environment variables are and why secrets stay out of the code",
+          "How an API request and response work",
+          "Status codes 200, 400, 401, 403, 429, 500 and the 4xx-vs-5xx rule",
+          "Rate limits and retry behavior",
+          "How to protect keys and why exposed keys must be rotated"
+        ],
+        tasks: [
+          { text: "Create a fake .env file and confirm Git ignores it", tag: "Security" },
+          { text: "Decide which settings belong in config.yaml vs .env", tag: "Config" },
+          { text: "Memorize what 400, 401, 403, 429, and 500 mean", tag: "API" },
+          { text: "Check that your bot does not print API keys in logs", tag: "Safety" },
+          { text: "Set a monthly spend limit in your API console", tag: "Security" }
+        ],
+        commands: "git status\ngit check-ignore .env\ntype config.yaml\n# Never run type .env while sharing your screen or copying logs",
+        deliverable: "You can manage API keys safely and tell whether an error is your code, your key, or a temporary service issue.",
+        activityType: "quiz",
+        quiz: [
+          {
+            q: "Your bot fails with a 401 error. Where do you look first?",
+            options: [
+              "The model's servers are down",
+              "Your API key is wrong, missing, or expired",
+              "You sent too many requests",
+              "Your watchlist is empty"
+            ],
+            answer: 1,
+            explain: "401 = unauthorized, an authentication problem. Check that your key is present and valid."
+          },
+          {
+            q: "You get a 500 error. Whose problem is it most likely, and what do you do?",
+            options: [
+              "Yours -- rewrite your code immediately",
+              "The service's -- it is usually temporary, so wait and retry",
+              "Your key -- rotate it now",
+              "Nobody's -- 500 means success"
+            ],
+            answer: 1,
+            explain: "5xx codes mean the service broke. Usually transient -- retry before changing anything on your side."
+          },
+          {
+            q: "Which setting belongs in .env, not config.yaml?",
+            options: [
+              "The list of tickers to analyze",
+              "Which model to use",
+              "Your ANTHROPIC_API_KEY",
+              "The output folder name"
+            ],
+            answer: 2,
+            explain: "API keys are secrets and belong in .env. The rest are safe-to-share settings for config.yaml."
+          },
+          {
+            q: "A 429 error means...",
+            options: [
+              "Your code is invalid",
+              "You hit a rate limit -- slow down or retry later",
+              "The server crashed",
+              "Your key was rotated"
+            ],
+            answer: 1,
+            explain: "429 = too many requests. Back off and retry; it is about request volume, not correctness."
+          }
+        ]
+      },
+      {
+        week: 5,
+        title: "Testing and Debugging Without Panic",
+        focus: "Run tests, read failures calmly, and force the AI to diagnose before it edits.",
+        difficulty: "Intermediate",
+        time: "45 to 60 min per day",
+        topics: ["Testing", "Debugging", "Pytest"],
+        lesson: `
+          <h5>What tests are for</h5>
+          <p>A <strong>test</strong> is a small piece of code that checks the real code does what it should. Tests are your proof that an AI change actually works &mdash; not just that it looks plausible. A <strong>unit test</strong> checks one small piece in isolation; an <strong>integration test</strong> checks that several pieces work together.</p>
+          <p class="l-key">💡 Operator rule: never accept an AI change without a passing test that proves it. "It looks right" is not evidence; a green test is.</p>
+
+          <h5>Running tests with pytest</h5>
+          <pre class="lesson-code">python -m pytest           <span class="c"># run every test</span>
+python -m pytest -q        <span class="c"># quieter, summary output</span>
+python -m pytest tests/test_config.py   <span class="c"># run just one file</span></pre>
+          <p>Each test reports one of three outcomes:</p>
+          <ul>
+            <li><strong class="g">PASSED</strong> &mdash; the check held. Good.</li>
+            <li><strong class="r">FAILED</strong> &mdash; reality did not match what the test expected. Something is wrong.</li>
+            <li><strong class="y">SKIPPED</strong> &mdash; the test was deliberately not run (often because it needs a real API key). Not a failure, but not coverage either.</li>
+          </ul>
+
+          <h5>Reading a stack trace without fear</h5>
+          <p>When a test fails, Python prints a <strong>stack trace</strong> &mdash; a wall of text that looks alarming but is just a trail of breadcrumbs. Read it <strong>bottom to top</strong>: the <em>last</em> line names the actual error, and the lines above show the path that led there.</p>
+          <pre class="lesson-code">  File "src/config.py", line 12, in load_config
+    return data["model"]
+<span class="r">KeyError: 'model'</span></pre>
+          <p>That bottom line is the whole story: the code asked for a key <code>'model'</code> that was not in the dictionary. The line above tells you exactly where (config.py, line 12). The common errors you will meet:</p>
+          <ul>
+            <li><code>ModuleNotFoundError</code> &mdash; a library is not installed, or you are in the wrong environment.</li>
+            <li><code>FileNotFoundError</code> &mdash; a file/path is missing (often the wrong-folder problem from Week 1).</li>
+            <li><code>KeyError</code> &mdash; asked a dict for a field it does not have.</li>
+            <li><code>ValidationError</code> &mdash; data did not match the required schema (Week 6).</li>
+          </ul>
+
+          <h5>The disciplined debugging loop</h5>
+          <p>When something fails, do not immediately tell the AI "fix it" &mdash; that lets it guess and rewrite blindly. Instead:</p>
+          <ul>
+            <li><strong>1. Diagnose first.</strong> Ask: "Here is the failing test and stack trace. Explain the root cause. Do not edit yet."</li>
+            <li><strong>2. Confirm the plan.</strong> Make it state the smallest fix and which test will prove it.</li>
+            <li><strong>3. Then let it edit</strong>, and re-run <code>python -m pytest</code> yourself to confirm green.</li>
+          </ul>
+        `,
+        learn: [
+          "What unit tests and integration tests are",
+          "How to run pytest and read PASSED / FAILED / SKIPPED",
+          "How to read a stack trace bottom-to-top",
+          "Common errors: ModuleNotFoundError, FileNotFoundError, KeyError, ValidationError",
+          "Why a passing test is the only real proof a change works",
+          "Forcing the AI to diagnose before it edits"
+        ],
+        tasks: [
+          { text: "Run the full test suite", tag: "Testing" },
+          { text: "Open one test file and explain what it checks", tag: "Pytest" },
+          { text: "Break a harmless function and watch a test fail", tag: "Debugging" },
+          { text: "Read the stack trace bottom-to-top and name the error", tag: "Debugging" },
+          { text: "Fix the function, rerun tests, and confirm green", tag: "Testing" }
+        ],
+        commands: "python -m pytest\npython -m pytest -q\npython -m pytest tests/test_config.py\nresearch-bot --ticker AAPL --stage analysis --dry-run",
+        deliverable: "You can run tests, interpret failures calmly, and refuse to accept untested AI changes.",
+        activityType: "quiz",
+        quiz: [
+          {
+            q: "A test fails and prints a long stack trace. Which line names the actual error?",
+            options: [
+              "The very first line",
+              "The last (bottom) line",
+              "The line in the middle",
+              "Stack traces never name the error"
+            ],
+            answer: 1,
+            explain: "Read bottom-to-top. The last line is the error itself; the lines above show how the code got there."
+          },
+          {
+            q: "What does a SKIPPED test mean?",
+            options: [
+              "The test failed",
+              "The test was deliberately not run, so it gave you no coverage",
+              "The test passed perfectly",
+              "The project is broken"
+            ],
+            answer: 1,
+            explain: "Skipped is not a failure, but it is not proof either -- that behavior was not actually checked."
+          },
+          {
+            q: "You see KeyError: 'model'. What went wrong?",
+            options: [
+              "A library is not installed",
+              "The code asked a dictionary for a field 'model' that was not there",
+              "The API server crashed",
+              "A file is missing"
+            ],
+            answer: 1,
+            explain: "KeyError means a dict was asked for a key it does not contain -- here, 'model' was missing from config."
+          },
+          {
+            q: "The best first thing to ask the AI when a test fails is:",
+            options: [
+              "Just fix everything right now",
+              "Delete the failing test",
+              "Explain the root cause from this trace, and do not edit yet",
+              "Rewrite the whole file"
+            ],
+            answer: 2,
+            explain: "Diagnose before editing. Make it explain the cause and plan the smallest fix before touching code."
+          }
+        ]
+      },
+      {
+        week: 6,
+        title: "JSON, Schemas, and Pydantic",
+        focus: "Understand structured AI output so your bot produces validated analysis, not messy prose.",
+        difficulty: "Intermediate",
+        time: "45 to 60 min per day",
+        topics: ["JSON", "Schema", "Pydantic"],
+        lesson: `
+          <h5>Why structure beats prose</h5>
+          <p>If the AI just writes paragraphs, you cannot reliably pull out "what is the rating?" or "what is the price target?". So your bot makes the AI fill in a fixed <strong>structure</strong> instead. That structure is <strong>JSON</strong>, and a <strong>schema</strong> is the contract that says which fields must be present and what type each must be.</p>
+
+          <h5>Reading JSON</h5>
+          <p>JSON is just labelled data. It has six building blocks: objects <code>{ }</code>, arrays <code>[ ]</code>, strings, numbers, booleans, and <code>null</code> (no value). Your bot's output looks like this:</p>
+          <pre class="lesson-code">{
+  "ticker": "AAPL",
+  "thesis": "Durable services growth...",
+  "verdict": "buy",
+  "price_target": 210.0,
+  "catalysts": ["Services margin", "Buybacks"],
+  "risks": ["China demand", "Regulation"],
+  "confidence": 0.72
+}</pre>
+          <p>An <strong>object</strong> is a set of <code>"key": value</code> pairs. An <strong>array</strong> is an ordered list inside <code>[ ]</code>. You already know this shape &mdash; it is a Python dict from Week 3.</p>
+
+          <h5>What a schema enforces with Pydantic</h5>
+          <p><strong>Pydantic</strong> is a Python library that defines the schema as a model. It checks every AI response and <em>rejects</em> anything that does not fit &mdash; missing fields, wrong types, or invalid values:</p>
+          <pre class="lesson-code">from pydantic import BaseModel
+from typing import Literal
+
+class AnalysisResult(BaseModel):
+    ticker: str                              <span class="c"># required text</span>
+    verdict: Literal["buy","hold","sell","avoid"]  <span class="c"># MUST be one of these</span>
+    price_target: float                      <span class="c"># required number</span>
+    confidence: float                        <span class="c"># required number</span></pre>
+          <p>That <code>Literal["buy","hold","sell","avoid"]</code> is powerful: it means the verdict can <em>only</em> be one of those four words. If the model returns "strong buy" or "maybe", validation fails loudly instead of letting garbage through.</p>
+
+          <h5>Validation as a gate</h5>
+          <p>Here is why this matters for you as an operator: validation sits <strong>between</strong> the AI's output and everything downstream (the Markdown article, publishing). If the data is malformed, it stops <em>there</em> &mdash; a clear <code>ValidationError</code> &mdash; instead of silently flowing into a published article with a missing price target.</p>
+          <p class="l-key">💡 The schema is your quality floor. A broken or hallucinated field becomes a loud error you catch, not a quiet mistake your readers catch.</p>
+          <p class="l-watch">⚠️ When you ask the AI to add a new field, it changes the schema &mdash; which can break existing tests and older saved JSON files. Always ask "what does this field do to the tests and to existing outputs?" before accepting it.</p>
+        `,
+        learn: [
+          "JSON building blocks: objects, arrays, strings, numbers, booleans, null",
+          "How JSON mirrors the Python dict you already know",
+          "How Pydantic models define required fields and types",
+          "Literal values (buy / hold / sell / avoid) and why they constrain the AI",
+          "How validation acts as a gate before publishing",
+          "Why adding a field affects tests and existing outputs"
+        ],
+        tasks: [
+          { text: "Open a generated JSON analysis file from the out folder", tag: "JSON" },
+          { text: "Identify thesis, valuation, catalysts, risks, and verdict", tag: "Research" },
+          { text: "Find the Pydantic model defining AnalysisResult", tag: "Schema" },
+          { text: "List which fields are mandatory vs optional", tag: "Schema" },
+          { text: "Propose one useful new field and ask how it affects tests", tag: "Design" }
+        ],
+        commands: "type out\\aapl.json\n# Or open the JSON file in VS Code or Notepad for easier reading",
+        deliverable: "You can inspect structured AI output and explain how the schema protects the whole pipeline.",
+        activityType: "quiz",
+        quiz: [
+          {
+            q: "What does Literal[\"buy\",\"hold\",\"sell\",\"avoid\"] enforce on the verdict field?",
+            options: [
+              "The verdict can be any text",
+              "The verdict must be exactly one of those four words, or validation fails",
+              "The verdict must be a number",
+              "The verdict is optional"
+            ],
+            answer: 1,
+            explain: "Literal restricts a field to a fixed set of allowed values. 'strong buy' would be rejected."
+          },
+          {
+            q: "Why is schema validation valuable to you as an operator?",
+            options: [
+              "It makes the AI faster",
+              "It catches malformed output early, before it flows into published articles",
+              "It hides errors",
+              "It writes the article for you"
+            ],
+            answer: 1,
+            explain: "Validation is a gate: bad data becomes a loud ValidationError instead of a quiet mistake downstream."
+          },
+          {
+            q: "In JSON, what does [ ] denote?",
+            options: [
+              "An object with named fields",
+              "An ordered array (list) of values",
+              "A secret key",
+              "A comment"
+            ],
+            answer: 1,
+            explain: "Square brackets are an array -- an ordered list. Curly braces { } are an object with key:value pairs."
+          },
+          {
+            q: "Before accepting an AI-added schema field, the key question is:",
+            options: [
+              "What color should it be?",
+              "How does this field affect the tests and existing saved outputs?",
+              "Can we publish immediately?",
+              "Does it look nice?"
+            ],
+            answer: 1,
+            explain: "New fields change the contract -- they can break tests and older JSON. Always check the ripple effects."
+          }
+        ]
+      },
+      {
+        week: 7,
+        title: "Markdown and Grounded Content Generation",
+        focus: "Turn validated JSON into publishable, analyst-style Markdown without letting the AI hallucinate.",
+        difficulty: "Operator",
+        time: "45 to 60 min per day",
+        topics: ["Markdown", "Content", "Publishing"],
+        lesson: `
+          <h5>Markdown in five minutes</h5>
+          <p><strong>Markdown</strong> is plain text with a few symbols that become formatting. It is how the bot writes articles. The whole language you need:</p>
+          <pre class="lesson-code"># Big heading
+## Smaller heading
+
+**bold text**   and   *italic text*
+
+- a bullet
+- another bullet
+
+| Scenario | Price | Prob |
+| -------- | ----- | ---- |
+| Bull     | 240   | 30%  |
+| Base     | 210   | 50%  |</pre>
+          <p>That table syntax (pipes <code>|</code> and a divider row of dashes) is how you build scenario and valuation tables, which is most of an analyst note.</p>
+
+          <h5>Front matter: metadata at the top</h5>
+          <p>Many articles start with a <strong>YAML front matter</strong> block fenced by <code>---</code>. It carries machine-readable metadata that the publishing step uses:</p>
+          <pre class="lesson-code">---
+title: "Apple: Services-Led Re-Rating"
+ticker: AAPL
+date: 2026-06-12
+rating: buy
+tags: [tech, large-cap]
+---</pre>
+
+          <h5>Deterministic template vs AI rewrite</h5>
+          <p>There are two ways to turn JSON into an article, and the difference is the whole game:</p>
+          <ul>
+            <li><strong>Deterministic template</strong> &mdash; code drops the validated JSON values into fixed slots. Boring, but it <em>cannot</em> invent facts.</li>
+            <li><strong>AI rewrite</strong> &mdash; the model rephrases for flow. Reads better, but <em>can</em> drift from the source.</li>
+          </ul>
+          <p class="l-key">💡 The safe pattern: the factual core (numbers, rating, price target) follows the validated JSON closely &mdash; ideally templated. Let the AI improve <em>wording</em>, never the <em>facts</em>. After generation, compare the article's numbers against the source JSON.</p>
+
+          <h5>Grounding and the dry-run gate</h5>
+          <p><strong>Grounded</strong> means every claim in the article traces back to the source JSON or real data &mdash; nothing invented. Your job reviewing Stage 2 is to spot any number or claim that is <em>not</em> in the JSON; that is a hallucination and it must go.</p>
+          <p>Two safety rails:</p>
+          <ul>
+            <li>A <strong>disclaimer</strong> is appended automatically (compliance), so it can never be forgotten.</li>
+            <li><code>--dry-run</code> writes the article locally and shows it, but <strong>does not publish</strong>. Nothing reaches the public until you explicitly say so.</li>
+          </ul>
+          <p class="l-watch">⚠️ Always run content generation with <code>--dry-run</code> first and read the output. Treat publishing as a separate, deliberate decision &mdash; never the default.</p>
+        `,
+        learn: [
+          "Markdown headings, bold, lists, and tables",
+          "YAML front matter for title, ticker, date, rating, and tags",
+          "Deterministic template vs AI rewrite, and when to use each",
+          "What 'grounded' means and how to spot a hallucinated claim",
+          "Why disclaimers are auto-appended for compliance",
+          "Why --dry-run must be respected before any publish"
+        ],
+        tasks: [
+          { text: "Write a Markdown note with headings and a table", tag: "Markdown" },
+          { text: "Add YAML front matter to a note", tag: "Content" },
+          { text: "Build a scenario / valuation table", tag: "Research" },
+          { text: "Review a generated article against its source JSON for invented claims", tag: "QA" },
+          { text: "Confirm the disclaimer is appended and dry-run does not publish", tag: "Compliance" }
+        ],
+        commands: "research-bot --ticker LITE --stage content --dry-run\ndir content\ntype content\\2026-06-01-LITE.md",
+        deliverable: "You can supervise Stage 2 and judge whether an article is publishable, grounded, and analyst-grade.",
+        activityType: "quiz",
+        quiz: [
+          {
+            q: "You review a generated article and the price target is 230, but the source JSON says 210. What is this?",
+            options: [
+              "A rounding choice, ignore it",
+              "A hallucination -- a claim not grounded in the source -- and it must be fixed",
+              "A formatting bug",
+              "Correct, the AI knows better"
+            ],
+            answer: 1,
+            explain: "Every number must trace back to the JSON. A figure that is not in the source is hallucinated and unsafe to publish."
+          },
+          {
+            q: "What does --dry-run do during content generation?",
+            options: [
+              "Publishes immediately",
+              "Writes and shows the article locally but does NOT publish",
+              "Deletes the article",
+              "Sends an email"
+            ],
+            answer: 1,
+            explain: "Dry-run lets you preview the output safely. Publishing stays a separate, deliberate action."
+          },
+          {
+            q: "For the factual core of an article (numbers, rating), the safer approach is:",
+            options: [
+              "Let the AI freely rewrite everything",
+              "Follow the validated JSON closely, ideally via a deterministic template",
+              "Skip the JSON entirely",
+              "Publish without review"
+            ],
+            answer: 1,
+            explain: "Templates can't invent facts. Let the AI polish wording, but keep facts pinned to the validated JSON."
+          },
+          {
+            q: "In Markdown, how do you make a table row?",
+            options: [
+              "With curly braces { }",
+              "With pipes | separating cells and a dashed divider row",
+              "With the word TABLE",
+              "You cannot make tables in Markdown"
+            ],
+            answer: 1,
+            explain: "Pipes separate columns and a row of dashes marks the header divider -- that is the whole table syntax."
+          }
+        ]
+      },
+      {
+        week: 8,
+        title: "Automation, Reliability, and Operating Discipline",
+        focus: "Move from one-off vibe coding to repeatable, safe workflows with logs, dry-runs, and a review checklist.",
+        difficulty: "Operator",
+        time: "45 to 60 min per day",
+        topics: ["Automation", "Reliability", "Workflow"],
+        lesson: `
+          <h5>From lucky to repeatable</h5>
+          <p>Vibe coding gets you a result once. <strong>Operating</strong> means getting the right result every time, safely, even when you are not watching. This week is about the habits and guardrails that make that true.</p>
+
+          <h5>Dry-run as a safety switch</h5>
+          <p>You met <code>--dry-run</code> in Week 7. Make it your default. A dry-run does all the work and shows you the result <em>without</em> side effects &mdash; no publishing, no irreversible writes. The discipline: <strong>dry-run, read, then run for real.</strong> Real publishing is always an explicit, separate step.</p>
+
+          <h5>Logs and date-stamped output</h5>
+          <p>When a run happens unattended, logs are how you find out what it did. Two practices:</p>
+          <ul>
+            <li><strong>Log files</strong> record each run: what ran, what succeeded, what failed and why. Your first stop when something looks off.</li>
+            <li><strong>Date-stamped outputs</strong> (e.g. <code>content/2026-06-12-AAPL.md</code>) keep history and prevent one run from silently overwriting another &mdash; and help prevent duplicate publishing.</li>
+          </ul>
+
+          <h5>Watchlists and per-ticker error isolation</h5>
+          <p>A <strong>watchlist</strong> lets the bot process many tickers from config in one run:</p>
+          <pre class="lesson-code">watchlist:
+  - AAPL
+  - MSFT
+  - NVDA
+  - LITE</pre>
+          <p class="l-key">💡 The reliability rule that matters most: <strong>one ticker failing must not stop the others.</strong> If NVDA errors, AAPL, MSFT, and LITE should still complete. This is called per-ticker error isolation &mdash; the run catches each ticker's error, logs it, and moves on. When you ask the AI for batch features, demand this explicitly.</p>
+
+          <h5>Scheduling (later, carefully)</h5>
+          <p>Once dry-run, logging, and isolation are solid, you can have <strong>Windows Task Scheduler</strong> run the bot on a schedule (e.g. weekly). Do not schedule anything that publishes automatically until you trust it completely &mdash; schedule the analysis, keep publishing manual.</p>
+
+          <h5>Your pre-commit checklist</h5>
+          <p>Before you accept and commit any AI work, run this every single time. This checklist is the entire point of the course &mdash; it is how you replace blind trust with verification:</p>
+          <pre class="lesson-code">[ ] git status   -- only the files I expected changed?
+[ ] git diff     -- I read every changed line and I want it?
+[ ] pytest       -- all tests pass (and new behavior has a test)?
+[ ] secrets      -- nothing printed or committed a key? .env still ignored?
+[ ] scope        -- nothing changed outside what I asked for?
+[ ] dry-run      -- preview looks grounded before anything publishes?
+[ ] README       -- still accurate after the change?</pre>
+          <p class="l-watch">⚠️ If any box is unchecked, do not commit. An unreviewed AI change is a liability, not a feature &mdash; the whole skill you have built is the willingness to stop here.</p>
+        `,
+        learn: [
+          "Dry-run as your default safety switch",
+          "Logging and date-stamped outputs for unattended runs",
+          "Watchlist-based runs across many tickers",
+          "Per-ticker error isolation so one failure does not stop the rest",
+          "Scheduling with Windows Task Scheduler (analysis yes, publishing no)",
+          "A repeatable pre-commit checklist before accepting AI work"
+        ],
+        tasks: [
+          { text: "Run analysis for two tickers and compare outputs", tag: "Workflow" },
+          { text: "Design a watchlist config", tag: "Automation" },
+          { text: "Ask the AI to ensure one ticker failure does not stop the whole run", tag: "Reliability" },
+          { text: "Review git status, git diff, tests, and README before commit", tag: "Review" },
+          { text: "Write your own personal pre-commit checklist", tag: "Operator" }
+        ],
+        commands: "git status\ngit diff\npython -m pytest\nresearch-bot --ticker AAPL --stage analysis --dry-run\nresearch-bot --ticker LITE --stage content --dry-run",
+        deliverable: "You can operate the bot repeatedly and safely, with review habits that replace blind trust in AI-generated code.",
+        activityType: "builder",
+        builder: {
+          intro: "Build your pre-commit review in the correct order: see what changed, read it, prove it works, then save it. Click the steps in order.",
+          bank: ["git push", "git status", "git diff", "python -m pytest", "git commit -m \"...\""],
+          answer: ["git status", "git diff", "python -m pytest", "git commit -m \"...\""],
+          success: "See changes, read changes, prove with tests, then commit. Pushing comes only after this passes."
+        },
+        quiz: [
+          {
+            q: "In a watchlist run, NVDA throws an error. What SHOULD happen?",
+            options: [
+              "The whole run stops and nothing else is analyzed",
+              "The error is logged and the other tickers still complete",
+              "All output is deleted",
+              "The bot publishes anyway"
+            ],
+            answer: 1,
+            explain: "Per-ticker error isolation: catch and log one ticker's failure, then keep going for the rest."
+          },
+          {
+            q: "Why use date-stamped output files like 2026-06-12-AAPL.md?",
+            options: [
+              "They look professional",
+              "They keep history and stop one run from overwriting or duplicating another",
+              "They are required by Python",
+              "They make files smaller"
+            ],
+            answer: 1,
+            explain: "Date stamps preserve history and help prevent silent overwrites and duplicate publishing."
+          },
+          {
+            q: "What is the correct order of your pre-commit checklist?",
+            options: [
+              "Commit, then check status",
+              "git status and diff to review, run tests to prove it, then commit",
+              "Push first, review later",
+              "Just trust the AI and commit"
+            ],
+            answer: 1,
+            explain: "Review what changed (status/diff), prove it works (tests), then commit. Never commit unreviewed work."
+          },
+          {
+            q: "Which task is safe to put on an automatic schedule first?",
+            options: [
+              "Automatic publishing to the public",
+              "Analysis runs (with publishing kept manual)",
+              "Deleting the repo",
+              "Rotating keys randomly"
+            ],
+            answer: 1,
+            explain: "Schedule analysis once it's reliable, but keep publishing a deliberate manual step until you fully trust it."
+          }
+        ]
+      }
+    ];
+
+    const projects = [
+      {
+        title: "Project 1: Run and inspect Stage 1",
+        difficulty: "Beginner",
+        topics: ["Research Bot", "JSON", "Testing"],
+        description: "Run the existing analysis stage, inspect output JSON, and confirm the result makes business sense.",
+        tasks: [
+          { text: "Run AAPL analysis", tag: "CLI" },
+          { text: "Run LITE analysis", tag: "CLI" },
+          { text: "Open output JSON and identify the investment thesis", tag: "JSON" },
+          { text: "Check tests and commit history", tag: "Git" }
+        ],
+        commands: "research-bot --ticker AAPL --stage analysis\nresearch-bot --ticker LITE --stage analysis\npython -m pytest\ngit log --oneline",
+        quiz: [
+          {
+            q: "After running the analysis stage, where do you look to read the investment thesis?",
+            options: [
+              "In the .env file",
+              "In the generated JSON output file (the out folder)",
+              "In git log",
+              "In config.yaml"
+            ],
+            answer: 1,
+            explain: "Stage 1 writes structured results to the out folder as JSON. Open it to read thesis, verdict, catalysts, and risks."
+          },
+          {
+            q: "Before you trust the output, what gives you evidence the existing code is healthy?",
+            options: [
+              "It produced a file, so it must be fine",
+              "All tests pass when you run python -m pytest",
+              "The JSON is long",
+              "git log shows many commits"
+            ],
+            answer: 1,
+            explain: "A passing test suite is your proof the pipeline behaves correctly -- not just that some output appeared."
+          }
+        ]
+      },
+      {
+        title: "Project 2: Build Stage 2 Markdown output",
+        difficulty: "Operator",
+        topics: ["Markdown", "Content", "Testing"],
+        description: "Turn AnalysisResult JSON into a publishable Markdown analyst note with front matter and tables.",
+        tasks: [
+          { text: "Generate Markdown from validated JSON", tag: "Markdown" },
+          { text: "Add YAML front matter", tag: "Content" },
+          { text: "Add scenario and valuation tables", tag: "Research" },
+          { text: "Write tests for Markdown generation", tag: "Testing" }
+        ],
+        commands: "research-bot --ticker LITE --stage content --dry-run\ndir content\npython -m pytest",
+        quiz: [
+          {
+            q: "What belongs in the YAML front matter at the top of the article?",
+            options: [
+              "Your API key",
+              "Metadata like title, ticker, date, and rating",
+              "The entire analysis prose",
+              "The test results"
+            ],
+            answer: 1,
+            explain: "Front matter carries machine-readable metadata (title, ticker, date, rating, tags) that the publishing step uses."
+          },
+          {
+            q: "To keep the article grounded, the factual core (numbers, rating) should follow...",
+            options: [
+              "Whatever sounds best",
+              "The validated JSON closely, ideally via a deterministic template",
+              "A random number generator",
+              "The previous article"
+            ],
+            answer: 1,
+            explain: "Pin facts to the validated JSON so the AI can polish wording but never invent figures."
+          },
+          {
+            q: "Why write tests for the Markdown generation?",
+            options: [
+              "Tests make the file shorter",
+              "So a future change can't silently break the output without you noticing",
+              "Tests publish the article",
+              "They are not needed for content"
+            ],
+            answer: 1,
+            explain: "Tests catch regressions: if a later edit breaks the front matter or tables, a failing test warns you before readers see it."
+          }
+        ]
+      },
+      {
+        title: "Project 3: Add watchlist support",
+        difficulty: "Operator",
+        topics: ["Automation", "Config", "Reliability"],
+        description: "Let the bot analyze multiple tickers from a config watchlist while isolating errors per ticker.",
+        tasks: [
+          { text: "Create a watchlist in config.yaml", tag: "Config" },
+          { text: "Run multiple tickers in one command", tag: "CLI" },
+          { text: "Continue even if one ticker fails", tag: "Reliability" },
+          { text: "Add tests for error isolation", tag: "Testing" }
+        ],
+        commands: "# Example config idea\nwatchlist:\n  - AAPL\n  - MSFT\n  - NVDA\n  - LITE",
+        quiz: [
+          {
+            q: "Where does the watchlist of tickers live?",
+            options: [".env", "config.yaml", "the out folder", "git history"],
+            answer: 1,
+            explain: "The watchlist is a safe-to-share setting, so it belongs in config.yaml -- not in .env."
+          },
+          {
+            q: "One ticker in the watchlist throws an error mid-run. What should happen?",
+            options: [
+              "The whole run stops",
+              "The error is logged and the remaining tickers still complete",
+              "Every output is deleted",
+              "The bot publishes the broken result"
+            ],
+            answer: 1,
+            explain: "Per-ticker error isolation: catch and log the one failure, then keep going for the rest."
+          }
+        ]
+      },
+      {
+        title: "Project 4: Scheduled runs",
+        difficulty: "Operator",
+        topics: ["Automation", "Logs", "Reliability"],
+        description: "Prepare the bot for scheduled weekly or daily operation without accidental duplicate publishing.",
+        tasks: [
+          { text: "Add log files for runs", tag: "Logs" },
+          { text: "Add date-stamped output files", tag: "Output" },
+          { text: "Learn Windows Task Scheduler basics", tag: "Automation" },
+          { text: "Prevent duplicate publish attempts", tag: "Safety" }
+        ],
+        commands: "# Later step, not needed immediately\n# Windows Task Scheduler can run a PowerShell command on a schedule",
+        quiz: [
+          {
+            q: "Why give output files date stamps like 2026-06-12-AAPL.md?",
+            options: [
+              "It looks professional",
+              "To keep history and stop one run from overwriting or duplicating another",
+              "Python requires it",
+              "It makes files smaller"
+            ],
+            answer: 1,
+            explain: "Date stamps preserve history and help prevent silent overwrites and duplicate publishing."
+          },
+          {
+            q: "Which Windows tool runs the bot automatically on a schedule?",
+            options: ["Notepad", "Task Scheduler", "git", "pytest"],
+            answer: 1,
+            explain: "Windows Task Scheduler can run a PowerShell command on a schedule -- start with analysis, keep publishing manual."
+          }
+        ]
+      },
+      {
+        title: "Project 5: Publishing integration later",
+        difficulty: "Operator",
+        topics: ["Publishing", "API", "Safety"],
+        description: "Only after local Markdown is reliable, add a publisher interface and optional Ghost publishing.",
+        tasks: [
+          { text: "Keep local Markdown as default", tag: "Safety" },
+          { text: "Add --publish as an explicit flag", tag: "CLI" },
+          { text: "Store publishing secrets in .env", tag: "Security" },
+          { text: "Add a dry-run publish preview", tag: "QA" }
+        ],
+        commands: "research-bot --ticker LITE --stage content --dry-run\n# Later only:\nresearch-bot --ticker LITE --stage content --publish",
+        quiz: [
+          {
+            q: "What should stay the default, with real publishing hidden behind an explicit flag?",
+            options: [
+              "Publishing to the public",
+              "Writing local Markdown only",
+              "Deleting old articles",
+              "Printing the API key"
+            ],
+            answer: 1,
+            explain: "Local Markdown stays the default; publishing only happens when you pass an explicit --publish flag."
+          },
+          {
+            q: "Where do publishing secrets (like a Ghost token) belong?",
+            options: ["config.yaml", ".env", "the article body", "git log"],
+            answer: 1,
+            explain: "Any credential is a secret and belongs in .env, never in shareable config or committed files."
+          },
+          {
+            q: "Before a real publish, what do you run first?",
+            options: [
+              "Nothing, just publish",
+              "A dry-run preview to confirm the output is grounded",
+              "git push --force",
+              "del content"
+            ],
+            answer: 1,
+            explain: "Always dry-run and read the preview first. Publishing is a separate, deliberate decision."
+          }
+        ]
+      }
+    ];
+
+    const references = [
+      {
+        title: "Essential PowerShell Commands",
+        rows: [
+          ["cd", "Move into a folder"],
+          ["dir", "List files in the current folder"],
+          ["mkdir", "Create a folder"],
+          ["copy", "Copy a file"],
+          ["del", "Delete a file"],
+          ["type", "Print a file to the terminal"],
+          ["notepad file.txt", "Open a file in Notepad"]
+        ]
+      },
+      {
+        title: "Git Review Commands",
+        rows: [
+          ["git status", "See changed files"],
+          ["git diff", "Inspect exact code changes (+ added, - removed)"],
+          ["git log --oneline", "Show commit history"],
+          ["git add .", "Stage changes"],
+          ["git commit -m \"message\"", "Commit changes"],
+          ["git check-ignore .env", "Confirm .env is ignored"]
+        ]
+      },
+      {
+        title: "Common API Errors",
+        rows: [
+          ["400", "Bad request. Your code sent something invalid (4xx = your side)"],
+          ["401", "Unauthorized. API key wrong, missing, or expired"],
+          ["403", "Forbidden. Key valid but not allowed"],
+          ["429", "Rate limited. Too many requests, slow down"],
+          ["500", "Server error. Their side, usually temporary (5xx = retry)"]
+        ]
+      },
+      {
+        title: "Python Reading Cheatsheet",
+        rows: [
+          ["\"text\"", "A string (text in quotes)"],
+          ["[a, b, c]", "A list (ordered collection)"],
+          ["{\"k\": v}", "A dict (named fields) -- same shape as JSON"],
+          ["if x is not None:", "Run only when x has a real value"],
+          ["def f(x): return y", "A function: takes x, hands back y"],
+          ["indentation", "Defines what is inside an if / loop / function"]
+        ]
+      },
+      {
+        title: "Stack Trace & Error Decoder",
+        rows: [
+          ["Read direction", "Bottom-to-top; last line is the real error"],
+          ["ModuleNotFoundError", "A library is missing or wrong environment"],
+          ["FileNotFoundError", "Wrong path or wrong folder"],
+          ["KeyError", "Asked a dict for a field it does not have"],
+          ["ValidationError", "Data did not match the schema (Pydantic)"]
+        ]
+      },
+      {
+        title: "Pre-Commit Operator Checklist",
+        rows: [
+          ["git status", "Only expected files changed?"],
+          ["git diff", "Read every changed line, want them all?"],
+          ["pytest", "All tests pass, new behavior tested?"],
+          ["secrets", "No keys printed/committed, .env still ignored?"],
+          ["scope", "Nothing changed outside the request?"],
+          ["dry-run", "Preview grounded before any publish?"]
+        ]
+      },
+      {
+        title: "AI Review Questions",
+        rows: [
+          ["Files changed", "Which files changed and why?"],
+          ["Tests", "Which tests prove this works?"],
+          ["Risks", "What failure cases are not covered?"],
+          ["Secrets", "Did anything print or commit secrets?"],
+          ["Scope", "Did you change anything outside the request?"]
+        ]
+      }
+    ];
+
+    const topics = Array.from(new Set([
+      ...syllabus.flatMap(item => item.topics),
+      ...projects.flatMap(item => item.topics)
+    ])).sort();
+
+    const state = {
+      view: "weeks",
+      activeWeek: "all",
+      activeTopic: "all"
+    };
+
+    function taskId(scope, index, taskIndex) {
+      return `${scope}-${index}-${taskIndex}`;
+    }
+
+    function quizId(kind, index, qIndex) {
+      const prefix = kind === "project" ? "pquiz" : "quiz";
+      return `${prefix}-${index}-${qIndex}`;
+    }
+
+    function getDoneMap() {
+      try {
+        return JSON.parse(localStorage.getItem("vibeCodingProgress") || "{}");
+      } catch (error) {
+        return {};
+      }
+    }
+
+    function setDone(id, value) {
+      const done = getDoneMap();
+      done[id] = value;
+      localStorage.setItem("vibeCodingProgress", JSON.stringify(done));
+      updateProgress();
+      render();
+    }
+
+    function quizItems() {
+      const weekQuizzes = syllabus.flatMap((week, index) =>
+        (week.quiz || []).map((q, qIndex) => ({ id: quizId("week", index, qIndex), text: q.q, tag: "Quiz" }))
+      );
+      const projectQuizzes = projects.flatMap((project, index) =>
+        (project.quiz || []).map((q, qIndex) => ({ id: quizId("project", index, qIndex), text: q.q, tag: "Quiz" }))
+      );
+      return [...weekQuizzes, ...projectQuizzes];
+    }
+
+    function allTasks() {
+      const weekTasks = syllabus.flatMap((week, index) => week.tasks.map((task, taskIndex) => ({ id: taskId("week", index, taskIndex), ...task })));
+      const projectTasks = projects.flatMap((project, index) => project.tasks.map((task, taskIndex) => ({ id: taskId("project", index, taskIndex), ...task })));
+      return [...weekTasks, ...projectTasks, ...quizItems()];
+    }
+
+    function updateProgress() {
+      const done = getDoneMap();
+      const tasks = allTasks();
+      const completed = tasks.filter(task => done[task.id]).length;
+      const pct = tasks.length ? Math.round((completed / tasks.length) * 100) : 0;
+      document.getElementById("progressText").textContent = `${pct}%`;
+      document.getElementById("progressFill").style.width = `${pct}%`;
+      document.getElementById("completedTasks").textContent = completed;
+      const quizTotal = quizItems().length;
+      const statQuizzes = document.getElementById("statQuizzes");
+      if (statQuizzes) statQuizzes.textContent = quizTotal;
+    }
+
+    function renderNav() {
+      const weekNav = document.getElementById("weekNav");
+      weekNav.innerHTML = `
+        <button class="nav-btn ${state.activeWeek === "all" ? "active" : ""}" onclick="selectWeek('all')">
+          <span>All weeks</span><span>8 weeks</span>
+        </button>
+        ${syllabus.map(item => `
+          <button class="nav-btn ${state.activeWeek === item.week ? "active" : ""}" onclick="selectWeek(${item.week})">
+            <span>Week ${item.week}</span><span>${item.difficulty}</span>
+          </button>
+        `).join("")}
+      `;
+
+      const topicNav = document.getElementById("topicNav");
+      topicNav.innerHTML = `
+        <button class="topic-chip ${state.activeTopic === "all" ? "active" : ""}" onclick="selectTopic('all')">All</button>
+        ${topics.map(topic => `
+          <button class="topic-chip ${state.activeTopic === topic ? "active" : ""}" onclick="selectTopic('${escapeAttribute(topic)}')">${topic}</button>
+        `).join("")}
+      `;
+    }
+
+    function selectWeek(week) {
+      state.activeWeek = week;
+      state.view = "weeks";
+      updateViewButtons();
+      renderNav();
+      render();
+      scrollToContent();
+    }
+
+    function selectTopic(topic) {
+      state.activeTopic = topic;
+      if (topic !== "all") state.view = "topics";
+      updateViewButtons();
+      renderNav();
+      render();
+      scrollToContent();
+    }
+
+    function setView(view) {
+      state.view = view;
+      updateViewButtons();
+      render();
+    }
+
+    function updateViewButtons() {
+      document.querySelectorAll(".view-btn").forEach(button => {
+        button.classList.toggle("active", button.dataset.view === state.view);
+      });
+    }
+
+    function searchMatch(item) {
+      const query = document.getElementById("searchInput").value.trim().toLowerCase();
+      const difficulty = document.getElementById("difficultyFilter").value;
+      const text = JSON.stringify(item).toLowerCase();
+      const difficultyOk = difficulty === "all" || item.difficulty === difficulty;
+      const searchOk = !query || text.includes(query);
+      const topicOk = state.activeTopic === "all" || item.topics.includes(state.activeTopic);
+      return difficultyOk && searchOk && topicOk;
+    }
+
+    function weekMatch(item) {
+      const weekOk = state.activeWeek === "all" || item.week === state.activeWeek;
+      return weekOk && searchMatch(item);
+    }
+
+    function render() {
+      renderNav();
+      updateProgress();
+      const content = document.getElementById("content");
+
+      if (state.view === "weeks") {
+        const items = syllabus.filter(weekMatch);
+        content.innerHTML = items.length ? items.map(item => renderWeekCard(item, syllabus.indexOf(item))).join("") : emptyState();
+        return;
+      }
+
+      if (state.view === "topics") {
+        const grouped = topics
+          .filter(topic => state.activeTopic === "all" || topic === state.activeTopic)
+          .map(topic => ({ topic, items: syllabus.filter(item => item.topics.includes(topic) && weekMatch(item)) }))
+          .filter(group => group.items.length);
+        content.innerHTML = grouped.length ? grouped.map(renderTopicGroup).join("") : emptyState();
+        return;
+      }
+
+      if (state.view === "checklist") {
+        content.innerHTML = renderChecklist();
+        return;
+      }
+
+      if (state.view === "projects") {
+        const items = projects.filter(searchMatch);
+        content.innerHTML = items.length ? `<div class="project-grid">${items.map((item, index) => renderProjectCard(item, index)).join("")}</div>` : emptyState();
+        return;
+      }
+
+      if (state.view === "references") {
+        content.innerHTML = renderReferences();
+      }
+    }
+
+    function renderWeekCard(item, index) {
+      const quizCount = (item.quiz || []).length;
+      return `
+        <article class="week-card open" data-card>
+          <div class="card-head">
+            <div>
+              <h3>Week ${item.week}: ${item.title}</h3>
+              <p>${item.focus}</p>
+              <div class="badge-row">
+                <span class="badge difficulty">${item.difficulty}</span>
+                <span class="badge time">${item.time}</span>
+                ${quizCount ? `<span class="badge quiz-badge">Activity + ${quizCount} Q quiz</span>` : ""}
+                ${item.topics.map(topic => `<span class="badge">${topic}</span>`).join("")}
+              </div>
+            </div>
+            <button class="expand-btn" onclick="toggleCard(this)">Toggle</button>
+          </div>
+          <div class="card-body">
+            <div class="lesson">
+              <span class="lesson-tag">📖 Lesson</span>
+              ${item.lesson || ""}
+            </div>
+            <div class="section-grid">
+              <div class="mini-section">
+                <h4>Key takeaways</h4>
+                <ul>${item.learn.map(point => `<li>${point}</li>`).join("")}</ul>
+              </div>
+              <div class="mini-section">
+                <h4>Practice checklist</h4>
+                <div class="task-list">
+                  ${item.tasks.map((task, taskIndex) => renderTask(task, taskId("week", index, taskIndex))).join("")}
+                </div>
+              </div>
+            </div>
+            <div class="mini-section">
+              <h4>Commands to practice</h4>
+              ${renderCode(item.commands)}
+            </div>
+            ${renderActivity(item, index)}
+            <div class="note success"><strong>Deliverable:</strong> ${item.deliverable}</div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderActivity(item, index) {
+      const kind = "week";
+      const builder = item.activityType === "builder" && item.builder ? renderBuilder(item, index) : "";
+      const quiz = (item.quiz || []).length ? renderQuiz(kind, item, index) : "";
+      if (!builder && !quiz) return "";
+      return `<div class="activity">
+        <div class="activity-head">
+          <h4>✏️ Try it: end-of-week activity</h4>
+          ${quizScoreBadge(item, index, kind)}
+        </div>
+        <p class="activity-intro">Prove you understood the lesson. Answers save automatically and count toward your progress.</p>
+        ${builder}
+        ${quiz}
+      </div>`;
+    }
+
+    function renderProjectActivity(item, index) {
+      if (!(item.quiz || []).length) return "";
+      return `<div class="activity">
+        <div class="activity-head">
+          <h4>✏️ Check yourself</h4>
+          ${quizScoreBadge(item, index, "project")}
+        </div>
+        <p class="activity-intro">Quick questions on this project. Answers save automatically and count toward your progress.</p>
+        ${renderQuiz("project", item, index)}
+      </div>`;
+    }
+
+    function quizScoreBadge(item, index, kind) {
+      const quiz = item.quiz || [];
+      if (!quiz.length) return "";
+      const done = getDoneMap();
+      const correct = quiz.filter((q, qi) => done[quizId(kind, index, qi)]).length;
+      return `<span class="activity-score">${correct}/${quiz.length} correct</span>`;
+    }
+
+    function renderQuiz(kind, item, index) {
+      const done = getDoneMap();
+      return item.quiz.map((q, qi) => {
+        const qid = quizId(kind, index, qi);
+        const answered = !!done[qid];
+        return `
+          <div class="quiz-q" data-qid="${qid}">
+            <p class="quiz-question">${qi + 1}. ${escapeHtml(q.q)}</p>
+            <div class="quiz-opts">
+              ${q.options.map((opt, oi) => `
+                <button class="quiz-opt ${answered && oi === q.answer ? "correct" : ""}" ${answered ? "disabled" : ""} onclick="checkQuiz('${kind}', ${index}, ${qi}, ${oi}, this)">${escapeHtml(opt)}</button>
+              `).join("")}
+            </div>
+            <div class="quiz-feedback ${answered ? "show success" : ""}">${answered ? "✓ " + escapeHtml(q.explain) : ""}</div>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function checkQuiz(kind, index, qi, oi, btn) {
+      const source = kind === "project" ? projects : syllabus;
+      const q = source[index].quiz[qi];
+      const wrap = btn.closest(".quiz-q");
+      const feedback = wrap.querySelector(".quiz-feedback");
+      if (oi === q.answer) {
+        wrap.querySelectorAll(".quiz-opt").forEach(b => { b.disabled = true; });
+        btn.classList.add("correct");
+        feedback.textContent = "✓ " + q.explain;
+        feedback.classList.remove("error");
+        feedback.classList.add("show", "success");
+        setDone(quizId(kind, index, qi), true);
+      } else {
+        btn.classList.add("wrong");
+        btn.disabled = true;
+        feedback.textContent = "✗ Not quite — read the lesson again and try another answer.";
+        feedback.classList.remove("success");
+        feedback.classList.add("show", "error");
+      }
+    }
+
+    function renderBuilder(item, index) {
+      const b = item.builder;
+      return `
+        <div class="builder" data-builder="${index}">
+          <p>${escapeHtml(b.intro)}</p>
+          <div class="builder-bank">
+            ${b.bank.map((chip, ci) => `<button class="chip-btn" data-chip="${ci}" onclick="builderPick(${index}, ${ci}, this)">${escapeHtml(chip)}</button>`).join("")}
+          </div>
+          <div class="builder-line"><span class="prompt">PS&gt;</span> <span class="builder-built" data-built></span></div>
+          <div class="builder-actions">
+            <button class="small-btn" onclick="builderCheck(${index})">Check answer</button>
+            <button class="small-btn" onclick="builderReset(${index})">Reset</button>
+          </div>
+          <div class="quiz-feedback" data-builder-feedback></div>
+        </div>
+      `;
+    }
+
+    const builderState = {};
+
+    function builderPick(index, chipIndex, btn) {
+      if (!builderState[index]) builderState[index] = [];
+      const chipText = syllabus[index].builder.bank[chipIndex];
+      builderState[index].push(chipText);
+      btn.disabled = true;
+      const root = document.querySelector(`[data-builder="${index}"]`);
+      root.querySelector("[data-built]").textContent = builderState[index].join(" ");
+    }
+
+    function builderReset(index) {
+      builderState[index] = [];
+      const root = document.querySelector(`[data-builder="${index}"]`);
+      root.querySelector("[data-built]").textContent = "";
+      root.querySelectorAll(".chip-btn").forEach(b => { b.disabled = false; });
+      const fb = root.querySelector("[data-builder-feedback]");
+      fb.className = "quiz-feedback";
+      fb.textContent = "";
+    }
+
+    function builderCheck(index) {
+      const built = builderState[index] || [];
+      const answer = syllabus[index].builder.answer;
+      const root = document.querySelector(`[data-builder="${index}"]`);
+      const fb = root.querySelector("[data-builder-feedback]");
+      const correct = built.length === answer.length && built.every((part, i) => part === answer[i]);
+      if (correct) {
+        fb.className = "quiz-feedback show success";
+        fb.textContent = "✓ " + syllabus[index].builder.success;
+        setDone(`builder-${index}`, true);
+      } else {
+        fb.className = "quiz-feedback show error";
+        fb.textContent = "✗ Not quite. Reset and rebuild it in the right order.";
+      }
+    }
+
+    function renderProjectCard(item, index) {
+      return `
+        <article class="project-card open" data-card>
+          <div class="card-head">
+            <div>
+              <h3>${item.title}</h3>
+              <p>${item.description}</p>
+              <div class="badge-row">
+                <span class="badge difficulty">${item.difficulty}</span>
+                ${(item.quiz || []).length ? `<span class="badge quiz-badge">${item.quiz.length} Q quiz</span>` : ""}
+                ${item.topics.map(topic => `<span class="badge">${topic}</span>`).join("")}
+              </div>
+            </div>
+            <button class="expand-btn" onclick="toggleCard(this)">Toggle</button>
+          </div>
+          <div class="card-body">
+            <div class="mini-section">
+              <h4>Project checklist</h4>
+              <div class="task-list">
+                ${item.tasks.map((task, taskIndex) => renderTask(task, taskId("project", index, taskIndex))).join("")}
+              </div>
+            </div>
+            <div class="mini-section">
+              <h4>Useful commands or config</h4>
+              ${renderCode(item.commands)}
+            </div>
+            ${renderProjectActivity(item, index)}
+          </div>
+        </article>
+      `;
+    }
+
+    function renderTask(task, id) {
+      const done = getDoneMap();
+      const checked = done[id] ? "checked" : "";
+      const cls = done[id] ? "task-item done" : "task-item";
+      return `
+        <label class="${cls}">
+          <input type="checkbox" ${checked} onchange="setDone('${id}', this.checked)" />
+          <span>${task.text}</span>
+          <small class="task-tag">${task.tag}</small>
+        </label>
+      `;
+    }
+
+    function renderTopicGroup(group) {
+      return `
+        <section class="reference-card open" data-card>
+          <div class="card-head">
+            <div>
+              <h3>${group.topic}</h3>
+              <p>${group.items.length} related week${group.items.length === 1 ? "" : "s"} in the course.</p>
+            </div>
+            <button class="expand-btn" onclick="toggleCard(this)">Toggle</button>
+          </div>
+          <div class="card-body">
+            ${group.items.map(item => renderWeekCard(item, syllabus.indexOf(item))).join("")}
+          </div>
+        </section>
+      `;
+    }
+
+    function renderChecklist() {
+      const done = getDoneMap();
+      const weekTasks = syllabus.map((week, index) => {
+        const quizCount = (week.quiz || []).length;
+        const quizDone = (week.quiz || []).filter((q, qi) => done[quizId("week", index, qi)]).length;
+        return `
+        <article class="week-card open" data-card>
+          <div class="card-head">
+            <div>
+              <h3>Week ${week.week}: ${week.title}</h3>
+              <p>${week.tasks.filter((task, taskIndex) => done[taskId("week", index, taskIndex)]).length}/${week.tasks.length} practice tasks${quizCount ? ` &middot; ${quizDone}/${quizCount} quiz` : ""}</p>
+            </div>
+            <button class="expand-btn" onclick="toggleCard(this)">Toggle</button>
+          </div>
+          <div class="card-body">
+            <div class="task-list">
+              ${week.tasks.map((task, taskIndex) => renderTask(task, taskId("week", index, taskIndex))).join("")}
+              ${(week.quiz || []).map((q, qi) => renderTask({ text: `Quiz: ${q.q}`, tag: "Quiz" }, quizId("week", index, qi))).join("")}
+            </div>
+          </div>
+        </article>
+      `;
+      }).join("");
+
+      const projectTasks = `
+        <article class="week-card open" data-card>
+          <div class="card-head">
+            <div>
+              <h3>Applied Projects</h3>
+              <p>Track project tasks separately from weekly learning tasks.</p>
+            </div>
+            <button class="expand-btn" onclick="toggleCard(this)">Toggle</button>
+          </div>
+          <div class="card-body">
+            <div class="task-list">
+              ${projects.flatMap((project, index) => project.tasks.map((task, taskIndex) => renderTask({ text: `${project.title}: ${task.text}`, tag: task.tag }, taskId("project", index, taskIndex)))).join("")}
+              ${projects.flatMap((project, index) => (project.quiz || []).map((q, qi) => renderTask({ text: `${project.title} quiz: ${q.q}`, tag: "Quiz" }, quizId("project", index, qi)))).join("")}
+            </div>
+          </div>
+        </article>
+      `;
+
+      return weekTasks + projectTasks;
+    }
+
+    function renderReferences() {
+      return `
+        <div class="reference-grid">
+          ${references.map(ref => `
+            <article class="reference-card open" data-card>
+              <div class="card-head">
+                <div>
+                  <h3>${ref.title}</h3>
+                  <p>Quick reference for operating the project.</p>
+                </div>
+                <button class="expand-btn" onclick="toggleCard(this)">Toggle</button>
+              </div>
+              <div class="card-body">
+                <table class="ref-table">
+                  <thead><tr><th>Item</th><th>Meaning</th></tr></thead>
+                  <tbody>
+                    ${ref.rows.map(row => `<tr><td><code>${escapeHtml(row[0])}</code></td><td>${escapeHtml(row[1])}</td></tr>`).join("")}
+                  </tbody>
+                </table>
+              </div>
+            </article>
+          `).join("")}
+        </div>
+        <article class="reference-card open" data-card>
+          <div class="card-head">
+            <div>
+              <h3>Reusable AI Prompt Template</h3>
+              <p>Use this when asking an AI tool to modify your project.</p>
+            </div>
+            <button class="expand-btn" onclick="toggleCard(this)">Toggle</button>
+          </div>
+          <div class="card-body">
+            ${renderCode(codexPromptTemplate())}
+            <div class="note warning"><strong>Operator rule:</strong> Ask the AI to explain its plan before making broad edits. Then check git diff and tests before accepting the commit.</div>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderCode(code) {
+      return `
+        <pre class="code-block"><button class="copy-btn" onclick="copyCode(this)">Copy</button><code>${escapeHtml(code)}</code></pre>
+      `;
+    }
+
+    function emptyState() {
+      return `
+        <div class="empty-state">
+          <h3>No matches found</h3>
+          <p>Try clearing the search, difficulty filter, selected week, or selected topic.</p>
+        </div>
+      `;
+    }
+
+    function toggleCard(button) {
+      const card = button.closest("[data-card]");
+      card.classList.toggle("open");
+    }
+
+    function expandAll() {
+      document.querySelectorAll("[data-card]").forEach(card => card.classList.add("open"));
+    }
+
+    function collapseAll() {
+      document.querySelectorAll("[data-card]").forEach(card => card.classList.remove("open"));
+    }
+
+    function resetProgress() {
+      const confirmed = confirm("Reset all saved checklist and quiz progress?");
+      if (!confirmed) return;
+      localStorage.removeItem("vibeCodingProgress");
+      updateProgress();
+      render();
+    }
+
+    function exportProgress() {
+      const done = getDoneMap();
+      const tasks = allTasks();
+      const completed = tasks.filter(task => done[task.id]);
+      const lines = [
+        "Vibe Coding Course Progress",
+        `Completed: ${completed.length}/${tasks.length}`,
+        "",
+        ...tasks.map(task => `${done[task.id] ? "[x]" : "[ ]"} ${task.text} (${task.tag})`)
+      ];
+      navigator.clipboard.writeText(lines.join("\n"));
+      alert("Progress copied to clipboard.");
+    }
+
+    function codexPromptTemplate() {
+      return `Goal:\n[Describe the feature or bug clearly.]\n\nScope:\n[Which files or modules should be changed?]\n\nConstraints:\n- Do not touch unrelated files.\n- Preserve existing public interfaces unless necessary.\n- Do not commit secrets.\n- Respect --dry-run where relevant.\n- Add or update tests.\n\nBefore editing:\n- Explain your plan.\n- Identify risks and edge cases.\n\nAfter editing:\n- Show changed files.\n- Run python -m pytest.\n- Explain which tests prove the change works.\n- Commit only after tests pass.`;
+    }
+
+    function copyPromptTemplate() {
+      navigator.clipboard.writeText(codexPromptTemplate());
+      alert("AI prompt template copied.");
+    }
+
+    function copyCode(button) {
+      const code = button.parentElement.querySelector("code").textContent;
+      navigator.clipboard.writeText(code);
+      button.textContent = "Copied";
+      setTimeout(() => button.textContent = "Copy", 1200);
+    }
+
+    function scrollToContent() {
+      document.getElementById("contentTop").scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function escapeAttribute(value) {
+      return String(value).replace(/'/g, "\\'");
+    }
+
+    renderNav();
+    render();
+    updateProgress();
+  </script>
+</body>
+</html>
